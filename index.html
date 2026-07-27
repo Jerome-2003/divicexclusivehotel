@@ -1,0 +1,1622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiviceXclusive Hotel — Lagos</title>
+<meta name="description" content="DiviceXclusive Hotel, Lagos. Quiet luxury, considered detail — rooms, dining, wellness and events.">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --ink:#14100c;        /* near-black warm charcoal — base ground */
+    --ink-2:#1c1712;      /* slightly lifted panel tone */
+    --ivory:#f4ecdd;      /* warm ivory — primary text on dark */
+    --stone:#a89e8d;      /* muted secondary text */
+    --brass:#b8905a;      /* aged brass — accent, links, rules */
+    --brass-deep:#8c6a3f; /* brass hover/pressed */
+    --burgundy:#5c2a2e;   /* quiet secondary accent, used sparingly */
+  }
+  html{scroll-behavior:auto;}
+  body{
+    font-family:'Jost',sans-serif;
+    background:var(--ink);
+    color:var(--ivory);
+    font-weight:300;
+    letter-spacing:.01em;
+  }
+  .font-display{font-family:'Cormorant Garamond',serif; font-weight:500;}
+  .eyebrow{font-family:'Jost',sans-serif; letter-spacing:.35em; text-transform:uppercase; font-size:.68rem; color:var(--brass); font-weight:500;}
+  .rule{width:44px;height:1px;background:var(--brass);}
+  .rule-center{margin-left:auto;margin-right:auto;}
+  .btn-brass{
+    display:inline-flex; align-items:center; gap:.6rem;
+    border:1px solid var(--brass); color:var(--ivory);
+    padding:.9rem 2.4rem; font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+    transition:background .35s ease,color .35s ease;
+    background:transparent;
+  }
+  .btn-brass:hover{background:var(--brass); color:var(--ink);}
+  .btn-brass-solid{
+    background:var(--brass); color:var(--ink); border:1px solid var(--brass);
+  }
+  .btn-brass-solid:hover{background:var(--brass-deep); border-color:var(--brass-deep); color:var(--ivory);}
+
+  /* ---- pages / routing ---- */
+  .page{display:none;}
+  .page.is-active{display:block; animation:pageIn .5s ease both;}
+  @keyframes pageIn{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+  .sweep{position:fixed; top:0; left:0; height:2px; width:0%; background:var(--brass); z-index:200; transition:width .4s ease;}
+
+  /* ---- utility bar / nav ---- */
+  .top-info-bar{background:var(--ink-2); border-bottom:1px solid rgba(184,144,90,.2);}
+  header.main-nav{background:rgba(20,16,12,.95); backdrop-filter:blur(10px); border-bottom:1px solid rgba(184,144,90,.15);}
+  .nav-link{font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--stone); transition:color .25s;}
+  .nav-link:hover, .nav-link.active{color:var(--brass);}
+  .dropdown-menu{display:none;}
+  .dropdown.active .dropdown-menu{display:block;}
+  .dropdown-menu{background:var(--ink-2); border:1px solid rgba(184,144,90,.2);}
+
+  /* ---- hero ---- */
+  .hero-height{min-height:75vh; height:calc(100 * min(var(--vh, 1vh), 1vh));}
+  .hero-gradient{background:linear-gradient(180deg, rgba(20,16,12,.35) 0%, rgba(20,16,12,.15) 45%, rgba(20,16,12,.85) 100%);}
+
+  /* ---- cards ---- */
+  .facility-icon{width:58px;height:58px;border-radius:9999px;border:1px solid rgba(184,144,90,.4); display:flex;align-items:center;justify-content:center;}
+  .review-card{border:1px solid rgba(184,144,90,.18); background:var(--ink-2);}
+  .plaque-num{font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--brass); font-size:.95rem;}
+
+  .whatsapp-btn{position:fixed; bottom:24px; right:24px; z-index:150; width:56px;height:56px;border-radius:50%; background:#25D366; display:flex;align-items:center;justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.4); transition:transform .2s;}
+  .whatsapp-btn:hover{transform:scale(1.1);}
+
+  ::selection{background:var(--brass); color:var(--ink);}
+  input:focus, select:focus, textarea:focus{outline:none; border-color:var(--brass) !important;}
+
+  /* ---- admin panel ---- */
+  .admin-tab-btn.active, .req-filter-btn.active, .cmp-filter-btn.active{background:var(--brass); color:var(--ink) !important; border-color:var(--brass) !important;}
+  .admin-card{background:var(--ink-2); border:1px solid rgba(184,144,90,.2); border-radius:.75rem; padding:1.25rem;}
+  .status-pill{display:inline-block; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; padding:.25rem .65rem; border-radius:9999px;}
+  .status-pending{background:rgba(184,144,90,.18); color:var(--brass);}
+  .status-approved{background:rgba(92,140,92,.18); color:#7fbf7f;}
+  .status-declined{background:rgba(180,80,80,.18); color:#e08a8a;}
+  .status-checked-in{background:rgba(90,130,190,.2); color:#8fb3e0;}
+  .status-checked-out{background:rgba(150,150,150,.18); color:#c2c2c2;}
+  .admin-btn-sm{font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; padding:.4rem .9rem; border-radius:.5rem; border:1px solid rgba(184,144,90,.35); color:var(--ivory); transition:background .2s;}
+  .admin-btn-sm:hover{background:rgba(184,144,90,.15);}
+  .admin-input-sm{background:var(--ink); border:1px solid rgba(184,144,90,.3); color:var(--ivory); border-radius:.5rem; padding:.4rem .6rem; font-size:.8rem;}
+  .cal-cell-open{background:rgba(92,140,92,.15); color:#7fbf7f;}
+  .cal-cell-full{background:rgba(180,80,80,.15); color:#e08a8a;}
+</style>
+</head>
+<body class="w-full min-h-screen overflow-x-hidden">
+
+<div class="sweep" id="sweep"></div>
+
+<!-- ============ HEADER & TOP CONTACT BAR ============ -->
+<div class="top-info-bar py-2.5 px-6">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs tracking-wider" style="color:var(--stone)">
+    <div class="flex flex-wrap items-center justify-center gap-6">
+      <a href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-500"></i> 1st Avenue, E Close, Festac, Lagos</a>
+      <a href="tel:08000000000" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="phone" class="w-3.5 h-3.5 text-amber-500"></i> 08000000000</a>
+      <span class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-amber-500"></i> reservations@divicexclusive.com</span>
+    </div>
+    <a href="#book" data-page-link="book" class="hidden md:inline-flex items-center gap-1 hover:text-amber-400 transition" style="color:var(--brass)">
+      Book Online <i data-lucide="arrow-right" class="w-3 h-3"></i>
+    </a>
+  </div>
+</div>
+
+<header class="main-nav sticky top-0 z-50">
+  <nav class="max-w-7xl mx-auto px-6 py-4">
+    <div class="hidden md:flex items-center justify-center">
+      <ul class="flex items-center gap-8">
+        <li><a href="#home" data-page-link="home" class="nav-link">Home</a></li>
+        <li><a href="#rooms" data-page-link="rooms" class="nav-link">Rooms</a></li>
+        <li class="dropdown relative">
+          <button class="dropdown-trigger nav-link flex items-center gap-1">Dine &amp; Unwind <i data-lucide="chevron-down" class="w-3 h-3"></i></button>
+          <ul class="dropdown-menu absolute top-full left-0 mt-3 shadow-2xl py-2 min-w-[170px]">
+            <li><a href="#experience/bar" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5">The Amber Room</a></li>
+            <li><a href="#experience/pool" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5">The Sky Pool</a></li>
+            <li><a href="#experience/gym" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5">The Forge</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="#home" data-page-link="home" class="font-display text-3xl tracking-wide mx-12" style="color:var(--ivory)">DiviceXclusive</a>
+      <ul class="flex items-center gap-8">
+        <li><a href="#book" data-page-link="book" class="nav-link">Book a Stay</a></li>
+        <li><a href="#contact" data-page-link="contact" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+    <div class="md:hidden flex items-center justify-between">
+      <a href="#home" data-page-link="home" class="font-display text-2xl tracking-wide" style="color:var(--ivory)">DiviceXclusive</a>
+      <button id="mobile-toggle" aria-label="Toggle menu"><i data-lucide="menu" class="w-6 h-6" style="color:var(--ivory)"></i></button>
+    </div>
+    <ul id="nav-links-mobile" class="hidden md:hidden flex-col gap-4 pt-5 pb-2">
+      <li><a href="#home" data-page-link="home" class="nav-link block">Home</a></li>
+      <li><a href="#rooms" data-page-link="rooms" class="nav-link block">Rooms</a></li>
+      <li><a href="#experience/bar" data-page-link="experience" class="nav-link block">Bar</a></li>
+      <li><a href="#experience/pool" data-page-link="experience" class="nav-link block">Pool</a></li>
+      <li><a href="#experience/gym" data-page-link="experience" class="nav-link block">Gym</a></li>
+      <li><a href="#book" data-page-link="book" class="nav-link block">Book a Stay</a></li>
+      <li><a href="#contact" data-page-link="contact" class="nav-link block">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="pt-0">
+
+<!-- ============ PAGE: HOME ============ -->
+<section class="page" data-page="home">
+
+  <!-- HERO SECTION -->
+  <div id="hero" class="relative hero-height flex items-center justify-center pt-20 pb-20">
+    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2069&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="Hotel lobby at night">
+    <div class="absolute inset-0 hero-gradient"></div>
+    <div class="relative text-center px-6 z-10">
+      <p class="eyebrow mb-4">Victoria Island, Lagos</p>
+      <h1 class="font-display text-4xl sm:text-6xl md:text-8xl mb-6" style="color:var(--ivory)">DiviceXclusive Hotel</h1>
+      <p class="max-w-md mx-auto mb-8 text-sm sm:text-base" style="color:var(--stone)">Quiet luxury on the water's edge — considered rooms, unhurried service, a city view worth waking up to.</p>
+      <div class="rule rule-center mb-8"></div>
+      <a href="#book" data-page-link="book" class="btn-brass">Book Now</a>
+    </div>
+  </div>
+
+  <!-- SECTION: ROOM TYPES -->
+  <section class="py-20 sm:py-28 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <p class="eyebrow mb-3">Accommodation</p>
+        <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">Our Room Collections</h2>
+        <div class="rule rule-center"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Standard Rooms">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Double Bed, 2 Guests</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Standard Rooms</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">Clean, modern aesthetics with full ambient lighting controls, comfortable workstation, and high-speed Wi-Fi.</p>
+          <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            Reserve Room <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Comfort First Rooms">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">King Size Bed, Mood Lighting</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Comfort First Rooms</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">Features custom mood lighting, premium climate control, plush king bedding, and an expansive balcony.</p>
+          <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            Reserve Room <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Deluxe Suites">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">King Size Beds, 2-4 Guests</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Executive Deluxe Suites</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">Spacious lounge areas, handcrafted leather seating, marble baths, and dedicated butler service.</p>
+          <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            Reserve Room <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: DINE & UNWIND / COMMUNAL SPACES -->
+  <section class="py-20 sm:py-28 px-6 border-t" style="background:var(--ink-2); border-color:rgba(184,144,90,.15)">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <p class="eyebrow mb-3">Lifestyle &amp; Recreation</p>
+        <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">Dine, Unwind &amp; Recharge</h2>
+        <div class="rule rule-center"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Soulful Communal Spaces">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Lobbies, Restaurant &amp; Bars</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Soulful Communal Spaces</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:var(--stone)">Open marble-floored dining lounges, artisanal breakfast spreads, and relaxed seating designed for conversation.</p>
+          <a href="#experience/bar" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            Explore Spaces <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
+            <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="The Amber Room Bar">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Signature Lounge</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">The Amber Room</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:var(--stone)">A low-lit brass and oak bar serving curated spirits, fine wines, and custom cocktails late into the evening.</p>
+          <a href="#experience/bar" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            View Bar Menu <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Fitness and Health">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Fitness &amp; Health</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">The Forge Gym</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:var(--stone)">Fully equipped fitness facility featuring top-tier cardio treadmills, weight bays, and personal trainers.</p>
+          <a href="#experience/gym" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            View Gym <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facilities Summary Grid -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="eyebrow mb-3">A Different Kind of Stay</p>
+      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl mb-6" style="color:var(--ivory)">What's Included in Every Stay</h2>
+      <div class="rule rule-center mb-12 sm:mb-16"></div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
+        <div class="flex flex-col items-center gap-4">
+          <div class="facility-icon"><i data-lucide="wifi" class="w-5 h-5" style="color:var(--brass)"></i></div>
+          <p class="text-sm">Complimentary Wi-Fi</p>
+        </div>
+        <div class="flex flex-col items-center gap-4">
+          <div class="facility-icon"><i data-lucide="bed-double" class="w-5 h-5" style="color:var(--brass)"></i></div>
+          <p class="text-sm">42 Rooms &amp; Suites</p>
+        </div>
+        <div class="flex flex-col items-center gap-4">
+          <div class="facility-icon"><i data-lucide="wine" class="w-5 h-5" style="color:var(--brass)"></i></div>
+          <p class="text-sm">Signature Cocktail Bar</p>
+        </div>
+        <div class="flex flex-col items-center gap-4">
+          <div class="facility-icon"><i data-lucide="waves" class="w-5 h-5" style="color:var(--brass)"></i></div>
+          <p class="text-sm">Rooftop Infinity Pool</p>
+        </div>
+        <div class="flex flex-col items-center gap-4">
+          <div class="facility-icon"><i data-lucide="dumbbell" class="w-5 h-5" style="color:var(--brass)"></i></div>
+          <p class="text-sm">24-Hour Fitness Studio</p>
+        </div>
+        <div class="flex flex-col items-center gap-4">
+          <div class="facility-icon"><i data-lucide="clock" class="w-5 h-5" style="color:var(--brass)"></i></div>
+          <p class="text-sm">Round-the-Clock Concierge</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ============ PAGE: ROOMS (HORIZONTAL ALTERNATING LAYOUT) ============ -->
+<section class="page" data-page="rooms">
+  <div class="pt-32 sm:pt-40 pb-12 sm:pb-20 px-6 text-center">
+    <p class="eyebrow mb-3">Extraordinary Accommodation</p>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">Choose Your Room</h1>
+    <div class="rule rule-center"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 pb-24 sm:pb-32 space-y-16 sm:space-y-24">
+    
+    <!-- ROOM 1: Image Left, Text Right -->
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-classic-img" src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="Classic room">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.25)"></div>
+      </div>
+      <div>
+        <span class="plaque-num mb-2 block">I</span>
+        <h2 id="cms-classic-title" class="font-display text-3xl sm:text-4xl mb-3" style="color:var(--ivory)">The Classic Room</h2>
+        <div class="rule mb-5"></div>
+        <p id="cms-classic-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">32sqm of warm timber and linen, a rain shower, and a private balcony looking toward the lagoon. Built for effortless living with smart climate controls and high-speed connections.</p>
+        <p class="font-display text-2xl mb-6" style="color:var(--brass)">From <span id="cms-classic-price">₦85,000</span> / night</p>
+        <a href="#book" data-page-link="book" class="btn-brass-solid py-3 px-8 text-xs">Reserve Classic Room</a>
+      </div>
+    </div>
+
+    <!-- ROOM 2: Text Left, Image Right -->
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="order-2 md:order-1">
+        <span class="plaque-num mb-2 block">II</span>
+        <h2 id="cms-deluxe-title" class="font-display text-3xl sm:text-4xl mb-3" style="color:var(--ivory)">The Deluxe Suite</h2>
+        <div class="rule mb-5"></div>
+        <p id="cms-deluxe-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">A separate sitting room, deep soaking tub, and curated minibar — built for longer stays and slower mornings. Offers floor-to-ceiling windows with panoramic city skyline views.</p>
+        <p class="font-display text-2xl mb-6" style="color:var(--brass)">From <span id="cms-deluxe-price">₦145,000</span> / night</p>
+        <a href="#book" data-page-link="book" class="btn-brass-solid py-3 px-8 text-xs">Reserve Deluxe Suite</a>
+      </div>
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96 order-1 md:order-2">
+        <img id="cms-deluxe-img" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="Deluxe suite">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.25)"></div>
+      </div>
+    </div>
+
+    <!-- ROOM 3: Image Left, Text Right -->
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-presidential-img" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="Presidential suite">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.25)"></div>
+      </div>
+      <div>
+        <span class="plaque-num mb-2 block">III</span>
+        <h2 id="cms-presidential-title" class="font-display text-3xl sm:text-4xl mb-3" style="color:var(--ivory)">The Presidential Suite</h2>
+        <div class="rule mb-5"></div>
+        <p id="cms-presidential-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">Two bedrooms, a private dining room, and a wraparound terrace — with a dedicated butler on call. The pinnacle of quiet luxury designed for distinguished executive relaxation.</p>
+        <p class="font-display text-2xl mb-6" style="color:var(--brass)">From <span id="cms-presidential-price">₦320,000</span> / night</p>
+        <a href="#book" data-page-link="book" class="btn-brass-solid py-3 px-8 text-xs">Reserve Presidential Suite</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ PAGE: EXPERIENCE (DINE & UNWIND HORIZONTAL LAYOUT) ============ -->
+<section class="page" data-page="experience">
+  <div class="pt-32 sm:pt-40 pb-12 sm:pb-20 px-6 text-center">
+    <p class="eyebrow mb-3">Dine &amp; Unwind</p>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">The Experience</h1>
+    <div class="rule rule-center"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 pb-24 sm:pb-32 space-y-16 sm:space-y-24">
+    
+    <!-- EXPERIENCE 1: Image Left, Text Right -->
+    <div id="bar" class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-bar-img" src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="The Amber Room bar">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.3)"></div>
+      </div>
+      <div>
+        <p class="plaque-num mb-2">I</p>
+        <h2 id="cms-bar-title" class="font-display text-3xl sm:text-4xl mb-4" style="color:var(--ivory)">The Amber Room</h2>
+        <div class="rule mb-6"></div>
+        <p id="cms-bar-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">A low-lit bar built around a single long counter of aged brass and dark oak. The list runs from Nigerian-inflected classics to a rotating barrel-aged reserve — poured slowly, meant to be lingered over. Open nightly until 2am.</p>
+        <a href="#book" data-page-link="book" class="btn-brass py-2.5 px-6 text-xs">Book Table</a>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE 2: Text Left, Image Right -->
+    <div id="pool" class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="order-2 md:order-1">
+        <p class="plaque-num mb-2">II</p>
+        <h2 id="cms-pool-title" class="font-display text-3xl sm:text-4xl mb-4" style="color:var(--ivory)">The Sky Pool</h2>
+        <div class="rule mb-6"></div>
+        <p id="cms-pool-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">Sixteen floors up, a heated infinity pool traces the edge of the building with an unbroken view of the lagoon. Cabanas, a light small-plates menu, and a resident DJ on Friday evenings.</p>
+        <a href="#book" data-page-link="book" class="btn-brass py-2.5 px-6 text-xs">Reserve Cabana</a>
+      </div>
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96 order-1 md:order-2">
+        <img id="cms-pool-img" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="The Sky Pool">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.3)"></div>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE 3: Image Left, Text Right -->
+    <div id="gym" class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-gym-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="The Forge gym">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.3)"></div>
+      </div>
+      <div>
+        <p class="plaque-num mb-2">III</p>
+        <h2 id="cms-gym-title" class="font-display text-3xl sm:text-4xl mb-4" style="color:var(--ivory)">The Forge</h2>
+        <div class="rule mb-6"></div>
+        <p id="cms-gym-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">A 24-hour fitness studio equipped with free weights, Technogym machines, and a dedicated stretch room. Personal trainers and in-room recovery treatments available on request.</p>
+        <a href="#contact" data-page-link="contact" class="btn-brass py-2.5 px-6 text-xs">Inquire Gym Membership</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ PAGE: BOOK ============ -->
+<section class="page" data-page="book">
+  <div class="relative min-h-[85vh] flex items-center justify-center pt-28 sm:pt-36 pb-16 sm:pb-24 px-6">
+    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="Luxury suite background">
+    <div class="absolute inset-0 hero-gradient" style="background: linear-gradient(180deg, rgba(20,16,12,.75) 0%, rgba(20,16,12,.85) 100%);"></div>
+
+    <div class="relative z-10 max-w-xl w-full mx-auto">
+      <div class="text-center mb-8 sm:mb-10">
+        <p class="eyebrow mb-3">Reserve Your Stay</p>
+        <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-4" style="color:var(--ivory)">Book a Stay</h1>
+        <div class="rule rule-center"></div>
+      </div>
+
+      <div class="bg-[#1c1712]/90 backdrop-blur-md p-6 sm:p-10 rounded-2xl shadow-2xl" style="border: 1px solid rgba(184,144,90,.25)">
+        <form id="booking-form" class="space-y-5 text-left">
+          
+          <!-- NAME & PHONE NUMBER INPUTS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="guest-name">Full Name</label>
+              <input id="guest-name" type="text" placeholder="e.g. Alexander Cole" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="guest-phone">Phone Number</label>
+              <input id="guest-phone" type="tel" placeholder="+234 800 000 0000" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+          </div>
+
+          <!-- EMAIL ADDRESS INPUT -->
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="guest-email">Email Address</label>
+            <input id="guest-email" type="email" placeholder="alexander@example.com" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="room-type">Room Collection &amp; Nightly Rate</label>
+            <select id="room-type" class="w-full rounded-lg px-4 py-3 text-sm cursor-pointer" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+              <option id="opt-classic" value="classic" data-price="85000">The Classic Room — ₦85,000 / night</option>
+              <option id="opt-deluxe" value="deluxe" data-price="145000">The Deluxe Suite — ₦145,000 / night</option>
+              <option id="opt-presidential" value="presidential" data-price="320000">The Presidential Suite — ₦320,000 / night</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="checkin">Check In</label>
+              <input id="checkin" type="date" required class="w-full rounded-lg px-4 py-3 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="checkout">Check Out</label>
+              <input id="checkout" type="date" required class="w-full rounded-lg px-4 py-3 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+          </div>
+
+          <!-- DYNAMIC PRICE SUMMARY CALCULATOR -->
+          <div class="p-5 rounded-xl border mt-4" style="background:var(--ink); border-color:rgba(184,144,90,.25)">
+            <p class="eyebrow mb-3">Stay Summary</p>
+            <div class="space-y-2 text-xs sm:text-sm" style="color:var(--stone)">
+              <div class="flex justify-between">
+                <span>Room Type:</span>
+                <span id="summary-room" class="font-medium text-white">The Classic Room</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Duration of Stay:</span>
+                <span id="summary-nights" class="font-medium text-white">0 Nights</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Rate per Night:</span>
+                <span id="summary-rate" class="font-medium text-white">₦85,000</span>
+              </div>
+            </div>
+            <div class="border-t mt-4 pt-3 flex justify-between items-center" style="border-color:rgba(184,144,90,.2)">
+              <span class="uppercase tracking-wider text-xs font-semibold" style="color:var(--ivory)">Estimated Total Fee:</span>
+              <span id="summary-total" class="font-display text-2xl sm:text-3xl font-bold" style="color:var(--brass)">₦0</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-brass-solid w-full py-4 rounded-lg tracking-[0.2em] uppercase text-sm font-medium mt-2">Submit Reservation</button>
+        </form>
+        <p id="booking-success" class="hidden mt-4 font-medium text-center text-sm sm:text-base" style="color:var(--brass)">Booking request submitted — our reservations team will confirm shortly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews & Submission Section -->
+  <div class="py-16 sm:py-20 px-6 border-t" style="background:var(--ink-2); border-color:rgba(184,144,90,.15)">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center">
+        <p class="eyebrow mb-3">In Their Words</p>
+        <h2 class="font-display text-3xl sm:text-4xl mb-6" style="color:var(--ivory)">Guest Reviews</h2>
+        <div class="rule rule-center mb-10 sm:mb-14"></div>
+      </div>
+
+      <div id="reviews-list" class="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16">
+        <blockquote class="review-card p-6 sm:p-8 rounded-xl text-left">
+          <div class="flex items-center gap-1 mb-3 text-amber-400">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+          </div>
+          <p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">"Every detail felt deliberate — from the scent in the lobby to the note left by housekeeping. The Sky Pool at sunset is worth the trip alone."</p>
+          <cite class="not-italic text-sm" style="color:var(--brass)">— Amara O., Lagos</cite>
+        </blockquote>
+
+        <blockquote class="review-card p-6 sm:p-8 rounded-xl text-left">
+          <div class="flex items-center gap-1 mb-3 text-amber-400">
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+          </div>
+          <p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">"Quiet, precise, warm. The Amber Room's bartenders remembered our order on night two. This is what a city hotel should feel like."</p>
+          <cite class="not-italic text-sm" style="color:var(--brass)">— Tunde A., London</cite>
+        </blockquote>
+      </div>
+
+      <div class="max-w-2xl mx-auto p-6 sm:p-8 rounded-xl" style="background:var(--ink); border: 1px solid rgba(184,144,90,.2)">
+        <h3 class="font-display text-2xl text-center mb-2" style="color:var(--ivory)">Leave a Review</h3>
+        <p class="text-xs sm:text-sm text-center mb-6" style="color:var(--stone)">Share your recent experience staying with us</p>
+
+        <form id="review-form" class="space-y-5 text-left">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="reviewer-name">Your Name</label>
+              <input id="reviewer-name" type="text" placeholder="e.g. Samuel K." required class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="reviewer-location">Location (optional)</label>
+              <input id="reviewer-location" type="text" placeholder="e.g. Abuja" class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)">Your Rating</label>
+            <div id="star-selector" class="flex items-center gap-2 cursor-pointer">
+              <button type="button" data-rating="1" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="2" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="3" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="4" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="5" class="star-btn text-amber-400 transition"><i data-lucide="star" class="w-6 h-6 fill-amber-400 stroke-amber-400"></i></button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="review-text">Review</label>
+            <textarea id="review-text" rows="3" required placeholder="Tell us about your stay..." class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)"></textarea>
+          </div>
+
+          <button type="submit" class="btn-brass-solid w-full py-3 rounded-lg tracking-[0.18em] uppercase text-xs font-medium">Post Review</button>
+        </form>
+        <p id="review-success" class="hidden mt-4 font-medium text-center text-sm" style="color:var(--brass)">Thank you for your feedback! Your review has been added.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE: CONTACT ============ -->
+<section class="page" data-page="contact">
+  <div class="pt-32 sm:pt-40 pb-16 sm:pb-20 px-6 text-center">
+    <p class="eyebrow mb-3">Get in Touch</p>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">Contact &amp; Location</h1>
+    <div class="rule rule-center"></div>
+  </div>
+  <div class="max-w-5xl mx-auto px-6 pb-24 sm:pb-32 grid md:grid-cols-2 gap-12 text-center">
+    <div>
+      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Reservations</h3>
+      <p class="mb-2"><a href="tel:08000000000" style="color:var(--stone)" class="hover:text-amber-400 transition">08000000000</a></p>
+      <p class="mb-2" style="color:var(--stone)">reservations@divicexclusive.com</p>
+      <p style="color:var(--stone)">Front desk &amp; concierge — available 24 hours</p>
+    </div>
+    <div>
+      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Getting Here</h3>
+      <p><a href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" style="color:var(--stone)" class="hover:text-amber-400 transition underline">1st Avenue, E Close, Festac, Lagos, Nigeria</a></p>
+    </div>
+  </div>
+
+  <!-- Complaints / Feedback -->
+  <div class="max-w-2xl mx-auto px-6 pb-24 sm:pb-32">
+    <div class="p-6 sm:p-8 rounded-xl" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.2)">
+      <h3 class="font-display text-2xl text-center mb-2" style="color:var(--ivory)">Raise a Concern</h3>
+      <p class="text-xs sm:text-sm text-center mb-6" style="color:var(--stone)">Had an issue during your stay? Let our team know and we'll follow up directly.</p>
+      <form id="complaint-form" class="space-y-5 text-left">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="complaint-name">Your Name</label>
+            <input id="complaint-name" type="text" required placeholder="e.g. Samuel K." class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="complaint-email">Email or Phone</label>
+            <input id="complaint-email" type="text" required placeholder="you@example.com" class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+        </div>
+        <div>
+          <label class="block mb-1 text-sm" style="color:var(--stone)" for="complaint-message">What happened?</label>
+          <textarea id="complaint-message" rows="4" required placeholder="Tell us what went wrong..." class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)"></textarea>
+        </div>
+        <button type="submit" class="btn-brass-solid w-full py-3 rounded-lg tracking-[0.18em] uppercase text-xs font-medium">Submit</button>
+      </form>
+      <p id="complaint-success" class="hidden mt-4 font-medium text-center text-sm" style="color:var(--brass)">Thank you — your concern has been logged and our team will reach out shortly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE: ADMIN (HIDDEN — no nav link, reached only via typing the URL hash manually) ============ -->
+<section class="page" data-page="dx-control-9247">
+  <div class="max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-24">
+
+    <!-- LOGIN GATE -->
+    <div id="admin-login-gate" class="max-w-sm mx-auto text-center py-16 sm:py-24">
+      <p class="eyebrow mb-3">Staff Only</p>
+      <h1 class="font-display text-3xl mb-6" style="color:var(--ivory)">Admin Sign In</h1>
+      <form id="admin-login-form" class="space-y-4 text-left">
+        <div>
+          <label class="block mb-1 text-sm" style="color:var(--stone)">Password</label>
+          <input id="admin-password" type="password" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+        </div>
+        <button type="submit" class="btn-brass-solid w-full py-3 rounded-lg tracking-[0.18em] uppercase text-xs font-medium">Enter</button>
+      </form>
+      <p id="admin-login-error" class="hidden mt-4 text-sm" style="color:#e08a8a">Incorrect password.</p>
+      <p class="mt-8 text-xs opacity-50" style="color:var(--stone)">This panel is not linked anywhere on the site.</p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="admin-dashboard" class="hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div>
+          <p class="eyebrow mb-2">Back Office</p>
+          <h1 class="font-display text-3xl sm:text-4xl" style="color:var(--ivory)">DiviceXclusive Admin</h1>
+        </div>
+        <button id="admin-logout" class="btn-brass py-2 px-5 text-xs">Log Out</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap gap-2 mb-10 border-b pb-5" style="border-color:rgba(184,144,90,.2)">
+        <button data-tab="requests" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Requests</button>
+        <button data-tab="calendar" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Calendar</button>
+        <button data-tab="pricing" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Rooms &amp; Pricing</button>
+        <button data-tab="complaints" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Complaints</button>
+        <button data-tab="content" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Content</button>
+        <button data-tab="analytics" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Analytics</button>
+      </div>
+
+      <!-- TAB: REQUESTS -->
+      <div id="admin-tab-requests" class="admin-tab-panel">
+        <div class="flex flex-wrap gap-2 mb-6" id="requests-filter">
+          <button data-filter="all" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">All</button>
+          <button data-filter="pending" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Pending</button>
+          <button data-filter="approved" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Approved</button>
+          <button data-filter="checked-in" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Checked In</button>
+          <button data-filter="checked-out" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Checked Out</button>
+          <button data-filter="declined" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Declined</button>
+        </div>
+        <div id="requests-list" class="space-y-4"></div>
+      </div>
+
+      <!-- TAB: CALENDAR -->
+      <div id="admin-tab-calendar" class="admin-tab-panel hidden">
+        <p class="text-sm mb-6" style="color:var(--stone)">Room availability for the next 14 days, based on approved &amp; checked-in bookings.</p>
+        <div id="calendar-grid" class="overflow-x-auto"></div>
+      </div>
+
+      <!-- TAB: ROOMS & PRICING -->
+      <div id="admin-tab-pricing" class="admin-tab-panel hidden space-y-10">
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Rates &amp; Inventory</h3>
+          <div id="pricing-rooms" class="grid md:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Closed Dates</h3>
+          <p class="text-xs mb-3" style="color:var(--stone)">Dates the hotel is not accepting new check-ins.</p>
+          <div class="flex flex-wrap gap-3 mb-4">
+            <input id="closed-date-input" type="date" class="rounded-lg px-4 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <button id="add-closed-date" class="btn-brass py-2.5 px-5 text-xs">Close Date</button>
+          </div>
+          <div id="closed-dates-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Discount Packages</h3>
+          <div class="grid sm:grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+            <input id="discount-name" type="text" placeholder="Package name" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <select id="discount-room" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+              <option value="classic">Classic Room</option>
+              <option value="deluxe">Deluxe Suite</option>
+              <option value="presidential">Presidential Suite</option>
+            </select>
+            <input id="discount-percent" type="number" min="1" max="90" placeholder="% off" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <input id="discount-start" type="date" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <input id="discount-end" type="date" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+          <button id="add-discount" class="btn-brass py-2.5 px-5 text-xs mb-5">Add Package</button>
+          <div id="discounts-list" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- TAB: COMPLAINTS -->
+      <div id="admin-tab-complaints" class="admin-tab-panel hidden">
+        <div class="flex flex-wrap gap-2 mb-6" id="complaints-filter">
+          <button data-filter="all" class="cmp-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">All</button>
+          <button data-filter="open" class="cmp-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Open</button>
+          <button data-filter="resolved" class="cmp-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Resolved</button>
+        </div>
+        <div id="complaints-list" class="space-y-4"></div>
+      </div>
+
+      <!-- TAB: CONTENT (CMS) -->
+      <div id="admin-tab-content" class="admin-tab-panel hidden space-y-10">
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Room Descriptions &amp; Photos</h3>
+          <div id="content-rooms" class="space-y-6"></div>
+        </div>
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Dine &amp; Unwind Content</h3>
+          <div id="content-experiences" class="space-y-6"></div>
+        </div>
+      </div>
+
+      <!-- TAB: ANALYTICS -->
+      <div id="admin-tab-analytics" class="admin-tab-panel hidden">
+        <div id="analytics-cards" class="grid sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative" style="background:var(--ink-2)">
+  <div class="py-12 sm:py-16 px-6">
+    <div class="max-w-6xl mx-auto text-center border-t pt-10 sm:pt-14" style="border-color:rgba(184,144,90,.15)">
+      <p class="font-display text-2xl sm:text-3xl mb-3" style="color:var(--ivory)">DiviceXclusive Hotel</p>
+      <p class="eyebrow mb-6">Quiet Luxury, Considered Detail</p>
+      <div class="flex items-center justify-center gap-6 mb-8">
+        <a href="#" aria-label="Instagram" style="color:var(--stone)" class="hover:text-white"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="#" aria-label="Facebook" style="color:var(--stone)" class="hover:text-white"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="#" aria-label="Twitter" style="color:var(--stone)" class="hover:text-white"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+      <p class="text-xs sm:text-sm opacity-60">© 2026 DiviceXclusive Hotel. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/2348000000000" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" aria-label="Contact us on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
+  lucide.createIcons();
+
+  // ---------- dropdown (desktop) ----------
+  document.querySelectorAll('.dropdown-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const parent = btn.closest('.dropdown');
+      const wasActive = parent.classList.contains('active');
+      document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+      if (!wasActive) parent.classList.add('active');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+  });
+
+  // ---------- mobile menu ----------
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    const nav = document.getElementById('nav-links-mobile');
+    nav.classList.toggle('hidden');
+    nav.classList.toggle('flex');
+  });
+
+  // ---------- DYNAMIC BOOKING TOTAL CALCULATOR ----------
+  const roomSelect = document.getElementById('room-type');
+  const checkinInput = document.getElementById('checkin');
+  const checkoutInput = document.getElementById('checkout');
+  const summaryRoom = document.getElementById('summary-room');
+  const summaryNights = document.getElementById('summary-nights');
+  const summaryRate = document.getElementById('summary-rate');
+  const summaryTotal = document.getElementById('summary-total');
+
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  if (checkinInput && checkoutInput) {
+    checkinInput.value = today.toISOString().split('T')[0];
+    checkoutInput.value = tomorrow.toISOString().split('T')[0];
+    checkinInput.min = today.toISOString().split('T')[0];
+
+    function calculateBookingTotal() {
+      const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+      const roomName = selectedOption.text.split('—')[0].trim();
+      const roomType = roomSelect.value;
+      let pricePerNight = parseInt(selectedOption.dataset.price, 10) || 0;
+
+      const checkInDate = new Date(checkinInput.value);
+      const checkOutDate = new Date(checkoutInput.value);
+
+      let diffTime = checkOutDate.getTime() - checkInDate.getTime();
+      let diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
+
+      if (isNaN(diffDays) || diffDays <= 0) {
+        diffDays = 0;
+      }
+
+      let rateNote = '';
+      if (window.DXAdmin) {
+        const discount = window.DXAdmin.findActiveDiscount(roomType, checkinInput.value);
+        if (discount) {
+          const discounted = Math.round(pricePerNight * (1 - discount.percent / 100));
+          rateNote = ` (${discount.percent}% off — ${discount.name})`;
+          pricePerNight = discounted;
+        }
+      }
+
+      const totalFee = diffDays * pricePerNight;
+
+      summaryRoom.textContent = roomName;
+      summaryNights.textContent = `${diffDays} ${diffDays === 1 ? 'Night' : 'Nights'}`;
+      summaryRate.textContent = `₦${pricePerNight.toLocaleString()}${rateNote}`;
+      summaryTotal.textContent = `₦${totalFee.toLocaleString()}`;
+    }
+
+    roomSelect.addEventListener('change', calculateBookingTotal);
+    checkinInput.addEventListener('change', () => {
+      if (checkinInput.value) {
+        checkoutInput.min = checkinInput.value;
+        if (checkoutInput.value && checkoutInput.value <= checkinInput.value) {
+          const nextDay = new Date(checkinInput.value);
+          nextDay.setDate(nextDay.getDate() + 1);
+          checkoutInput.value = nextDay.toISOString().split('T')[0];
+        }
+      }
+      calculateBookingTotal();
+    });
+    checkoutInput.addEventListener('change', calculateBookingTotal);
+
+    calculateBookingTotal();
+  }
+
+  // ---------- booking form submission ----------
+  const bookingForm = document.getElementById('booking-form');
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (window.DXAdmin && window.DXAdmin.isDateClosed(checkinInput.value)) {
+        alert('We are not accepting check-ins on the selected date. Please choose another date.');
+        return;
+      }
+
+      // persist the request into the admin store so staff can act on it
+      if (window.DXAdmin) {
+        const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+        const roomType = roomSelect.value;
+        const nights = parseInt(summaryNights.textContent, 10) || 0;
+        const rate = parseInt((summaryRate.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+        const total = parseInt((summaryTotal.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+
+        window.DXAdmin.addBooking({
+          name: document.getElementById('guest-name').value.trim(),
+          phone: document.getElementById('guest-phone').value.trim(),
+          email: document.getElementById('guest-email').value.trim(),
+          roomType,
+          roomTypeName: selectedOption.text.split('—')[0].trim(),
+          checkin: checkinInput.value,
+          checkout: checkoutInput.value,
+          nights, rate, total
+        });
+      }
+
+      document.getElementById('booking-success').classList.remove('hidden');
+      bookingForm.reset();
+      calculateBookingTotal();
+    });
+  }
+
+  // ---------- complaint form submission ----------
+  const complaintForm = document.getElementById('complaint-form');
+  if (complaintForm) {
+    complaintForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (window.DXAdmin) {
+        window.DXAdmin.addComplaint({
+          name: document.getElementById('complaint-name').value.trim(),
+          contact: document.getElementById('complaint-email').value.trim(),
+          message: document.getElementById('complaint-message').value.trim()
+        });
+      }
+      document.getElementById('complaint-success').classList.remove('hidden');
+      complaintForm.reset();
+    });
+  }
+
+  // ---------- review star rating selector ----------
+  let selectedRating = 5;
+  const starButtons = document.querySelectorAll('#star-selector .star-btn');
+  
+  starButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedRating = parseInt(btn.dataset.rating);
+      updateStarUI();
+    });
+  });
+
+  function updateStarUI() {
+    starButtons.forEach(btn => {
+      const r = parseInt(btn.dataset.rating);
+      const icon = btn.querySelector('svg');
+      if (r <= selectedRating) {
+        btn.classList.add('text-amber-400');
+        btn.classList.remove('text-stone-500');
+        if (icon) {
+          icon.setAttribute('fill', '#fbbf24');
+          icon.setAttribute('stroke', '#fbbf24');
+        }
+      } else {
+        btn.classList.remove('text-amber-400');
+        btn.classList.add('text-stone-500');
+        if (icon) {
+          icon.setAttribute('fill', 'none');
+          icon.setAttribute('stroke', 'currentColor');
+        }
+      }
+    });
+  }
+
+  // ---------- review submission logic ----------
+  const reviewForm = document.getElementById('review-form');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reviewer-name').value.trim();
+      const location = document.getElementById('reviewer-location').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+
+      const starsHTML = Array(selectedRating)
+        .fill('<i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>')
+        .join('');
+
+      const newReviewCard = document.createElement('blockquote');
+      newReviewCard.className = 'review-card p-6 sm:p-8 rounded-xl text-left';
+      newReviewCard.innerHTML = `
+        <div class="flex items-center gap-1 mb-3 text-amber-400">${starsHTML}</div>
+        <p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">"${text}"</p>
+        <cite class="not-italic text-sm" style="color:var(--brass)">— ${name}${location ? ', ' + location : ''}</cite>
+      `;
+
+      document.getElementById('reviews-list').appendChild(newReviewCard);
+      lucide.createIcons();
+
+      document.getElementById('review-success').classList.remove('hidden');
+      reviewForm.reset();
+      selectedRating = 5;
+      updateStarUI();
+    });
+  }
+
+  // ---------- true page routing ----------
+  const pages = document.querySelectorAll('.page[data-page]');
+  const navLinks = document.querySelectorAll('[data-page-link]');
+  const sweep = document.getElementById('sweep');
+  const validPages = Array.from(pages).map(p => p.dataset.page);
+
+  function route() {
+    let raw = window.location.hash.replace('#', '') || 'home';
+    let [pageId, sectionId] = raw.split('/');
+    if (!validPages.includes(pageId)) pageId = 'home';
+
+    sweep.style.width = '0%';
+    requestAnimationFrame(() => { sweep.style.width = '100%'; });
+
+    pages.forEach(p => p.classList.toggle('is-active', p.dataset.page === pageId));
+    navLinks.forEach(l => l.classList.toggle('active', l.dataset.pageLink === pageId));
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    if (sectionId) {
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 60);
+    }
+
+    setTimeout(() => { sweep.style.width = '0%'; }, 500);
+
+    const mobileNav = document.getElementById('nav-links-mobile');
+    mobileNav.classList.add('hidden');
+    mobileNav.classList.remove('flex');
+  }
+
+  window.addEventListener('hashchange', route);
+  document.addEventListener('DOMContentLoaded', route);
+  route();
+
+  function setVh() {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+</script>
+
+<!-- ============================================================
+     ADMIN PANEL ENGINE
+     Hidden page: no nav link points here. It only renders when
+     someone types the exact hash into the address bar:
+
+         yoursite.html#dx-control-9247
+
+     CHANGE THE SECRET: search this file for "dx-control-9247" and
+     replace every occurrence (there are two: the section's
+     data-page attribute above, and ADMIN_HASH below) with your own
+     private string.
+
+     CHANGE THE PASSWORD: edit ADMIN_PASSWORD below.
+
+     NOTE ON SECURITY: this is a client-side-only demo. Anyone who
+     views the page source can read ADMIN_PASSWORD and the secret
+     hash. This is "hidden from casual browsing", not "secure
+     against a technical visitor". For real protection you'd need
+     server-side login and a real database instead of localStorage.
+     ============================================================ -->
+<script>
+(function () {
+  const ADMIN_HASH = 'dx-control-9247';
+  const ADMIN_PASSWORD = 'DivX-Admin-2026';
+  const STORE_KEY = 'dx_hotel_admin_store_v1';
+
+  const ROOM_LABELS = { classic: 'The Classic Room', deluxe: 'The Deluxe Suite', presidential: 'The Presidential Suite' };
+
+  function defaultStore() {
+    return {
+      rooms: {
+        classic:       { price: 85000,  inventory: 20, description: '32sqm of warm timber and linen, a rain shower, and a private balcony looking toward the lagoon. Built for effortless living with smart climate controls and high-speed connections.', image: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop' },
+        deluxe:        { price: 145000, inventory: 15, description: 'A separate sitting room, deep soaking tub, and curated minibar — built for longer stays and slower mornings. Offers floor-to-ceiling windows with panoramic city skyline views.', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop' },
+        presidential:  { price: 320000, inventory: 7,  description: 'Two bedrooms, a private dining room, and a wraparound terrace — with a dedicated butler on call. The pinnacle of quiet luxury designed for distinguished executive relaxation.', image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop' }
+      },
+      experiences: {
+        bar:  { title: 'The Amber Room', description: 'A low-lit bar built around a single long counter of aged brass and dark oak. The list runs from Nigerian-inflected classics to a rotating barrel-aged reserve — poured slowly, meant to be lingered over. Open nightly until 2am.', image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop' },
+        pool: { title: 'The Sky Pool', description: 'Sixteen floors up, a heated infinity pool traces the edge of the building with an unbroken view of the lagoon. Cabanas, a light small-plates menu, and a resident DJ on Friday evenings.', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop' },
+        gym:  { title: 'The Forge', description: 'A 24-hour fitness studio equipped with free weights, Technogym machines, and a dedicated stretch room. Personal trainers and in-room recovery treatments available on request.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop' }
+      },
+      closedDates: [],
+      discounts: [],
+      bookings: [],
+      complaints: []
+    };
+  }
+
+  let store = null;
+
+  function loadStore() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      store = raw ? JSON.parse(raw) : defaultStore();
+    } catch (err) {
+      console.error('Admin store failed to load, resetting.', err);
+      store = defaultStore();
+    }
+  }
+
+  function saveStore() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    } catch (err) {
+      console.error('Admin store failed to save.', err);
+    }
+  }
+
+  function uid(prefix) {
+    return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  function fmtNaira(n) { return '₦' + (Number(n) || 0).toLocaleString(); }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  // ---------------- apply live data to the public-facing site ----------------
+  function applyCmsToPublicSite() {
+    Object.keys(store.rooms).forEach((key) => {
+      const room = store.rooms[key];
+      const title = document.getElementById(`cms-${key}-title`);
+      const desc = document.getElementById(`cms-${key}-desc`);
+      const img = document.getElementById(`cms-${key}-img`);
+      const price = document.getElementById(`cms-${key}-price`);
+      if (title) title.textContent = ROOM_LABELS[key];
+      if (desc) desc.textContent = room.description;
+      if (img) img.src = room.image;
+      if (price) price.textContent = fmtNaira(room.price);
+
+      const opt = document.getElementById(`opt-${key}`);
+      if (opt) {
+        opt.dataset.price = room.price;
+        opt.textContent = `${ROOM_LABELS[key]} — ${fmtNaira(room.price)} / night`;
+      }
+    });
+
+    Object.keys(store.experiences).forEach((key) => {
+      const exp = store.experiences[key];
+      const title = document.getElementById(`cms-${key}-title`);
+      const desc = document.getElementById(`cms-${key}-desc`);
+      const img = document.getElementById(`cms-${key}-img`);
+      if (title) title.textContent = exp.title;
+      if (desc) desc.textContent = exp.description;
+      if (img) img.src = exp.image;
+    });
+
+    if (typeof calculateBookingTotal === 'function') calculateBookingTotal();
+  }
+
+  // ---------------- public API used by the booking/complaint forms ----------------
+  function isDateClosed(dateStr) {
+    return store.closedDates.includes(dateStr);
+  }
+
+  function findActiveDiscount(roomType, checkinDate) {
+    if (!checkinDate) return null;
+    return store.discounts.find(d =>
+      d.roomType === roomType &&
+      checkinDate >= d.start &&
+      checkinDate <= d.end
+    ) || null;
+  }
+
+  function addBooking(data) {
+    store.bookings.unshift({
+      id: uid('BK'),
+      status: 'pending',
+      roomNumber: '',
+      createdAt: new Date().toISOString(),
+      ...data
+    });
+    saveStore();
+    renderAll();
+  }
+
+  function addComplaint(data) {
+    store.complaints.unshift({
+      id: uid('CX'),
+      status: 'open',
+      createdAt: new Date().toISOString(),
+      ...data
+    });
+    saveStore();
+    renderAll();
+  }
+
+  window.DXAdmin = { addBooking, addComplaint, findActiveDiscount, isDateClosed };
+
+  // ================= ADMIN UI =================
+  let currentReqFilter = 'all';
+  let currentCmpFilter = 'all';
+
+  function renderRequests() {
+    const container = document.getElementById('requests-list');
+    if (!container) return;
+    const list = store.bookings.filter(b => currentReqFilter === 'all' || b.status === currentReqFilter);
+
+    if (!list.length) {
+      container.innerHTML = `<p class="text-sm" style="color:var(--stone)">No requests in this view.</p>`;
+      return;
+    }
+
+    container.innerHTML = list.map(b => `
+      <div class="admin-card" data-id="${b.id}">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+          <div>
+            <p class="font-display text-lg" style="color:var(--ivory)">${escapeHtml(b.name)}</p>
+            <p class="text-xs" style="color:var(--stone)">${escapeHtml(b.phone)} · ${escapeHtml(b.email)}</p>
+          </div>
+          <span class="status-pill status-${b.status}">${b.status.replace('-', ' ')}</span>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-2 text-sm mb-4" style="color:var(--stone)">
+          <p><span style="color:var(--brass)">Room:</span> ${escapeHtml(b.roomTypeName || b.roomType)}${b.roomNumber ? ' · #' + escapeHtml(b.roomNumber) : ''}</p>
+          <p><span style="color:var(--brass)">Stay:</span> ${fmtDate(b.checkin)} → ${fmtDate(b.checkout)} (${b.nights} nights)</p>
+          <p><span style="color:var(--brass)">Rate:</span> ${fmtNaira(b.rate)} / night</p>
+          <p><span style="color:var(--brass)">Total:</span> ${fmtNaira(b.total)}</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          ${b.status === 'pending' ? `
+            <button class="admin-btn-sm" data-action="approve">Approve &amp; Assign Room</button>
+            <button class="admin-btn-sm" data-action="decline">Decline</button>
+          ` : ''}
+          ${b.status === 'approved' ? `<button class="admin-btn-sm" data-action="checkin">Check In</button>` : ''}
+          ${b.status === 'checked-in' ? `<button class="admin-btn-sm" data-action="checkout">Check Out</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderCalendar() {
+    const container = document.getElementById('calendar-grid');
+    if (!container) return;
+    const days = [];
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      days.push(d.toISOString().split('T')[0]);
+    }
+
+    const roomKeys = Object.keys(store.rooms);
+    let html = '<table class="w-full text-xs border-collapse"><thead><tr>';
+    html += `<th class="p-2 text-left" style="color:var(--brass)">Room Type</th>`;
+    days.forEach(d => {
+      const dd = new Date(d + 'T00:00:00');
+      html += `<th class="p-2 text-center" style="color:var(--stone)">${dd.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    roomKeys.forEach(key => {
+      const inv = store.rooms[key].inventory;
+      html += `<tr><td class="p-2" style="color:var(--ivory)">${ROOM_LABELS[key]}</td>`;
+      days.forEach(d => {
+        const booked = store.bookings.filter(b =>
+          b.roomType === key &&
+          (b.status === 'approved' || b.status === 'checked-in') &&
+          d >= b.checkin && d < b.checkout
+        ).length;
+        const full = booked >= inv;
+        html += `<td class="p-2 text-center rounded ${full ? 'cal-cell-full' : 'cal-cell-open'}">${booked}/${inv}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  function renderPricing() {
+    const container = document.getElementById('pricing-rooms');
+    if (container) {
+      container.innerHTML = Object.keys(store.rooms).map(key => {
+        const r = store.rooms[key];
+        return `
+        <div class="admin-card">
+          <p class="font-display text-lg mb-3" style="color:var(--ivory)">${ROOM_LABELS[key]}</p>
+          <label class="block text-xs mb-1" style="color:var(--stone)">Price / night (₦)</label>
+          <input type="number" class="admin-input-sm w-full mb-3" id="price-${key}" value="${r.price}">
+          <label class="block text-xs mb-1" style="color:var(--stone)">Total Rooms in Inventory</label>
+          <input type="number" class="admin-input-sm w-full mb-4" id="inventory-${key}" value="${r.inventory}">
+          <button class="admin-btn-sm w-full" data-action="save-room" data-key="${key}">Save</button>
+        </div>`;
+      }).join('');
+    }
+
+    const closedList = document.getElementById('closed-dates-list');
+    if (closedList) {
+      closedList.innerHTML = store.closedDates.length
+        ? store.closedDates.sort().map(d => `
+          <span class="status-pill status-declined flex items-center gap-2">
+            ${fmtDate(d)}
+            <button data-action="remove-closed" data-date="${d}" class="ml-1" style="color:inherit">✕</button>
+          </span>`).join('')
+        : `<p class="text-sm" style="color:var(--stone)">No closed dates.</p>`;
+    }
+
+    const discList = document.getElementById('discounts-list');
+    if (discList) {
+      discList.innerHTML = store.discounts.length
+        ? store.discounts.map(d => `
+          <div class="admin-card flex flex-wrap items-center justify-between gap-3">
+            <div class="text-sm" style="color:var(--stone)">
+              <span style="color:var(--ivory)">${escapeHtml(d.name)}</span> — ${d.percent}% off ${ROOM_LABELS[d.roomType]}, ${fmtDate(d.start)} → ${fmtDate(d.end)}
+            </div>
+            <button class="admin-btn-sm" data-action="remove-discount" data-id="${d.id}">Remove</button>
+          </div>`).join('')
+        : `<p class="text-sm" style="color:var(--stone)">No active discount packages.</p>`;
+    }
+  }
+
+  function renderComplaints() {
+    const container = document.getElementById('complaints-list');
+    if (!container) return;
+    const list = store.complaints.filter(c => currentCmpFilter === 'all' || c.status === currentCmpFilter);
+    if (!list.length) {
+      container.innerHTML = `<p class="text-sm" style="color:var(--stone)">No complaints in this view.</p>`;
+      return;
+    }
+    container.innerHTML = list.map(c => `
+      <div class="admin-card" data-id="${c.id}">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
+          <div>
+            <p class="font-display text-lg" style="color:var(--ivory)">${escapeHtml(c.name)}</p>
+            <p class="text-xs" style="color:var(--stone)">${escapeHtml(c.contact)} · ${new Date(c.createdAt).toLocaleString()}</p>
+          </div>
+          <span class="status-pill ${c.status === 'open' ? 'status-pending' : 'status-approved'}">${c.status}</span>
+        </div>
+        <p class="text-sm mb-4" style="color:var(--stone)">${escapeHtml(c.message)}</p>
+        ${c.status === 'open'
+          ? `<button class="admin-btn-sm" data-action="resolve-complaint">Mark Resolved</button>`
+          : `<button class="admin-btn-sm" data-action="reopen-complaint">Reopen</button>`}
+      </div>
+    `).join('');
+  }
+
+  function renderContent() {
+    const roomsContainer = document.getElementById('content-rooms');
+    if (roomsContainer) {
+      roomsContainer.innerHTML = Object.keys(store.rooms).map(key => {
+        const r = store.rooms[key];
+        return `
+        <div class="admin-card grid md:grid-cols-[120px_1fr] gap-4 items-start">
+          <img src="${r.image}" class="w-full h-24 object-cover rounded-lg" alt="">
+          <div>
+            <p class="font-display text-lg mb-2" style="color:var(--ivory)">${ROOM_LABELS[key]}</p>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Description</label>
+            <textarea class="admin-input-sm w-full mb-2" rows="2" id="content-desc-${key}">${escapeHtml(r.description)}</textarea>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Image URL</label>
+            <input type="text" class="admin-input-sm w-full mb-3" id="content-img-${key}" value="${r.image}">
+            <button class="admin-btn-sm" data-action="save-content-room" data-key="${key}">Save</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    const expContainer = document.getElementById('content-experiences');
+    if (expContainer) {
+      expContainer.innerHTML = Object.keys(store.experiences).map(key => {
+        const e = store.experiences[key];
+        return `
+        <div class="admin-card grid md:grid-cols-[120px_1fr] gap-4 items-start">
+          <img src="${e.image}" class="w-full h-24 object-cover rounded-lg" alt="">
+          <div>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Title</label>
+            <input type="text" class="admin-input-sm w-full mb-2" id="content-title-${key}" value="${escapeHtml(e.title)}">
+            <label class="block text-xs mb-1" style="color:var(--stone)">Description</label>
+            <textarea class="admin-input-sm w-full mb-2" rows="2" id="content-desc-${key}">${escapeHtml(e.description)}</textarea>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Image URL</label>
+            <input type="text" class="admin-input-sm w-full mb-3" id="content-img-${key}" value="${e.image}">
+            <button class="admin-btn-sm" data-action="save-content-exp" data-key="${key}">Save</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  function renderAnalytics() {
+    const container = document.getElementById('analytics-cards');
+    if (!container) return;
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    const totalInventory = Object.values(store.rooms).reduce((s, r) => s + r.inventory, 0);
+    const occupiedToday = store.bookings.filter(b =>
+      (b.status === 'checked-in') ||
+      (b.status === 'approved' && todayStr >= b.checkin && todayStr < b.checkout)
+    ).length;
+    const occupancyPct = totalInventory ? Math.round((occupiedToday / totalInventory) * 100) : 0;
+
+    const todaysRevenue = store.bookings
+      .filter(b => (b.status === 'approved' || b.status === 'checked-in' || b.status === 'checked-out') && b.checkin === todayStr)
+      .reduce((s, b) => s + (b.total || 0), 0);
+
+    const totalRequests = store.bookings.length;
+    const approvedOrBeyond = store.bookings.filter(b => ['approved', 'checked-in', 'checked-out'].includes(b.status)).length;
+    const conversionPct = totalRequests ? Math.round((approvedOrBeyond / totalRequests) * 100) : 0;
+
+    const pendingCount = store.bookings.filter(b => b.status === 'pending').length;
+    const openComplaints = store.complaints.filter(c => c.status === 'open').length;
+
+    const cards = [
+      { label: "Today's Revenue (check-ins today)", value: fmtNaira(todaysRevenue) },
+      { label: 'Occupancy Rate', value: occupancyPct + '%' },
+      { label: 'Guest Conversion Rate', value: conversionPct + '%' },
+      { label: 'Pending Requests', value: pendingCount },
+      { label: 'Total Bookings Logged', value: totalRequests },
+      { label: 'Open Complaints', value: openComplaints },
+      { label: 'Total Room Inventory', value: totalInventory },
+      { label: 'Occupied Rooms Today', value: occupiedToday }
+    ];
+
+    container.innerHTML = cards.map(c => `
+      <div class="admin-card text-center">
+        <p class="font-display text-3xl mb-1" style="color:var(--brass)">${c.value}</p>
+        <p class="text-xs uppercase tracking-wider" style="color:var(--stone)">${c.label}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderAll() {
+    renderRequests();
+    renderCalendar();
+    renderPricing();
+    renderComplaints();
+    renderContent();
+    renderAnalytics();
+  }
+
+  function escapeHtml(str) {
+    if (str === undefined || str === null) return '';
+    return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  // ---------------- event wiring (delegation, since content re-renders) ----------------
+  function wireEvents() {
+    document.getElementById('requests-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const card = btn.closest('[data-id]');
+      const booking = store.bookings.find(b => b.id === card.dataset.id);
+      if (!booking) return;
+
+      if (btn.dataset.action === 'approve') {
+        const roomNum = prompt('Assign a room number (optional):', booking.roomNumber || '');
+        if (roomNum === null) return;
+        booking.status = 'approved';
+        booking.roomNumber = roomNum.trim();
+      } else if (btn.dataset.action === 'decline') {
+        if (!confirm('Decline this booking request?')) return;
+        booking.status = 'declined';
+      } else if (btn.dataset.action === 'checkin') {
+        booking.status = 'checked-in';
+        booking.checkedInAt = new Date().toISOString();
+      } else if (btn.dataset.action === 'checkout') {
+        booking.status = 'checked-out';
+        booking.checkedOutAt = new Date().toISOString();
+      }
+      saveStore();
+      renderAll();
+    });
+
+    document.getElementById('requests-filter').addEventListener('click', (e) => {
+      const btn = e.target.closest('.req-filter-btn');
+      if (!btn) return;
+      currentReqFilter = btn.dataset.filter;
+      document.querySelectorAll('.req-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderRequests();
+    });
+
+    document.getElementById('complaints-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const card = btn.closest('[data-id]');
+      const complaint = store.complaints.find(c => c.id === card.dataset.id);
+      if (!complaint) return;
+      complaint.status = btn.dataset.action === 'resolve-complaint' ? 'resolved' : 'open';
+      saveStore();
+      renderComplaints();
+    });
+
+    document.getElementById('complaints-filter').addEventListener('click', (e) => {
+      const btn = e.target.closest('.cmp-filter-btn');
+      if (!btn) return;
+      currentCmpFilter = btn.dataset.filter;
+      document.querySelectorAll('.cmp-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderComplaints();
+    });
+
+    document.getElementById('pricing-rooms').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="save-room"]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      const price = parseInt(document.getElementById(`price-${key}`).value, 10) || 0;
+      const inventory = parseInt(document.getElementById(`inventory-${key}`).value, 10) || 0;
+      store.rooms[key].price = price;
+      store.rooms[key].inventory = inventory;
+      saveStore();
+      applyCmsToPublicSite();
+      renderAll();
+    });
+
+    document.getElementById('add-closed-date').addEventListener('click', () => {
+      const val = document.getElementById('closed-date-input').value;
+      if (!val) return;
+      if (!store.closedDates.includes(val)) store.closedDates.push(val);
+      saveStore();
+      renderPricing();
+    });
+
+    document.getElementById('closed-dates-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="remove-closed"]');
+      if (!btn) return;
+      store.closedDates = store.closedDates.filter(d => d !== btn.dataset.date);
+      saveStore();
+      renderPricing();
+    });
+
+    document.getElementById('add-discount').addEventListener('click', () => {
+      const name = document.getElementById('discount-name').value.trim();
+      const roomType = document.getElementById('discount-room').value;
+      const percent = parseInt(document.getElementById('discount-percent').value, 10);
+      const start = document.getElementById('discount-start').value;
+      const end = document.getElementById('discount-end').value;
+      if (!name || !percent || !start || !end) {
+        alert('Please fill in package name, %, start and end date.');
+        return;
+      }
+      store.discounts.push({ id: uid('DC'), name, roomType, percent, start, end });
+      saveStore();
+      document.getElementById('discount-name').value = '';
+      document.getElementById('discount-percent').value = '';
+      document.getElementById('discount-start').value = '';
+      document.getElementById('discount-end').value = '';
+      renderPricing();
+    });
+
+    document.getElementById('discounts-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="remove-discount"]');
+      if (!btn) return;
+      store.discounts = store.discounts.filter(d => d.id !== btn.dataset.id);
+      saveStore();
+      renderPricing();
+    });
+
+    document.getElementById('content-rooms').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="save-content-room"]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      store.rooms[key].description = document.getElementById(`content-desc-${key}`).value.trim();
+      store.rooms[key].image = document.getElementById(`content-img-${key}`).value.trim();
+      saveStore();
+      applyCmsToPublicSite();
+      renderContent();
+    });
+
+    document.getElementById('content-experiences').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="save-content-exp"]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      store.experiences[key].title = document.getElementById(`content-title-${key}`).value.trim();
+      store.experiences[key].description = document.getElementById(`content-desc-${key}`).value.trim();
+      store.experiences[key].image = document.getElementById(`content-img-${key}`).value.trim();
+      saveStore();
+      applyCmsToPublicSite();
+      renderContent();
+    });
+
+    // tab switching
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+        document.querySelectorAll('.admin-tab-panel').forEach(p => {
+          p.classList.toggle('hidden', p.id !== `admin-tab-${btn.dataset.tab}`);
+        });
+      });
+    });
+
+    // login
+    document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = document.getElementById('admin-password').value;
+      if (val === ADMIN_PASSWORD) {
+        sessionStorage.setItem('dx_admin_ok', '1');
+        showDashboard();
+      } else {
+        document.getElementById('admin-login-error').classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('admin-logout').addEventListener('click', () => {
+      sessionStorage.removeItem('dx_admin_ok');
+      showLogin();
+    });
+  }
+
+  function showDashboard() {
+    document.getElementById('admin-login-gate').classList.add('hidden');
+    document.getElementById('admin-dashboard').classList.remove('hidden');
+    document.getElementById('admin-login-error').classList.add('hidden');
+    document.getElementById('admin-password').value = '';
+    document.querySelector('.admin-tab-btn[data-tab="requests"]').classList.add('active');
+    document.querySelector('.req-filter-btn[data-filter="all"]').classList.add('active');
+    document.querySelector('.cmp-filter-btn[data-filter="all"]').classList.add('active');
+    renderAll();
+  }
+
+  function showLogin() {
+    document.getElementById('admin-dashboard').classList.add('hidden');
+    document.getElementById('admin-login-gate').classList.remove('hidden');
+  }
+
+  function initAdminPageIfActive() {
+    const raw = window.location.hash.replace('#', '');
+    if (raw !== ADMIN_HASH) return;
+    if (sessionStorage.getItem('dx_admin_ok') === '1') {
+      showDashboard();
+    } else {
+      showLogin();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadStore();
+    applyCmsToPublicSite();
+    wireEvents();
+    initAdminPageIfActive();
+  });
+  window.addEventListener('hashchange', initAdminPageIfActive);
+})();
+</script>
+</body>
+</html>
