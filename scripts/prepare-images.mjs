@@ -4,7 +4,7 @@
  *   node scripts/prepare-images.mjs
  *
  * Sources of truth are `DIVIC URBAN/` and `divic exclusive/` — originals are never
- * modified. Derivatives are written to `public/images/<property>/`, so re-running this
+ * modified. Derivatives are written to `src/assets/images/<property>/`, so re-running this
  * after replacing a source file regenerates everything.
  *
  * The room images arrive as marketing flyers: inset thumbnails on a panel, a contact and
@@ -21,7 +21,7 @@ import { join } from 'node:path';
 const JOBS = [
   {
     src: 'DIVIC URBAN',
-    out: 'public/images/urban',
+    out: 'src/assets/images/urban',
     /* 1200x628 flyers: thumbnails down the left, logo top right, price bar along the
        bottom. left 228 clears the panel, width 852 stops before the watermark at x≈1085,
        height 560 stops above the bar at y≈565. */
@@ -31,7 +31,7 @@ const JOBS = [
   },
   {
     src: 'divic exclusive',
-    out: 'public/images/exclusive',
+    out: 'src/assets/images/exclusive',
     /* 1080x565 flyers: thumbnails down the left, logo top CENTRE, a further inset at the
        right, price bar along the bottom. top 100 clears the watermark, width 670 stops
        before the right-hand inset at x≈878, height 408 stops above the bar at y≈512. */

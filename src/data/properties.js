@@ -16,7 +16,7 @@
  * whenever the fetch succeeds, live values win. See src/lib/divic-api.js.
  */
 
-import { asset } from '../lib/asset';
+import { photo } from '../lib/images';
 
 /** Mirrors GET /api/public/properties exactly. Values taken from API.md. */
 export const PROPERTY_SEED = [
@@ -47,8 +47,8 @@ export const PROPERTY_SEED = [
   },
 ];
 
-const urban = (name) => asset(`images/urban/${name}.jpg`);
-const exclusive = (name) => asset(`images/exclusive/${name}.jpg`);
+const urban = (name) => photo('urban', name);
+const exclusive = (name) => photo('exclusive', name);
 
 /**
  * Editorial layer. `heroImage`, `galleryImages` and room `image` are null where no

@@ -1,12 +1,13 @@
 {
   "name": "divic-web",
   "version": "0.1.0",
-  "description": "Divic — website for Divic Exclusive and Divic Urban, Festac, Lagos",
+  "description": "Divic \u2014 website for Divic Exclusive and Divic Urban, Festac, Lagos",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node postbuild.js",
+    "build": "node scripts/check-images.mjs && vite build",
     "deploy": "npm run build && gh-pages -d dist",
-    "preview": "vite preview --port 4173"
+    "preview": "vite preview --port 4173",
+    "check:images": "node scripts/check-images.mjs"
   },
   "repository": {
     "type": "git",

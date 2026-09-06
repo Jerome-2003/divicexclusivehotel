@@ -26,13 +26,14 @@ folder on `main`, so `docs/` is build output that is committed, and it is served
 npm run build     # writes docs/ — commit the result
 ```
 
-**Rebuild and commit `docs/` whenever `src/` or `public/` changes**, or the live site
-keeps serving the previous bundle. The build copies `public/images/` into `docs/images/`;
-a deploy missing that directory is what produces `404 (Not Found)` on every photograph.
+**Rebuild and commit `docs/` whenever `src/` changes**, or the live site keeps serving
+the previous bundle. This is the one remaining way the site can go wrong, and it has
+already happened once: `docs/` was committed, the source was then fixed, and the stale
+bundle kept serving the old paths.
 
-Nothing in the app hardcodes the sub-path. Asset URLs go through `src/lib/asset.js`,
-which resolves against `import.meta.env.BASE_URL`, and the router takes the same value as
-its `basename`, so one flag moves the whole site:
+Nothing in the app hardcodes the sub-path. The photography is *imported* rather than
+referenced by URL (see below), and the router takes `import.meta.env.BASE_URL` as its
+`basename`, so one flag moves the whole site:
 
 | Served from | Build with |
 |---|---|
@@ -58,7 +59,9 @@ to the PMS's three public endpoints. The PMS owns the database.
 
 ```
 src/
+  assets/images/           the photography, imported (not served from public/)
   data/properties.js       PROPERTY_SEED (mirrors the API) + editorial CONTENT
+  lib/images.js            photo() — bundler-resolved image URLs
   lib/divic-api.js         API client, adapted from the supplied booking-widget.js
   lib/useProperties.js     live properties, falling back to the seed
   context/PropertyContext  which property is active; sets <html data-property>
@@ -66,8 +69,9 @@ src/
   pages/                   Home, Property, Contact, Book, BookingStatus
   styles/index.css         design tokens and component classes
 scripts/prepare-images.mjs crops and optimises the supplied photography
+scripts/check-images.mjs   fails the build when a name and a file disagree
 DIVIC URBAN/               source photography (originals, never modified)
-public/images/urban/       generated web assets
+src/assets/images/         generated web assets, imported by the app
 legacy/                    the previous static site, kept for reference
 ```
 
@@ -109,13 +113,27 @@ Set `WEBSITE_ORIGIN` on the backend to this site's exact origin, or CORS will re
 
 ## Photography
 
+**The photographs are imported, not served as static files.** They live in
+`src/assets/images/<property>/` and are reached through `photo(property, name)` in
+`src/lib/images.js`, which builds its map with `import.meta.glob`.
+
+They used to sit in `public/` and be written as literal URLs — `/images/urban/bar.jpg`.
+That failed twice over: a literal URL has to know where the site is deployed, so it
+broke under the Pages project path; and nothing checked it, so a wrong name was a 404 in
+somebody's browser rather than an error. Importing removes both. Vite resolves each file
+at build time, emits it with a content hash and writes the URL with the deployment base
+already applied, so the base cannot be wrong and a stale cached file cannot be served.
+
+`npm run build` runs `scripts/check-images.mjs` first, which fails the build if a
+referenced name has no file — and lists any file the site never uses.
+
 Source images live in `DIVIC URBAN/` and `divic exclusive/` and are never modified. Run:
 
 ```bash
 node scripts/prepare-images.mjs
 ```
 
-to regenerate `public/images/<property>/`. The room images arrive as marketing flyers and
+to regenerate `src/assets/images/<property>/`. The room images arrive as marketing flyers and
 the script crops each to the photograph alone — prices especially must not be burnt into a
 JPEG when the PMS is the source of truth. The two properties' flyers are laid out
 differently, so each has its own geometry in the script:
