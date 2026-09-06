@@ -16,12 +16,12 @@ export default function Footer() {
           <div className="lg:col-span-4">
             <SwanMark className="h-12 w-11 text-bone" showDisc={false} />
             <p className="mt-5 font-display text-d3">{BRAND.name}</p>
-            <p className="mt-2 text-micro uppercase text-bone/50">{BRAND.line}</p>
+            <p className="mt-2 text-sm text-bone/50">{BRAND.line}</p>
           </div>
 
           {properties.map((p) => (
             <div key={p.id} className="lg:col-span-3">
-              <p className="text-micro uppercase" style={{ color: '#C9A961' }}>
+              <p className="text-sm" style={{ color: '#C9A961' }}>
                 {p.name}
               </p>
               <p className="mt-3 text-sm text-bone/70">{p.address}</p>
@@ -32,7 +32,7 @@ export default function Footer() {
               </p>
               <Link
                 to={`/${p.id}`}
-                className="mt-4 inline-flex text-micro uppercase text-bone/60 underline-offset-4 hover:text-bone hover:underline"
+                className="mt-4 inline-flex text-sm text-bone/60 underline-offset-4 hover:text-bone hover:underline"
               >
                 {p.totalRooms} rooms &middot; View house
               </Link>
@@ -40,7 +40,7 @@ export default function Footer() {
           ))}
 
           <div className="lg:col-span-2">
-            <p className="text-micro uppercase" style={{ color: '#C9A961' }}>
+            <p className="text-sm" style={{ color: '#C9A961' }}>
               Elsewhere
             </p>
             <div className="mt-3 flex flex-col gap-2 text-sm text-bone/70">
@@ -54,7 +54,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-bone/15 pt-6 text-micro uppercase text-bone/40 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-16 flex flex-col gap-3 border-t border-bone/15 pt-6 text-sm text-bone/40 sm:flex-row sm:items-center sm:justify-between">
           <span>&copy; {new Date().getFullYear()} Divic</span>
           <span>Festac, Lagos</span>
         </div>

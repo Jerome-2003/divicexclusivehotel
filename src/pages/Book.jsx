@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useProperty } from '../context/PropertyContext';
 import { divic, buildBookingPayload, nights as nightsBetween } from '../lib/divic-api';
 import { formatNGN } from '../data/properties';
-import { Reveal, SectionHead } from '../components/primitives';
+import { SectionHead } from '../components/primitives';
 
 const FIELD =
   'w-full border-b border-ink/20 bg-transparent px-0 py-3 text-body text-ink ' +
@@ -22,7 +22,7 @@ function Steps({ step }) {
         return (
           <li key={label} className="flex items-center gap-3">
             <span
-              className={`text-micro uppercase ${
+              className={`text-sm ${
                 state === 'todo' ? 'text-mute' : state === 'current' ? 'font-semibold' : ''
               }`}
               style={state === 'current' ? { color: 'rgb(var(--accent))' } : undefined}
@@ -157,7 +157,6 @@ export default function Book() {
     <>
       <section className="shell pb-10 pt-40">
         <SectionHead
-          eyebrow="Reservations"
           title="Request a stay"
           lead="Choose your dates and room, and the house will call you to confirm and hold it. Nothing is charged here."
         />
@@ -175,7 +174,7 @@ export default function Book() {
                 <h2 className="font-display text-d3">When, and which house</h2>
                 <div className="mt-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
                   <label className="flex flex-col gap-1 sm:col-span-2">
-                    <span className="text-micro uppercase text-mute">House</span>
+                    <span className="text-sm text-mute">House</span>
                     <select value={form.location} onChange={set('location')} className={FIELD}>
                       {properties.map((p) => (
                         <option key={p.id} value={p.id}>
@@ -185,15 +184,15 @@ export default function Book() {
                     </select>
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-micro uppercase text-mute">Arrival</span>
+                    <span className="text-sm text-mute">Arrival</span>
                     <input type="date" min={today()} value={form.checkIn} onChange={set('checkIn')} required className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-micro uppercase text-mute">Departure</span>
+                    <span className="text-sm text-mute">Departure</span>
                     <input type="date" min={form.checkIn || today()} value={form.checkOut} onChange={set('checkOut')} required className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-micro uppercase text-mute">Adults</span>
+                    <span className="text-sm text-mute">Adults</span>
                     <select value={form.adults} onChange={set('adults')} className={FIELD}>
                       {[1, 2, 3, 4, 5, 6].map((n) => (
                         <option key={n} value={n}>{n}</option>
@@ -201,7 +200,7 @@ export default function Book() {
                     </select>
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-micro uppercase text-mute">Children</span>
+                    <span className="text-sm text-mute">Children</span>
                     <select value={form.children} onChange={set('children')} className={FIELD}>
                       {[0, 1, 2, 3, 4, 5, 6].map((n) => (
                         <option key={n} value={n}>{n}</option>
@@ -255,7 +254,7 @@ export default function Book() {
                           <span className="font-display text-lg" style={selected ? { color: 'rgb(var(--accent))' } : undefined}>
                             {row.name}
                           </span>
-                          <span className="text-micro uppercase text-mute">
+                          <span className="text-sm text-mute">
                             {row.available === null
                               ? 'Availability confirmed by the house'
                               : soldOut
@@ -265,7 +264,7 @@ export default function Book() {
                         </span>
                         <span className="flex flex-col items-end gap-1">
                           <span className="font-display text-xl">{formatNGN(row.total || row.rate * stayNights)}</span>
-                          <span className="text-micro uppercase text-mute">
+                          <span className="text-sm text-mute">
                             {formatNGN(row.rate)} × {stayNights}
                           </span>
                         </span>
@@ -299,19 +298,19 @@ export default function Book() {
                 </p>
                 <div className="mt-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
                   <label className="flex flex-col gap-1 sm:col-span-2">
-                    <span className="text-micro uppercase text-mute">Full name</span>
+                    <span className="text-sm text-mute">Full name</span>
                     <input type="text" minLength={2} maxLength={120} value={form.guestName} onChange={set('guestName')} required className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-micro uppercase text-mute">Telephone</span>
+                    <span className="text-sm text-mute">Telephone</span>
                     <input type="tel" minLength={7} maxLength={20} value={form.guestPhone} onChange={set('guestPhone')} required className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-micro uppercase text-mute">Email (optional)</span>
+                    <span className="text-sm text-mute">Email (optional)</span>
                     <input type="email" value={form.guestEmail} onChange={set('guestEmail')} className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1 sm:col-span-2">
-                    <span className="text-micro uppercase text-mute">
+                    <span className="text-sm text-mute">
                       Anything we should know (optional)
                     </span>
                     <textarea rows={3} maxLength={500} value={form.specialRequests} onChange={set('specialRequests')} className={`${FIELD} resize-none`} />
@@ -331,7 +330,6 @@ export default function Book() {
 
             {/* ---------- 4. confirmation ---------- */}
             {step === 4 && confirmation && (
-              <Reveal>
                 <div className="border border-ink/10 bg-chalk p-8 lg:p-10">
                   <p className="eyebrow">Request {confirmation.reference}</p>
                   <h2 className="mt-4 font-display text-d3">No room is held yet</h2>
@@ -351,7 +349,7 @@ export default function Book() {
                       ['Status', confirmation.status],
                     ].map(([k, v]) => (
                       <div key={k} className="flex items-baseline justify-between gap-6 border-t border-ink/10 py-3">
-                        <dt className="text-micro uppercase text-mute">{k}</dt>
+                        <dt className="text-sm text-mute">{k}</dt>
                         <dd className="text-right text-sm">{v}</dd>
                       </div>
                     ))}
@@ -363,7 +361,6 @@ export default function Book() {
                     </a>
                   )}
                 </div>
-              </Reveal>
             )}
           </div>
 
@@ -381,7 +378,7 @@ export default function Book() {
                   ['Room', chosenRow?.name || '—'],
                 ].map(([k, v]) => (
                   <div key={k} className="flex items-baseline justify-between gap-6 border-t border-ink/10 py-3">
-                    <dt className="text-micro uppercase text-mute">{k}</dt>
+                    <dt className="text-sm text-mute">{k}</dt>
                     <dd className="text-right text-sm">{v}</dd>
                   </div>
                 ))}
@@ -389,7 +386,7 @@ export default function Book() {
 
               {chosenRow && stayNights > 0 && (
                 <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-ink/15 pt-5">
-                  <span className="text-micro uppercase text-mute">Estimate</span>
+                  <span className="text-sm text-mute">Estimate</span>
                   <span className="font-display text-2xl" style={{ color: 'rgb(var(--accent))' }}>
                     {formatNGN(chosenRow.total || chosenRow.rate * stayNights)}
                   </span>
@@ -409,7 +406,7 @@ export default function Book() {
                 </p>
               )}
               <Link to="/booking-status" className="link-quiet mt-6">
-                Check an existing request &rarr;
+                Check an existing request
               </Link>
             </div>
           </aside>

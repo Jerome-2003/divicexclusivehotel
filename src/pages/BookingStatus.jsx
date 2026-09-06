@@ -4,7 +4,7 @@ import { SectionHead } from '../components/primitives';
 
 const FIELD =
   'w-full border-b border-ink/20 bg-transparent px-0 py-3 text-body text-ink uppercase ' +
-  'tracking-[0.12em] placeholder:text-mute placeholder:normal-case placeholder:tracking-normal ' +
+  'placeholder:text-mute placeholder:normal-case ' +
   'focus:border-[rgb(var(--accent))] focus:outline-none transition-colors duration-400';
 
 const WORDING = {
@@ -39,14 +39,13 @@ export default function BookingStatus() {
     <section className="shell pb-section pt-40">
       <div className="max-w-xl">
         <SectionHead
-          eyebrow="Reservations"
           title="Check a request"
           lead="Enter the reference you were given when you sent your request."
         />
 
         <form onSubmit={lookUp} className="mt-10">
           <label className="flex flex-col gap-1">
-            <span className="text-micro uppercase text-mute">Reference</span>
+            <span className="text-sm text-mute">Reference</span>
             <input
               value={reference}
               onChange={(e) => setReference(e.target.value)}

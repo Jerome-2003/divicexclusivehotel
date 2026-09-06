@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { BRAND } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
-import { Reveal, SectionHead, SpecList } from '../components/primitives';
+import { SectionHead, SpecList } from '../components/primitives';
 
 export default function Contact() {
   const { properties } = useProperty();
@@ -9,7 +9,6 @@ export default function Contact() {
     <>
       <section className="shell pb-8 pt-40">
         <SectionHead
-          eyebrow="Contact"
           title={
             <>
               Two houses,
@@ -24,14 +23,13 @@ export default function Contact() {
         <div className="grid gap-14 lg:grid-cols-12">
           {/* directory */}
           <div className="flex flex-col gap-12 lg:col-span-5">
-            {properties.map((p, i) => {
+            {properties.map((p) => {
               const accentVars =
                 p.id === 'urban'
                   ? { '--accent': '180 84 58', '--accent-deep': '138 61 40' }
                   : { '--accent': '91 86 56', '--accent-deep': '62 58 36' };
               return (
-                <Reveal key={p.id} delay={i * 80}>
-                  <div style={accentVars}>
+                <div key={p.id} style={accentVars}>
                     <p className="eyebrow">{p.name}</p>
                     <p className="mt-3 font-display text-d3">{p.character}</p>
                     <SpecList
@@ -45,14 +43,13 @@ export default function Contact() {
                     />
                     <div className="mt-6 flex flex-wrap gap-6">
                       <a href={p.mapUrl} target="_blank" rel="noopener noreferrer" className="link-quiet">
-                        Directions &rarr;
+                        Directions
                       </a>
                       <a href={`tel:${p.phone}`} className="link-quiet">
-                        Call the house &rarr;
+                        Call the house
                       </a>
                     </div>
-                  </div>
-                </Reveal>
+                </div>
               );
             })}
 
@@ -80,7 +77,7 @@ export default function Contact() {
             </div>
 
             <div className="mt-10 border-t border-ink/10 pt-8">
-              <p className="text-micro uppercase text-mute">Follow</p>
+              <p className="text-sm text-mute">Follow</p>
               <a
                 href={BRAND.instagram}
                 target="_blank"

@@ -2,24 +2,20 @@ import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { formatNGN } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
-import { Plate, Reveal, SectionHead, SpecList } from '../components/primitives';
+import { Plate, SectionHead, SpecList } from '../components/primitives';
 
 /* One row per room type: image and copy trade sides down the page. The image is the
    card — no borders, no shadow. */
 function RoomRow({ room, index }) {
   const flipped = index % 2 === 1;
   return (
-    <Reveal>
-      <article className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+    <article className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
         <Plate
           src={room.image}
           alt={room.name}
           className={`aspect-[16/11] lg:col-span-7 ${flipped ? 'lg:order-2 lg:col-start-6' : ''}`}
         />
         <div className={`flex flex-col gap-5 lg:col-span-4 ${flipped ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-9'}`}>
-          <p className="font-display text-lg italic" style={{ color: 'rgb(var(--accent))' }}>
-            {String(index + 1).padStart(2, '0')}
-          </p>
           <h3 className="font-display text-d3">{room.name}</h3>
           <p className="prose-body">{room.description}</p>
 
@@ -38,15 +34,14 @@ function RoomRow({ room, index }) {
             <span className="font-display text-3xl" style={{ color: 'rgb(var(--accent))' }}>
               {formatNGN(room.rate)}
             </span>
-            <span className="text-micro uppercase text-mute">per night, from</span>
+            <span className="text-sm text-mute">per night, from</span>
           </div>
 
           <Link to={`/book?roomType=${room.type}`} className="link-quiet self-start">
-            Request this room &rarr;
+            Request this room
           </Link>
         </div>
-      </article>
-    </Reveal>
+    </article>
   );
 }
 
@@ -80,8 +75,8 @@ export default function Property() {
         />
         <div aria-hidden="true" className="absolute inset-0 z-20" style={{ background: 'linear-gradient(to bottom, rgba(11,10,8,.45) 0%, rgba(11,10,8,.14) 32%, rgba(11,10,8,.72) 70%, rgba(11,10,8,.96) 100%)' }} />
         <div className="shell relative z-30 pb-16 pt-32">
-          <p className="text-micro uppercase" style={{ color: '#E8D9AE' }}>
-            {property.character} &middot; {property.totalRooms} rooms
+          <p className="text-sm" style={{ color: '#E8D9AE' }}>
+            {property.totalRooms} rooms. {property.character}.
           </p>
           <h1 className="mt-4 max-w-[14ch] font-display text-d1 font-light text-bone">
             {property.name}
@@ -91,9 +86,7 @@ export default function Property() {
             <Link to="/book" className="btn btn-onDark">
               Request a stay
             </Link>
-            <span className="text-micro uppercase text-bone/50">
-              From {formatNGN(totalFrom)} per night
-            </span>
+            <span className="text-sm text-bone/60">From {formatNGN(totalFrom)} per night</span>
           </div>
         </div>
       </section>
@@ -102,7 +95,7 @@ export default function Property() {
       <section className="section shell">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-6">
-            <SectionHead eyebrow="The house" title={property.intro} />
+            <SectionHead title={property.intro} />
           </div>
           <div className="flex flex-col justify-end gap-6 lg:col-span-4 lg:col-start-9">
             <p className="prose-body">{property.stayPitch}</p>
@@ -121,7 +114,6 @@ export default function Property() {
       <section className="section bg-chalk">
         <div className="shell">
           <SectionHead
-            eyebrow="Rooms & rates"
             title={`Every room at ${property.name}`}
             lead={`${property.roomTypes.length} room types, ${property.totalRooms} rooms in total. Rates are nightly and ${
               ratesAreLive ? 'come live from the hotel system' : 'are the published rates'
@@ -139,7 +131,7 @@ export default function Property() {
       <section className="section shell">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <SectionHead eyebrow="Included" title="What comes with the room" />
+            <SectionHead title="What comes with the room" />
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
             <dl className="grid gap-x-10 sm:grid-cols-2">
@@ -157,20 +149,20 @@ export default function Property() {
       {/* ---------- gallery: asymmetric, not a grid of equal tiles ---------- */}
       <section className="section bg-chalk">
         <div className="shell">
-          <SectionHead eyebrow="The place" title="A look around" />
+          <SectionHead title="A look around" />
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
-            <Reveal className="md:col-span-7">
+            <div className="md:col-span-7">
               <Plate src={property.galleryImages[0]} alt="" className="aspect-[4/3]" />
-            </Reveal>
-            <Reveal delay={80} className="md:col-span-4 md:col-start-9 md:mt-16">
+            </div>
+            <div className="md:col-span-4 md:col-start-9 md:mt-16">
               <Plate src={property.galleryImages[1]} alt="" className="aspect-[3/4]" />
-            </Reveal>
-            <Reveal delay={40} className="md:col-span-4 md:col-start-2">
+            </div>
+            <div className="md:col-span-4 md:col-start-2">
               <Plate src={property.galleryImages[2]} alt="" className="aspect-square" />
-            </Reveal>
-            <Reveal delay={120} className="md:col-span-6 md:col-start-7 md:-mt-12">
+            </div>
+            <div className="md:col-span-6 md:col-start-7 md:-mt-12">
               <Plate src={property.galleryImages[3]} alt="" className="aspect-[16/10]" />
-            </Reveal>
+            </div>
           </div>
         </div>
       </section>
@@ -179,10 +171,7 @@ export default function Property() {
       <section className="section bg-obsidian text-bone">
         <div className="shell flex flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-micro uppercase" style={{ color: '#C9A961' }}>
-              {property.name}
-            </p>
-            <h2 className="mt-4 max-w-[18ch] font-display text-d2 font-light">
+            <h2 className="max-w-[18ch] font-display text-d2 font-light">
               Request the room, and we will call you.
             </h2>
           </div>
@@ -194,7 +183,7 @@ export default function Property() {
               href={property.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-micro uppercase text-bone/50 underline-offset-4 hover:text-bone hover:underline"
+              className="text-sm text-bone/60 underline-offset-4 hover:text-bone hover:underline"
             >
               {property.address}
             </a>

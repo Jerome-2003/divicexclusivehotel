@@ -198,3 +198,34 @@ Exclusive has no photography yet, and renders its designed plate rather than sto
   written to be plausible; every hard fact comes from `API.md`.
 - **Deposits.** The contract supports an optional `paystackReference`; the flow does not
   take payment, and the client is ready for it when you are.
+
+---
+
+## 12. Design pass — what the review changed
+
+Run against the repo's `frontend-design` skill, which calibrates a design against the
+traits that currently mark work as machine-generated. Several were present and have been
+removed. None of them belonged to the Limestone direction; they were default habits
+layered on top of it.
+
+| Removed | Why |
+|---|---|
+| Tracked-out ALL-CAPS eyebrow above nearly every heading | A label that restates its heading is decoration. Labels now appear only where they carry something the heading does not, in sentence case |
+| `01 / 02 / 03` numerals on room types | Numbering encodes sequence. Rooms are a set, not a sequence — the room count already says what the numeral pretended to |
+| `→` appended to every link and button | Template chrome. The link is carried by colour, underline and hover |
+| Middle-dot meta strings (`21 rooms · Open, social, daylit`) | Now written as sentences, because they are sentences |
+| Fade-and-slide-up reveal on every section | Scattered scroll effects are the generated default. Everything is visible at rest; motion is spent where it answers an action |
+| All-caps buttons, navigation, switcher and spec keys | Signage where data and plain controls belong |
+
+**One finding stands open.** The skill names as its first calibration trait: *"a warm cream
+background (near #F4F1EA) with a high-contrast serif display and a terracotta or warm-clay
+accent"*. That is a fair description of Limestone — cream `#EFEBE4`, Fraunces, clay
+`#B4543A`. The direction was chosen deliberately from three options and the brief's own
+choice wins over the calibration list, so it stands. But it is worth knowing that the
+palette sits on the most crowded square of the board, and the differentiation now rests on
+the photography, the asymmetric layout and the two-house accent system rather than on the
+palette itself.
+
+If that is not acceptable, **Modernist Lagos** — off-white against ink-green, Bodoni Moda
+display, oxblood against signal green — moves decisively off the cluster and was the
+strongest of the three on distinctiveness. It needs commissioned photography to carry it.
