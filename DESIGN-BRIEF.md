@@ -27,37 +27,38 @@ of light, never a different website.
 
 ## 2. Colour
 
-Light ground, ink type, the champagne from the swan mark reserved for the mark and dark
-surfaces. Accents are exposed as CSS custom properties on `<html data-property>`, so no
-component ever hard-codes a property.
+One ground for the whole site: the near-black the swan mark was drawn on. The homepage
+set it; the property, contact and booking pages now share it, so moving from the
+destination chooser into a house is a change of place, not a change of website.
+Accents are exposed as CSS custom properties on `<html data-property>`, so no component
+ever hard-codes a property.
 
 ### Shared (never varies)
 
 | Token | Value | Role |
 |---|---|---|
-| `limestone` | `#EFEBE4` | Primary ground |
-| `chalk` | `#F7F4EF` | Raised ground, alternating sections |
-| `sand` | `#E4DED3` | Media plate base |
-| `obsidian` | `#0B0A08` | Deliberate dark: hero scrim, footer, closing sections |
-| `espresso` | `#191410` | Dark panel step |
-| `ink` | `#16130F` | Body text on light |
-| `slate` | `#6B635A` | Secondary text |
+| `obsidian` | `#0B0A08` | Primary ground |
+| `espresso` | `#141110` | Raised ground, alternating sections and panels |
+| `umber` | `#221D17` | Media plate base |
+| `bone` | `#F2EDE3` | Primary type |
+| `linen` | `#B3AA9C` | Body and secondary type |
 | `mute` | `#948B80` | Labels, tertiary |
-| `bone` | `#F2EDE3` | Text on dark |
-| `champagne` | `#C9A961` | The mark, and eyebrows on dark grounds only |
+| `champagne` | `#C9A961` | The mark and the brand wordmark |
 
 ### Per property
 
 | | Divic Exclusive | Divic Urban |
 |---|---|---|
-| `--accent` | `91 86 56` — deep olive-bronze | `180 84 58` — Lagos clay |
-| `--accent-deep` | `62 58 36` | `138 61 40` |
+| `--accent` | `138 130 88` — olive-bronze | `201 112 78` — Lagos clay |
+| `--accent-lift` | `167 157 108` (hover, large figures) | `220 134 99` |
+| `--accent-deep` | `62 58 36` (plate gradient) | `110 56 35` |
 | Reads as | Older, quieter, residential | Hotter, younger, street-facing |
 
 **Usage discipline.** The accent is line, letter and state — never a large fill, with the
 single exception of one solid button per view. Body copy is never accent-coloured.
-Contrast: ink on limestone ≈ 14:1; slate on limestone ≈ 6.4:1; both accents clear 4.5:1
-on limestone at body size.
+Contrast on `obsidian`: bone ≈ 17:1; linen ≈ 8.6:1; mute ≈ 5.9:1; both accents ≈ 5:1, so
+each clears 4.5:1 at body size. A solid accent button carries obsidian type, not bone —
+the accent is the light source on this ground, so the type on it is the dark half.
 
 ---
 
@@ -91,16 +92,18 @@ Display is set **light**, never bold. Labels are the only uppercase text. Headin
 - Shell `1360px`, gutters `clamp(1.25rem, 5vw, 5rem)`, section rhythm `clamp(5rem, 11vh, 9rem)`.
 - Twelve columns, asymmetric by default: `1–7 / 9–12`, `1–6 / 9–12`, `1–4 / 6–12`.
   Never the symmetric `1–6 / 7–12`.
-- Ground alternates limestone → chalk → obsidian to give a long page its cadence.
+- Ground alternates obsidian → espresso to give a long page its cadence.
 - Galleries are asymmetric with deliberate offsets, never a grid of equal tiles.
 
 ---
 
 ## 5. Components
 
-**Header.** Fixed. Over a hero it inverts to bone with no border; past 24px of scroll it
-takes a limestone ground at 85% with backdrop blur and an ink hairline. The switcher and
-wordmark invert with it.
+**Header.** Fixed, and one treatment everywhere — the site no longer crosses from a dark
+hero onto a light page, so there is nothing to invert between. Transparent over the hero;
+past 24px of scroll it takes an obsidian ground at 85% with backdrop blur and a bone
+hairline. The wordmark and mark are champagne; the one standing action is a solid accent
+fill, which is where each house's colour appears in the chrome.
 
 **Property switcher.** The persistent pivot — present at every scroll position and every
 breakpoint, never folded into the menu. `role="tablist"`, `aria-selected` maintained, a
@@ -269,3 +272,60 @@ that panel, where they are the location control anyway. Measured to fit from 360
 both on `frontend-design`'s list of generated-design tells. They were specified, and they
 are genuine luxury-hospitality convention, so they stand — but they are the two places
 this page follows a pattern rather than making an argument.
+
+
+---
+
+## 14. Matching the pages to the homepage
+
+The chooser was dark and everything behind it was cream. Two colour worlds in one site
+read as two sites, so the ground follows the homepage now and the whole system inverts:
+`obsidian` where `limestone` was, `espresso` where `chalk` was, `bone`/`linen`/`mute` for
+type. The two property accents move with it — the ink-on-paper olive and clay were too
+dark to read on near-black, so each is lifted to the value the homepage cards already
+used (`#8A8258`, `#C9704E`), and each gains an `--accent-lift` for hover and for the large
+rate figures. Nothing else about the direction changes: same typefaces, same scale, same
+asymmetry, same hairlines.
+
+### The property hero is a tour, not a portrait
+
+Arriving at a house opened on one still photograph of a facade. A guest choosing between
+two houses wants to know what each *has*, so the frontview still opens and the hero then
+moves through the bar, the pool, the gym — one shot per place, drawn from the same gallery
+groups further down the page. Under the copy sits a named index of those places: it labels
+what is on screen and doubles as the control, so the guest can go straight to the pool
+instead of waiting for it. It pauses on hover and does not advance under
+`prefers-reduced-motion`.
+
+### A look around
+
+Names sit **on** the photographs, not beneath them. One lead frame at full width, then an
+uneven tile — the shapes differ because the places differ. Each frame carries a bottom
+scrim, an accent hairline that lengthens on hover, the place name in the display face, and
+a count where the group holds more than one photograph. Where a group is a slideshow its
+dots move to the top-right, out of the caption's way. The photograph itself drifts in
+1.055× on hover; the frame and caption stay put.
+
+### Rooms
+
+A room is sold by the photograph, so the photograph takes the full width of the spread and
+the words sit on the edge of it: a panel of `espresso` at 95% with backdrop blur,
+overlapping the image by one column, sides swapping down the page. On small screens the
+panel pulls up over the bottom of the image by the same logic. Inside it, the rate is the
+largest thing set — it is what is being decided — with the room count and floors as one
+quiet line, and a solid accent button rather than a text link.
+
+### Amenities
+
+A hairline mesh: tiles of `obsidian` separated by 1px gaps over a `bone/15` ground, so the
+grid draws its own rules and no tile needs a border. Each carries a line mark matched to
+the hairline weight of the rest of the page, drawn in `src/components/AmenityIcon.jsx` and
+selected by the words the hotel actually uses, so a new amenity with a familiar word gets
+its mark without anyone editing a mapping. Nothing here loads from a CDN.
+
+### Order
+
+Hero → introduction → a look around → what comes with the room → every room → closing.
+The house first, then what is in it, then what it costs. The hero, the gallery and the
+closing each carry the same standing action, so the request is never more than a screen
+away.

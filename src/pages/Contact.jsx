@@ -24,10 +24,13 @@ export default function Contact() {
           {/* directory */}
           <div className="flex flex-col gap-12 lg:col-span-5">
             {properties.map((p) => {
+              /* Both houses appear on this page at once, so each block carries its own
+                 accent rather than inheriting the document's. Values match the tokens
+                 in index.css. */
               const accentVars =
                 p.id === 'urban'
-                  ? { '--accent': '180 84 58', '--accent-deep': '138 61 40' }
-                  : { '--accent': '91 86 56', '--accent-deep': '62 58 36' };
+                  ? { '--accent': '201 112 78', '--accent-lift': '220 134 99' }
+                  : { '--accent': '138 130 88', '--accent-lift': '167 157 108' };
               return (
                 <div key={p.id} style={accentVars}>
                     <p className="eyebrow">{p.name}</p>
@@ -58,7 +61,7 @@ export default function Contact() {
 
           {/* the reservation flow lives on its own page; this points at it */}
           <div className="lg:col-span-6 lg:col-start-7">
-            <div className="border border-ink/10 bg-chalk p-8 lg:p-12">
+            <div className="border border-bone/10 bg-espresso p-8 lg:p-12">
               <p className="eyebrow">Reservations</p>
               <h3 className="mt-4 font-display text-d3">Request a stay</h3>
               <p className="prose-body mt-4">
@@ -76,7 +79,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="mt-10 border-t border-ink/10 pt-8">
+            <div className="mt-10 border-t border-bone/10 pt-8">
               <p className="text-sm text-mute">Follow</p>
               <a
                 href={BRAND.instagram}
