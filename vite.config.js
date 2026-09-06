@@ -4,29 +4,34 @@ import { copyFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * GitHub Pages serves a *user* site (`<user>.github.io`) from the origin root and a
- * *project* site from `/<repo>/`. Nothing in the app may assume which: every asset URL
- * goes through `src/lib/asset.js`, which resolves against `import.meta.env.BASE_URL`,
- * and the router takes the same value as its basename.
+ * The site is published as a GitHub Pages *project* site — Pages is set to the `docs/`
+ * folder on `main`, and the build output is committed there — so it is served from
+ * `/divicexclusivehotel/`, not the origin root.
  *
- *   npm run build                                   → served from /
- *   VITE_BASE=/divicexclusivehotel/ npm run build   → served from /divicexclusivehotel/
+ * Nothing in the app may assume that path. Asset URLs go through `src/lib/asset.js`,
+ * which resolves against `import.meta.env.BASE_URL`, and the router takes the same value
+ * as its basename. `VITE_BASE` overrides it, so the same source also builds for a root
+ * deployment or a preview under some other path:
+ *
+ *   npm run build                 → /divicexclusivehotel/  (what Pages serves today)
+ *   VITE_BASE=/ npm run build     → the origin root
  *
  * The base must start and end with a slash.
  */
-const base = process.env.VITE_BASE || '/';
+const base = process.env.VITE_BASE || '/divicexclusivehotel/';
+const outDir = process.env.VITE_OUT_DIR || 'docs';
 
 /**
  * Pages has no server-side rewrite, so a guest opening /urban directly — or reloading
  * one — gets Pages' own 404 rather than the app. Serving the same document as 404.html
- * hands those URLs back to the router, which is the standard SPA fallback for Pages.
+ * hands those URLs back to the router. Written on every build so it can never drift out
+ * of step with index.html the way a hand-copied one does.
  */
-function spaFallback() {
+function spaFallback(dir) {
   return {
     name: 'divic-spa-fallback',
     apply: 'build',
     closeBundle() {
-      const dir = 'dist';
       const index = join(dir, 'index.html');
       if (existsSync(index)) copyFileSync(index, join(dir, '404.html'));
     },
@@ -35,6 +40,6 @@ function spaFallback() {
 
 export default defineConfig({
   base,
-  plugins: [react(), spaFallback()],
-  build: { outDir: 'dist', sourcemap: false },
+  plugins: [react(), spaFallback(outDir)],
+  build: { outDir, sourcemap: false, emptyOutDir: true },
 });

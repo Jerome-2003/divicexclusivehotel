@@ -4,7 +4,8 @@
   "description": "Divic — website for Divic Exclusive and Divic Urban, Festac, Lagos",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node postbuild.js",
+    "deploy": "npm run build && gh-pages -d dist",
     "preview": "vite preview --port 4173"
   },
   "repository": {
@@ -27,6 +28,7 @@
     "@fontsource-variable/karla": "^5.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "autoprefixer": "^10.5.5",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.5.28",
     "sharp": "^0.35.4",
     "tailwindcss": "^3.4.17",

@@ -18,25 +18,33 @@ npm run preview
 
 ## Deploying
 
-`npm run build` writes everything the site needs into `dist/` — **including
-`dist/images/`, copied from `public/`. Deploy the whole `dist/` directory.** Uploading
-only `index.html` and `assets/` is what produces `404 (Not Found)` on every photograph.
+The site is published as a GitHub Pages **project site**: Pages is set to the `docs/`
+folder on `main`, so `docs/` is build output that is committed, and it is served from
+`https://jerome-2003.github.io/divicexclusivehotel/`.
 
-Where the site is served from decides how the build must be made:
+```bash
+npm run build     # writes docs/ — commit the result
+```
+
+**Rebuild and commit `docs/` whenever `src/` or `public/` changes**, or the live site
+keeps serving the previous bundle. The build copies `public/images/` into `docs/images/`;
+a deploy missing that directory is what produces `404 (Not Found)` on every photograph.
+
+Nothing in the app hardcodes the sub-path. Asset URLs go through `src/lib/asset.js`,
+which resolves against `import.meta.env.BASE_URL`, and the router takes the same value as
+its `basename`, so one flag moves the whole site:
 
 | Served from | Build with |
 |---|---|
-| `https://<user>.github.io/` (user site, origin root) | `npm run build` |
-| `https://<user>.github.io/<repo>/` (project site) | `VITE_BASE=/<repo>/ npm run build` |
+| `…github.io/divicexclusivehotel/` (today) | `npm run build` |
+| the origin root, e.g. a user site | `VITE_BASE=/ npm run build` |
+| somewhere else | `VITE_BASE=/path/ VITE_OUT_DIR=dist npm run build` |
 
-Nothing in the app hardcodes the root. Asset URLs go through `src/lib/asset.js`, which
-resolves against `import.meta.env.BASE_URL`, and the router takes the same value as its
-`basename` — so one flag moves the whole site between the two.
-
-The build also writes `dist/404.html` as a copy of `index.html`. GitHub Pages has no
-server-side rewrite, so without it a guest who opens `/urban` directly, or reloads it,
-gets Pages' own 404 instead of the site. Pages serves `404.html` for unknown paths, which
-hands the URL back to the router.
+Every build also writes `404.html` beside `index.html`. Pages has no server-side rewrite,
+so without it a guest who opens `/urban` directly, or reloads it, gets Pages' own 404
+instead of the site. Pages serves `404.html` for unknown paths, which hands the URL back
+to the router. It is generated on every build rather than copied by hand, so it cannot
+drift out of step with `index.html`.
 
 ## Stack
 

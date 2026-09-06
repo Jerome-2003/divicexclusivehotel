@@ -25,7 +25,6 @@ export const PROPERTY_SEED = [
     name: 'Divic Exclusive',
     address: 'Plot 55, 1st Avenue, E Close, Festac, Lagos',
     phone: '09169845311',
-    totalRooms: 15,
     currency: 'NGN',
     roomTypes: [
       { type: 'standard', rate: 40000, roomCount: 6, floors: [0] },
@@ -38,7 +37,6 @@ export const PROPERTY_SEED = [
     name: 'Divic Urban',
     address: 'Plot 340, 3rd Avenue, A1 Close, Festac, Lagos',
     phone: '09169845314',
-    totalRooms: 21,
     currency: 'NGN',
     roomTypes: [
       { type: 'classic', rate: 50000, roomCount: 5, floors: [0, 1] },
@@ -62,9 +60,9 @@ export const CONTENT = {
     slug: 'exclusive',
     shortName: 'Exclusive',
     character: 'Residential, discreet, low-lit',
-    tagline: 'Fifteen rooms, and the sense that nobody else is checking in.',
+    tagline: 'the sense that nobody else is checking in.',
     intro:
-      'A fifteen-room house on a quiet close, built for people who would rather not be ' +
+      'Hotel on a quiet close, built for people who would rather not be ' +
       'announced. Three floors, one staircase, and a front desk that knows your name by ' +
       'the second evening.',
     stayPitch:
@@ -117,14 +115,13 @@ export const CONTENT = {
     slug: 'urban',
     shortName: 'Urban',
     character: 'Open, social, daylit',
-    tagline: 'Twenty-one rooms, and the whole of Festac at the door.',
+    tagline: 'the whole of Festac at the door.',
     intro:
-      'Twenty-one rooms over three floors on 3rd Avenue, built for people who came to be ' +
+      '3rd Avenue, built for people who came to be ' +
       'out, not in. A bar, a pool, a gym, and a lobby that stays busy from seven.',
     stayPitch:
       'Most guests stay a night or two. Check-in is quick, the restaurant opens early, and ' +
       'the desk knows which way to send you before the traffic builds.',
-    coords: '6.4671° N, 3.2894° E',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Plot+340+3rd+Avenue+A1+Close+Festac+Lagos',
     heroImage: urban('frontview'),
