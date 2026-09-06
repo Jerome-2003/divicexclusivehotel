@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import SplashScreen from './components/SplashScreen';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { PropertyProvider } from './context/PropertyContext';
 import Header from './components/Header';
@@ -21,6 +22,8 @@ function ScrollToTop() {
 export default function App() {
   return (
     <PropertyProvider>
+      {/* covers a page that is already mounted and interactive underneath */}
+      <SplashScreen />
       <ScrollToTop />
       <Header />
       <main id="main">

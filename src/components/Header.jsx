@@ -75,6 +75,9 @@ export default function Header() {
   // Over a hero the header inverts to bone, and returns to ink once it gains its ground.
   const hasHero = pathname === '/' || /^\/(exclusive|urban)$/.test(pathname);
   const onDark = hasHero && !stuck;
+  // On the chooser itself the page asks the question; the header does not ask it again.
+  const isChooser = pathname === '/';
+  const nav = isChooser ? NAV.filter((i) => !/^\/(exclusive|urban)$/.test(i.to)) : NAV;
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -121,7 +124,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden items-center gap-9 lg:flex" aria-label="Primary">
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -143,12 +146,16 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:block">
-              <PropertySwitcher onDark={onDark} />
-            </div>
-            <div className="sm:hidden">
-              <PropertySwitcher compact onDark={onDark} />
-            </div>
+            {!isChooser && (
+              <>
+                <div className="hidden sm:block">
+                  <PropertySwitcher onDark={onDark} />
+                </div>
+                <div className="sm:hidden">
+                  <PropertySwitcher compact onDark={onDark} />
+                </div>
+              </>
+            )}
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
@@ -178,7 +185,7 @@ export default function Header() {
           >
             Close
           </button>
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <NavLink key={item.to} to={item.to} className="py-2 font-display text-d3">
               {item.label}
             </NavLink>
