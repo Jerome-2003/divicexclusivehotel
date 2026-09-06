@@ -61,13 +61,15 @@ export default function Book() {
   const [availability, setAvailability] = useState(null);
   const [confirmation, setConfirmation] = useState(null);
 
+  /* The homepage search hands over location, dates and guests. Arriving with a complete
+     set means the guest has already answered step one, so we open on the room step. */
   const [form, setForm] = useState({
-    location: propertyId || 'exclusive',
+    location: params.get('location') || propertyId || 'exclusive',
     roomType: params.get('roomType') || '',
-    checkIn: '',
-    checkOut: '',
-    adults: '1',
-    children: '0',
+    checkIn: params.get('checkIn') || '',
+    checkOut: params.get('checkOut') || '',
+    adults: params.get('adults') || '2',
+    children: params.get('children') || '0',
     guestName: '',
     guestPhone: '',
     guestEmail: '',
@@ -79,8 +81,30 @@ export default function Book() {
   const stayNights = nightsBetween(form.checkIn, form.checkOut);
 
   useEffect(() => {
-    document.title = 'Book a stay — Divic';
+    document.title = 'Request a stay — Divic';
   }, []);
+
+  /* Arriving from the homepage search with dates already chosen: skip straight to the
+     room step and fetch availability, rather than showing a form that is already filled. */
+  const [handedOver] = useState(
+    () => Boolean(params.get('checkIn') && params.get('checkOut')),
+  );
+  useEffect(() => {
+    if (!handedOver) return;
+    setStep(2);
+    if (!divic.configured) return;
+    setBusy(true);
+    divic
+      .checkAvailability({
+        location: params.get('location') || 'exclusive',
+        checkIn: params.get('checkIn'),
+        checkOut: params.get('checkOut'),
+      })
+      .then(setAvailability)
+      .catch((err) => setError(err.message))
+      .finally(() => setBusy(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handedOver]);
 
   // keep the page's accent in step with the house being booked
   useEffect(() => {
