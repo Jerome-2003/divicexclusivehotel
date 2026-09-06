@@ -174,6 +174,34 @@ A high-contrast display serif against a geometric sans, held to a strict scale.
 - **CTA:** 1 px accent border, transparent fill, letter-spaced label; inverts to solid
   accent on hover. It is the only bordered element in the header.
 
+### 6.1a Entry sequence — the swan, then the choice
+
+The site opens with a single narrative built from the brand mark itself, then hands the
+guest a decision. Two screens, in order, once per session.
+
+**The loading sequence** (~6 s, skippable, `index.html`). The mark is drawn as inline SVG
+so each part animates independently — no video, no image, no library.
+
+| Beat | Timing | What happens |
+|---|---|---|
+| Approach | 0.1–2.2 s | The swan enters from a distance at 14 % scale, drifting across the water toward the golden sun, which warms from 18 % to full as it nears |
+| Settle | 2.1–3.0 s | It arrives on the sun and rocks once as its weight lands |
+| Wingbeat | 2.05–3.75 s | Two beats; the wing lifts clear of the back line, breaking the silhouette, then folds flush |
+| Ripples | 2.5–5.3 s | Three rings spread from the waterline, staggered 350 ms apart |
+| The words | 3.35–4.7 s | Both lines of the wordmark rise out of the ripple line, blurred to sharp, staggered |
+| The logo | 4.5–5.5 s | The lock-up settles to its final position and holds |
+| Open | 6.0 s | Fades to the branch gate |
+
+Skippable by click, `Esc`, `Enter` or `Space`, with a Skip control from 1.6 s. Under
+`prefers-reduced-motion` the finished logo is held for 1.8 s instead of animated. It runs
+once per session, so navigating the site is never punished by a six-second wait.
+
+**The branch gate.** The split portal then takes the full viewport with the header covered
+and scrolling locked: the guest chooses a house before the site opens. The choice is
+remembered for the session, and a deep link is held and restored afterwards — arrive at
+`#book`, choose Obudu, and you land on the booking page for Obudu. The back office is
+never gated. "View both houses" hands the choice back.
+
 ### 6.2 House switcher — the persistent pivot
 The brand's signature control. Present in the header on every page and every scroll position.
 
@@ -325,7 +353,9 @@ rooms/dining/experiences sections, the brand-story spread and the footer.
 | Split portal hero | Replaces the single home hero; hover expansion, resolve-to-full-bleed, stacked below 768 px |
 | Cross-property section | Both houses side by side with weather, altitude, coordinates and signature amenity |
 | House-bound details | Utility bar, contact page and footer carry each house's address, telephone and position |
+| Entry sequence | The swan loading animation, then a full-screen branch gate (§6.1a) |
 | Per-house rooms | Each house owns the same three room slots under its own names, rates, inventory, copy and imagery |
+| Nothing shared | Venues, room cards, rates, amenities, guest reviews, telephone, email, WhatsApp, booking imagery, page title and meta description all belong to one house. The home page previews that house's **real** rooms and venues, rendered from its own records, so what is advertised is what can be booked |
 | Booking | A House field synced with the switcher in both directions; the request records which house it belongs to |
 | Back office | A **Managing** selector scopes requests, calendar, pricing, content and analytics to one house |
 
@@ -334,6 +364,16 @@ Existing rooms, experiences, rates, inventory, closed dates, discounts, complain
 bookings become House I; House II is seeded from defaults. Nothing already saved is lost,
 and the v1 record is left in place.
 
+**Deliberately shared, because they are brand-level rather than house-level:** the branch
+gate and the "two houses" comparison section show both houses by definition, and the footer
+and contact page list both addresses as a directory. Everything a guest would call a
+*feature* of a hotel belongs to exactly one house.
+
 **Still single-house, by design, for a later pass:** closed dates and discount packages
 apply across both houses, and the reservation desk is one inbox. Splitting those needs a
 booking-rules decision from the operator, not a design one.
+
+**One open question — the brand name.** The supplied logo reads **Divic Exclusive Hotel**
+(three words). The site's wordmark and email domain read **DiviceXclusive**. The loading
+sequence reproduces the logo exactly, so both spellings currently appear. Whichever is
+correct, it should be the only one — say which and it becomes a one-line change.

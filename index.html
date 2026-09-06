@@ -151,6 +151,94 @@
     .portal__mark span:last-child{display:none;}
   }
 
+  /* ================= LOADING SEQUENCE =================
+     The swan drifts in from a distance, settles onto the golden sun,
+     flaps into position, and the ripples it makes carry the wordmark up.
+     One timeline, expressed as delays — no animation library. */
+  #loader{position:fixed;inset:0;z-index:300;background:#0B0A08;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s cubic-bezier(.16,1,.3,1),visibility .8s;}
+  #loader.is-done{opacity:0;visibility:hidden;}
+  .ld-stage{position:relative;width:min(78vw,460px);aspect-ratio:1/1.18;display:flex;align-items:center;justify-content:center;}
+
+  /* the whole lock-up settles into its final position at the end */
+  .ld-lockup{position:absolute;inset:0;animation:ldLock 1s cubic-bezier(.16,1,.3,1) 4.5s both;}
+  @keyframes ldLock{from{transform:translateY(0) scale(1);}to{transform:translateY(-4%) scale(.94);}}
+
+  .ld-mark{position:absolute;left:0;right:0;top:0;height:74%;}
+  .ld-svg{width:100%;height:100%;overflow:visible;}
+
+  /* the sun: present from the first frame, distant and dim, then warms as the swan nears */
+  .ld-sun{transform-origin:350px 252px;animation:ldSun 2.4s cubic-bezier(.16,1,.3,1) .2s both;}
+  @keyframes ldSun{
+    0%{opacity:.18;transform:scale(.82);}
+    70%{opacity:.85;transform:scale(1.02);}
+    100%{opacity:1;transform:scale(1);}
+  }
+
+  /* approach: far away and small, drifting in across the water */
+  .ld-travel{animation:ldTravel 2.1s cubic-bezier(.33,.02,.2,1) .1s both;transform-origin:245px 444px;}
+  @keyframes ldTravel{
+    0%{transform:translate(-46%,14%) scale(.14);opacity:0;}
+    12%{opacity:.5;}
+    100%{transform:translate(0,0) scale(1);opacity:1;}
+  }
+  /* riding the water the whole way */
+  .ld-bob{animation:ldBob 2.6s ease-in-out .1s 2, ldSettle .9s cubic-bezier(.16,1,.3,1) 2.1s both;transform-origin:245px 444px;}
+  @keyframes ldBob{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-2.2%) rotate(-.7deg);}}
+  @keyframes ldSettle{0%{transform:translateY(-1.6%);}55%{transform:translateY(1.4%);}100%{transform:translateY(0);}}
+
+  /* settling in: two wingbeats, the way a swan shrugs into position */
+  .ld-wing{transform-origin:400px 350px;animation:ldFlap .85s cubic-bezier(.4,0,.3,1) 2.05s 2 both;}
+  @keyframes ldFlap{
+    0%{transform:rotate(0deg) translateY(0);}
+    30%{transform:rotate(26deg) translateY(-10px);}   /* wing lifts clear of the back */
+    58%{transform:rotate(-3deg) translateY(2px);}     /* and drops back through */
+    80%{transform:rotate(9deg) translateY(-3px);}
+    100%{transform:rotate(0deg) translateY(0);}
+  }
+
+  /* the ripples those wingbeats push out */
+  .ld-ripple{transform-origin:245px 580px;opacity:0;}
+  .ld-ripple.r1{animation:ldRipple 2.1s cubic-bezier(.16,1,.3,1) 2.5s both;}
+  .ld-ripple.r2{animation:ldRipple 2.1s cubic-bezier(.16,1,.3,1) 2.85s both;}
+  .ld-ripple.r3{animation:ldRipple 2.1s cubic-bezier(.16,1,.3,1) 3.2s both;}
+  @keyframes ldRipple{
+    0%{transform:scale(.16);opacity:0;}
+    18%{opacity:.75;}
+    100%{transform:scale(1.75);opacity:0;}
+  }
+
+  /* the words rise out of the ripple line */
+  .ld-word{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:'Cormorant Garamond',serif;color:#F4F1EA;line-height:1.06;letter-spacing:.02em;}
+  .ld-word span{display:block;overflow:hidden;}
+  .ld-word i{display:block;font-style:normal;}
+  .ld-w1{font-size:clamp(1.5rem,7vw,2.6rem);}
+  .ld-w2{font-size:clamp(1.7rem,8vw,3rem);}
+  .ld-w1 i{animation:ldRise 1.1s cubic-bezier(.16,1,.3,1) 3.35s both;}
+  .ld-w2 i{animation:ldRise 1.1s cubic-bezier(.16,1,.3,1) 3.6s both;}
+  @keyframes ldRise{
+    0%{transform:translateY(105%);opacity:0;filter:blur(6px);}
+    60%{opacity:1;filter:blur(0);}
+    100%{transform:translateY(0);opacity:1;filter:blur(0);}
+  }
+
+  .ld-skip{position:absolute;bottom:clamp(1.25rem,4vh,2.5rem);left:50%;transform:translateX(-50%);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(244,241,234,.45);padding:.6rem 1.2rem;opacity:0;animation:ldSkip .6s ease 1.6s both;transition:color .3s;}
+  .ld-skip:hover{color:var(--brass);}
+  @keyframes ldSkip{to{opacity:1;}}
+
+  /* reduced motion: hold the finished logo briefly instead of animating to it */
+  @media (prefers-reduced-motion:reduce){
+    .ld-lockup,.ld-sun,.ld-travel,.ld-bob,.ld-wing,.ld-ripple,.ld-w1 i,.ld-w2 i,.ld-skip{animation:none!important;opacity:1;transform:none;}
+    .ld-ripple{opacity:.25;}
+  }
+
+  /* ---- branch gate: the choice is made before the site opens ---- */
+  body.gate-open{overflow:hidden;}
+  .portal.is-gate{position:fixed;inset:0;z-index:60;height:100%;min-height:0;}
+  /* .page.is-active keeps a transform from its entry animation, which would make it
+     the containing block for the fixed gate — drop it while the gate is up */
+  body.gate-open .page.is-active{animation:none;transform:none;}
+  body.gate-open .whatsapp-btn{display:none;}
+
   /* ---- cross-property showcase ---- */
   .house-card{display:flex;flex-direction:column;gap:1.25rem;}
   .house-card__media{position:relative;aspect-ratio:4/5;max-height:540px;overflow:hidden;border-radius:.75rem;}
@@ -163,6 +251,57 @@
 </head>
 <body class="w-full min-h-screen overflow-x-hidden">
 
+<!-- ============ LOADING SEQUENCE ============ -->
+<div id="loader" role="status" aria-label="Divic Exclusive Hotel — loading">
+  <div class="ld-stage">
+    <div class="ld-lockup">
+      <div class="ld-mark">
+        <svg class="ld-svg" viewBox="-20 0 600 620" aria-hidden="true">
+          <!-- the golden sun the swan is making for -->
+          <ellipse class="ld-sun" cx="350" cy="252" rx="210" ry="252" fill="#D9C79A"/>
+
+          <!-- ripples pushed out as it settles onto the water -->
+          <g fill="none" stroke="#D9C79A" stroke-width="2.5">
+            <ellipse class="ld-ripple r1" cx="245" cy="580" rx="228" ry="34"/>
+            <ellipse class="ld-ripple r2" cx="245" cy="580" rx="228" ry="34"/>
+            <ellipse class="ld-ripple r3" cx="245" cy="580" rx="228" ry="34"/>
+          </g>
+
+          <g class="ld-travel">
+            <g class="ld-bob">
+              <!-- neck and head: the tall, open S of the mark, with the sun
+                   showing through the sliver between neck and head -->
+              <path d="M350 445 C334 378 298 348 296 282 C294 214 306 166 344 156 C384 146 408 182 398 226"
+                    fill="none" stroke="#F4F1EA" stroke-width="54" stroke-linecap="round"/>
+              <circle cx="398" cy="226" r="31" fill="#F4F1EA"/>
+              <!-- beak -->
+              <path d="M414 206 L474 232 L412 252 Z" fill="#F4F1EA"/>
+              <!-- body, tail point at the left -->
+              <path d="M0 300 C24 330 30 356 22 380
+                       C8 470 96 598 250 598
+                       C400 598 490 520 490 430
+                       C490 340 410 290 300 290
+                       C200 290 110 306 60 306
+                       C34 306 12 304 0 300 Z" fill="#F4F1EA"/>
+              <!-- the wing: flush with the body at rest, opening only on the wingbeat -->
+              <path class="ld-wing"
+                    d="M170 348 C270 312 390 340 442 404 C470 440 456 496 410 522
+                       C336 562 232 548 190 496 C162 462 150 380 170 348 Z"
+                    fill="#F4F1EA"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="ld-word">
+        <span class="ld-w1"><i>Divic Exclusive</i></span>
+        <span class="ld-w2"><i>Hotel</i></span>
+      </div>
+    </div>
+  </div>
+  <button class="ld-skip" type="button" id="loader-skip">Skip</button>
+</div>
+
 <div class="sweep" id="sweep"></div>
 
 <!-- ============ HEADER & TOP CONTACT BAR ============ -->
@@ -171,7 +310,7 @@
     <div class="flex flex-wrap items-center justify-center gap-6">
       <a data-hb-href="mapUrl" href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="map-pin" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="address">1st Avenue, E Close, Festac, Lagos</span></a>
       <a data-hb-href="telUrl" href="tel:08000000000" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="phone" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="phone">08000000000</span></a>
-      <span class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-amber-500"></i> reservations@divicexclusive.com</span>
+      <span class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="email"></span></span>
     </div>
     <a href="#book" data-page-link="book" class="hidden md:inline-flex items-center gap-1 hover:text-amber-400 transition" style="color:var(--brass)">
       Book Online <i data-lucide="arrow-right" class="w-3 h-3"></i>
@@ -188,9 +327,9 @@
         <li class="dropdown relative">
           <button class="dropdown-trigger nav-link flex items-center gap-1">Dine &amp; Unwind <i data-lucide="chevron-down" class="w-3 h-3"></i></button>
           <ul class="dropdown-menu absolute top-full left-0 mt-3 shadow-2xl py-2 min-w-[170px]">
-            <li><a href="#experience/bar" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5">The Amber Room</a></li>
-            <li><a href="#experience/pool" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5">The Sky Pool</a></li>
-            <li><a href="#experience/gym" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5">The Forge</a></li>
+            <li><a href="#experience/bar" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5" id="nav-exp-bar">The Amber Room</a></li>
+            <li><a href="#experience/pool" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5" id="nav-exp-pool">The Sky Pool</a></li>
+            <li><a href="#experience/gym" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5" id="nav-exp-gym">The Forge</a></li>
           </ul>
         </li>
       </ul>
@@ -221,9 +360,9 @@
     <ul id="nav-links-mobile" class="hidden md:hidden flex-col gap-4 pt-5 pb-2">
       <li><a href="#home" data-page-link="home" class="nav-link block">Home</a></li>
       <li><a href="#rooms" data-page-link="rooms" class="nav-link block">Rooms</a></li>
-      <li><a href="#experience/bar" data-page-link="experience" class="nav-link block">Bar</a></li>
-      <li><a href="#experience/pool" data-page-link="experience" class="nav-link block">Pool</a></li>
-      <li><a href="#experience/gym" data-page-link="experience" class="nav-link block">Gym</a></li>
+      <li><a href="#experience/bar" data-page-link="experience" class="nav-link block" id="nav-exp-bar-m">Bar</a></li>
+      <li><a href="#experience/pool" data-page-link="experience" class="nav-link block" id="nav-exp-pool-m">Pool</a></li>
+      <li><a href="#experience/gym" data-page-link="experience" class="nav-link block" id="nav-exp-gym-m">Gym</a></li>
       <li><a href="#book" data-page-link="book" class="nav-link block">Book a Stay</a></li>
       <li><a href="#contact" data-page-link="contact" class="nav-link block">Contact</a></li>
     </ul>
@@ -296,48 +435,13 @@
   <section class="py-20 sm:py-28 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-12 sm:mb-16">
-        <p class="eyebrow mb-3">Accommodation</p>
+        <p class="eyebrow mb-3">Accommodation · <span data-hb="short"></span></p>
         <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">Our Room Collections</h2>
-        <div class="rule rule-center"></div>
+        <div class="rule rule-center mb-6"></div>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)" data-hb="roomsIntro"></p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-        <div class="flex flex-col">
-          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
-            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Standard Rooms">
-          </div>
-          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Double Bed, 2 Guests</p>
-          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Standard Rooms</h3>
-          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">Clean, modern aesthetics with full ambient lighting controls, comfortable workstation, and high-speed Wi-Fi.</p>
-          <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
-            Reserve Room <i data-lucide="chevron-right" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="flex flex-col">
-          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
-            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Comfort First Rooms">
-          </div>
-          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">King Size Bed, Mood Lighting</p>
-          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Comfort First Rooms</h3>
-          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">Features custom mood lighting, premium climate control, plush king bedding, and an expansive balcony.</p>
-          <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
-            Reserve Room <i data-lucide="chevron-right" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="flex flex-col">
-          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
-            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Deluxe Suites">
-          </div>
-          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">King Size Beds, 2-4 Guests</p>
-          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Executive Deluxe Suites</h3>
-          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">Spacious lounge areas, handcrafted leather seating, marble baths, and dedicated butler service.</p>
-          <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
-            Reserve Room <i data-lucide="chevron-right" class="w-3 h-3"></i>
-          </a>
-        </div>
-      </div>
+      <div id="home-room-cards" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"></div>
     </div>
   </section>
 
@@ -345,48 +449,13 @@
   <section class="py-20 sm:py-28 px-6 border-t" style="background:var(--ink-2); border-color:rgba(184,144,90,.15)">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-12 sm:mb-16">
-        <p class="eyebrow mb-3">Lifestyle &amp; Recreation</p>
+        <p class="eyebrow mb-3">Lifestyle &amp; Recreation · <span data-hb="short"></span></p>
         <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">Dine, Unwind &amp; Recharge</h2>
-        <div class="rule rule-center"></div>
+        <div class="rule rule-center mb-6"></div>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)" data-hb="lifestyleIntro"></p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="flex flex-col">
-          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
-            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Soulful Communal Spaces">
-          </div>
-          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Lobbies, Restaurant &amp; Bars</p>
-          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">Soulful Communal Spaces</h3>
-          <p class="text-xs leading-relaxed mb-4" style="color:var(--stone)">Open marble-floored dining lounges, artisanal breakfast spreads, and relaxed seating designed for conversation.</p>
-          <a href="#experience/bar" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
-            Explore Spaces <i data-lucide="chevron-right" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="flex flex-col">
-          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
-            <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="The Amber Room Bar">
-          </div>
-          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Signature Lounge</p>
-          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">The Amber Room</h3>
-          <p class="text-xs leading-relaxed mb-4" style="color:var(--stone)">A low-lit brass and oak bar serving curated spirits, fine wines, and custom cocktails late into the evening.</p>
-          <a href="#experience/bar" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
-            View Bar Menu <i data-lucide="chevron-right" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="flex flex-col">
-          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
-            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Fitness and Health">
-          </div>
-          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">Fitness &amp; Health</p>
-          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">The Forge Gym</h3>
-          <p class="text-xs leading-relaxed mb-4" style="color:var(--stone)">Fully equipped fitness facility featuring top-tier cardio treadmills, weight bays, and personal trainers.</p>
-          <a href="#experience/gym" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
-            View Gym <i data-lucide="chevron-right" class="w-3 h-3"></i>
-          </a>
-        </div>
-      </div>
+      <div id="home-lifestyle-cards" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
     </div>
   </section>
 
@@ -394,34 +463,9 @@
   <section class="py-20 px-6">
     <div class="max-w-6xl mx-auto text-center">
       <p class="eyebrow mb-3">A Different Kind of Stay</p>
-      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl mb-6" style="color:var(--ivory)">What's Included in Every Stay</h2>
+      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl mb-6" style="color:var(--ivory)" data-hb="staySummary"></h2>
       <div class="rule rule-center mb-12 sm:mb-16"></div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
-        <div class="flex flex-col items-center gap-4">
-          <div class="facility-icon"><i data-lucide="wifi" class="w-5 h-5" style="color:var(--brass)"></i></div>
-          <p class="text-sm">Complimentary Wi-Fi</p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <div class="facility-icon"><i data-lucide="bed-double" class="w-5 h-5" style="color:var(--brass)"></i></div>
-          <p class="text-sm">42 Rooms &amp; Suites</p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <div class="facility-icon"><i data-lucide="wine" class="w-5 h-5" style="color:var(--brass)"></i></div>
-          <p class="text-sm">Signature Cocktail Bar</p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <div class="facility-icon"><i data-lucide="waves" class="w-5 h-5" style="color:var(--brass)"></i></div>
-          <p class="text-sm">Rooftop Infinity Pool</p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <div class="facility-icon"><i data-lucide="dumbbell" class="w-5 h-5" style="color:var(--brass)"></i></div>
-          <p class="text-sm">24-Hour Fitness Studio</p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <div class="facility-icon"><i data-lucide="clock" class="w-5 h-5" style="color:var(--brass)"></i></div>
-          <p class="text-sm">Round-the-Clock Concierge</p>
-        </div>
-      </div>
+      <div id="home-facilities" class="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10"></div>
     </div>
   </section>
 
@@ -432,7 +476,8 @@
   <div class="pt-32 sm:pt-40 pb-12 sm:pb-20 px-6 text-center">
     <p class="eyebrow mb-3">Extraordinary Accommodation</p>
     <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">Choose Your Room</h1>
-    <div class="rule rule-center"></div>
+    <div class="rule rule-center mb-6"></div>
+    <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)" data-hb="roomsIntro"></p>
   </div>
 
   <div class="max-w-6xl mx-auto px-6 pb-24 sm:pb-32 space-y-16 sm:space-y-24">
@@ -549,7 +594,7 @@
 <!-- ============ PAGE: BOOK ============ -->
 <section class="page" data-page="book">
   <div class="relative min-h-[85vh] flex items-center justify-center pt-28 sm:pt-36 pb-16 sm:pb-24 px-6">
-    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="Luxury suite background">
+    <img id="book-hero-img" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="Suite background">
     <div class="absolute inset-0 hero-gradient" style="background: linear-gradient(180deg, rgba(20,16,12,.75) 0%, rgba(20,16,12,.85) 100%);"></div>
 
     <div class="relative z-10 max-w-xl w-full mx-auto">
@@ -648,31 +693,7 @@
         <div class="rule rule-center mb-10 sm:mb-14"></div>
       </div>
 
-      <div id="reviews-list" class="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16">
-        <blockquote class="review-card p-6 sm:p-8 rounded-xl text-left">
-          <div class="flex items-center gap-1 mb-3 text-amber-400">
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-          </div>
-          <p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">"Every detail felt deliberate — from the scent in the lobby to the note left by housekeeping. The Sky Pool at sunset is worth the trip alone."</p>
-          <cite class="not-italic text-sm" style="color:var(--brass)">— Amara O., Lagos</cite>
-        </blockquote>
-
-        <blockquote class="review-card p-6 sm:p-8 rounded-xl text-left">
-          <div class="flex items-center gap-1 mb-3 text-amber-400">
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-            <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
-          </div>
-          <p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">"Quiet, precise, warm. The Amber Room's bartenders remembered our order on night two. This is what a city hotel should feel like."</p>
-          <cite class="not-italic text-sm" style="color:var(--brass)">— Tunde A., London</cite>
-        </blockquote>
-      </div>
+      <div id="reviews-list" class="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16"></div>
 
       <div class="max-w-2xl mx-auto p-6 sm:p-8 rounded-xl" style="background:var(--ink); border: 1px solid rgba(184,144,90,.2)">
         <h3 class="font-display text-2xl text-center mb-2" style="color:var(--ivory)">Leave a Review</h3>
@@ -937,7 +958,7 @@
   </div>
 </footer>
 
-<a href="https://wa.me/2348000000000" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" aria-label="Contact us on WhatsApp">
+<a data-hb-href="whatsapp" href="https://wa.me/2348000000000" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" aria-label="Contact us on WhatsApp">
   <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
@@ -1136,20 +1157,14 @@
       const location = document.getElementById('reviewer-location').value.trim();
       const text = document.getElementById('review-text').value.trim();
 
-      const starsHTML = Array(selectedRating)
-        .fill('<i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>')
-        .join('');
-
-      const newReviewCard = document.createElement('blockquote');
-      newReviewCard.className = 'review-card p-6 sm:p-8 rounded-xl text-left';
-      newReviewCard.innerHTML = `
-        <div class="flex items-center gap-1 mb-3 text-amber-400">${starsHTML}</div>
-        <p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">"${text}"</p>
-        <cite class="not-italic text-sm" style="color:var(--brass)">— ${name}${location ? ', ' + location : ''}</cite>
-      `;
-
-      document.getElementById('reviews-list').appendChild(newReviewCard);
-      lucide.createIcons();
+      // the review belongs to the house being viewed, and stays with it
+      if (window.DXHouse) {
+        window.DXHouse.addReview({
+          text,
+          cite: name + (location ? ', ' + location : ''),
+          rating: selectedRating
+        });
+      }
 
       document.getElementById('review-success').classList.remove('hidden');
       reviewForm.reset();
@@ -1225,7 +1240,26 @@
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac',
       telUrl: 'tel:08000000000',
       portalImg: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2069&auto=format&fit=crop',
-      cardImg: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop'
+      cardImg: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop',
+      bookImg: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop',
+      whatsapp: 'https://wa.me/2348000000000',
+      roomsIntro: 'Twenty-two rooms above the lagoon — teak, unbleached linen, and shutters that actually close against the morning.',
+      lifestyleIntro: 'The city house keeps late hours. The bar runs until two, the pool until midnight.',
+      staySummary: 'What every stay in Festac includes',
+      roomMeta: { classic: 'Double bed · 2 guests', deluxe: 'King bed · mood lighting', presidential: 'Two kings · 2–4 guests' },
+      lifestyleMeta: { bar: 'Signature lounge', pool: 'Sixteen floors up', gym: 'Fitness & health' },
+      facilities: [
+        { icon: 'wifi', label: 'Complimentary Wi-Fi' },
+        { icon: 'bed-double', label: '42 Rooms & Suites' },
+        { icon: 'wine', label: 'Signature Cocktail Bar' },
+        { icon: 'waves', label: 'Rooftop Infinity Pool' },
+        { icon: 'dumbbell', label: '24-Hour Fitness Studio' },
+        { icon: 'clock', label: 'Round-the-Clock Concierge' }
+      ],
+      reviews: [
+        { text: 'Every detail felt deliberate — from the scent in the lobby to the note left by housekeeping. The Sky Pool at sunset is worth the trip alone.', cite: 'Amara O., Lagos' },
+        { text: "Quiet, precise, warm. The Amber Room's bartenders remembered our order on night two. This is what a city hotel should feel like.", cite: 'Tunde A., London' }
+      ]
     },
     b: {
       key: 'b', code: 'House II', short: 'Obudu', name: 'The Plateau House',
@@ -1239,7 +1273,26 @@
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=Obudu+Mountain+Resort%2C+Cross+River',
       telUrl: 'tel:08000000011',
       portalImg: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop',
-      cardImg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop'
+      cardImg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop',
+      bookImg: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2070&auto=format&fit=crop',
+      whatsapp: 'https://wa.me/2348000000011',
+      roomsIntro: 'Fourteen rooms along a single stone ridge — wool, oak, deep windows, and a fire laid in each one by four.',
+      lifestyleIntro: 'The plateau house keeps early hours. Breakfast from first light; dinner at half past seven, once.',
+      staySummary: 'What every stay on the plateau includes',
+      roomMeta: { classic: 'Wool-dressed bed · 2 guests', deluxe: 'Private hearth · king bed', presidential: 'Three bedrooms · own kitchen' },
+      lifestyleMeta: { bar: 'One table, one fire', pool: 'Above the cloud', gym: 'Ridge & recovery' },
+      facilities: [
+        { icon: 'flame', label: 'A Fire Laid by Four' },
+        { icon: 'bed-double', label: '14 Rooms & Suites' },
+        { icon: 'sunrise', label: 'Guided Dawn Ridge Walks' },
+        { icon: 'cloud', label: 'Cloud Terrace Breakfast' },
+        { icon: 'utensils', label: 'One Table, One Fire' },
+        { icon: 'car', label: 'Transfer from Calabar' }
+      ],
+      reviews: [
+        { text: 'We woke at five for the ridge walk and came back to a fire already lit and the coffee poured. Nobody had to be asked.', cite: 'Ngozi E., Abuja' },
+        { text: 'One table, one fire, one menu decided that morning. I have not eaten better anywhere on the continent.', cite: 'Peter M., Cape Town' }
+      ]
     }
   };
 
@@ -1316,6 +1369,53 @@
     });
   }
 
+  /* ---------- house-specific home content ----------
+     Reviews, amenities and imagery belong to one house and never appear
+     under the other. Room and dining cards are rendered by the back office
+     from that house's own records, so nothing here can contradict booking. */
+  const addedReviews = { a: [], b: [] };
+
+  function stars(n) {
+    let out = '';
+    for (let i = 0; i < n; i++) out += '<i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>';
+    return out;
+  }
+
+  function renderFacilities() {
+    const wrap = $('#home-facilities');
+    if (!wrap) return;
+    wrap.innerHTML = HOUSES[current].facilities.map(function (f) {
+      return '<div class="flex flex-col items-center gap-4">' +
+               '<div class="facility-icon"><i data-lucide="' + f.icon + '" class="w-5 h-5" style="color:var(--brass)"></i></div>' +
+               '<p class="text-sm">' + f.label + '</p>' +
+             '</div>';
+    }).join('');
+  }
+
+  function renderReviews() {
+    const wrap = $('#reviews-list');
+    if (!wrap) return;
+    const list = HOUSES[current].reviews.concat(addedReviews[current]);
+    wrap.innerHTML = list.map(function (r) {
+      return '<blockquote class="review-card p-6 sm:p-8 rounded-xl text-left">' +
+               '<div class="flex items-center gap-1 mb-3 text-amber-400">' + stars(r.rating || 5) + '</div>' +
+               '<p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">&ldquo;' + r.text + '&rdquo;</p>' +
+               '<cite class="not-italic text-sm" style="color:var(--brass)">— ' + r.cite + '</cite>' +
+             '</blockquote>';
+    }).join('');
+  }
+
+  // a review is left about one house, and stays with it
+  function addReview(review) {
+    addedReviews[current].push(review);
+    renderReviews();
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function paintIcons() {
+    if (window.lucide) window.lucide.createIcons();
+  }
+
   function announce(msg) {
     let live = $('#house-live');
     if (!live) {
@@ -1346,9 +1446,18 @@
     if (bookingHouse && bookingHouse.value !== key) bookingHouse.value = key;
 
     bindActive();
+    renderFacilities();
+    renderReviews();
+
+    const bookImg = $('#book-hero-img');
+    if (bookImg) bookImg.src = HOUSES[key].bookImg;
+    document.title = 'Divic Exclusive Hotel — ' + HOUSES[key].region;
+    const meta = $('meta[name="description"]');
+    if (meta) meta.setAttribute('content', HOUSES[key].name + ', ' + HOUSES[key].region + '. ' + HOUSES[key].blurb);
 
     // rooms, rates and dining copy belong to the house, so re-render them
     if (window.DXAdmin && window.DXAdmin.refreshPublicSite) window.DXAdmin.refreshPublicSite();
+    paintIcons();
 
     if (options.announce !== false) {
       announce('Now viewing ' + HOUSES[key].name + ', ' + HOUSES[key].region + '.');
@@ -1360,8 +1469,45 @@
     } catch (err) { /* older browsers simply keep the current URL */ }
   }
 
+  /* ---------- the branch gate ----------
+     The guest chooses a house before the site opens. The header switcher
+     lets them change their mind at any point afterwards. */
+  const HOUSE_KEY = 'dx_house_choice';
+  const PUBLIC_PAGES = ['home', 'rooms', 'experience', 'book', 'contact'];
+  let pendingHash = null;
+
+  function openGate() {
+    const portal = $('#hero');
+    if (!portal) return;
+    // the gate lives inside the home page, so hold any deep link until a house is picked
+    const raw = (window.location.hash || '').replace('#', '').split('/')[0];
+    if (raw && raw !== 'home' && PUBLIC_PAGES.indexOf(raw) !== -1) {
+      pendingHash = (window.location.hash || '').replace('#', '');
+      window.location.hash = 'home';
+    }
+    portal.removeAttribute('data-resolved');
+    portal.classList.add('is-gate');
+    document.body.classList.add('gate-open');
+    $$('.portal__half', portal).forEach(function (half) {
+      half.removeAttribute('aria-hidden');
+      $$('button, a', half).forEach(function (el) { el.tabIndex = 0; });
+    });
+  }
+
+  function closeGate() {
+    const portal = $('#hero');
+    if (portal) portal.classList.remove('is-gate');
+    document.body.classList.remove('gate-open');
+    if (pendingHash) {
+      const target = pendingHash;
+      pendingHash = null;
+      window.location.hash = target;
+    }
+  }
+
   function enterHouse(key) {
     setHouse(key);
+    try { sessionStorage.setItem(HOUSE_KEY, key); } catch (err) { /* private mode */ }
     const portal = $('#hero');
     if (!portal) return;
     portal.setAttribute('data-resolved', key);
@@ -1370,16 +1516,13 @@
       half.setAttribute('aria-hidden', String(off));
       $$('button, a', half).forEach(function (el) { el.tabIndex = off ? -1 : 0; });
     });
+    closeGate();
   }
 
+  // "View both houses" hands the choice back
   function bothHouses() {
-    const portal = $('#hero');
-    if (!portal) return;
-    portal.removeAttribute('data-resolved');
-    $$('.portal__half', portal).forEach(function (half) {
-      half.removeAttribute('aria-hidden');
-      $$('button, a', half).forEach(function (el) { el.tabIndex = 0; });
-    });
+    try { sessionStorage.removeItem(HOUSE_KEY); } catch (err) { /* private mode */ }
+    openGate();
   }
 
   document.addEventListener('click', function (e) {
@@ -1418,24 +1561,85 @@
     if (offset) document.documentElement.style.setProperty('--portal-offset', offset + 'px');
   }
 
+  /* ---------- the loading sequence ----------
+     Runs once per session: swan in from a distance, settles on the sun,
+     wingbeats, ripples, the words rise, the logo locks, the site opens. */
+  const INTRO_KEY = 'dx_intro_seen';
+  const INTRO_MS = 6000;
+  let introEnded = false;
+
+  function endIntro(afterwards) {
+    if (introEnded) return;
+    introEnded = true;
+    const loader = $('#loader');
+    try { sessionStorage.setItem(INTRO_KEY, '1'); } catch (err) { /* private mode */ }
+    if (loader) {
+      loader.classList.add('is-done');
+      setTimeout(function () { loader.style.display = 'none'; }, 850);
+    }
+    if (afterwards) afterwards();
+  }
+
+  function runIntro(afterwards) {
+    const loader = $('#loader');
+    if (!loader) { if (afterwards) afterwards(); return; }
+
+    let seen = false;
+    try { seen = sessionStorage.getItem(INTRO_KEY) === '1'; } catch (err) { /* private mode */ }
+    if (seen) {
+      loader.style.display = 'none';
+      introEnded = true;
+      if (afterwards) afterwards();
+      return;
+    }
+
+    const skip = function () { endIntro(afterwards); };
+    $('#loader-skip').addEventListener('click', skip);
+    loader.addEventListener('click', skip);
+    document.addEventListener('keydown', function onKey(e) {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { document.removeEventListener('keydown', onKey); skip(); }
+    });
+
+    setTimeout(skip, REDUCED ? 1800 : INTRO_MS);
+  }
+
+  function openingHouse() {
+    try {
+      const q = new URL(window.location.href).searchParams.get('house');
+      if (q) return q.toLowerCase().indexOf('o') === 0 ? 'b' : 'a';
+    } catch (err) { /* fall through */ }
+    try {
+      const saved = sessionStorage.getItem(HOUSE_KEY);
+      if (saved && HOUSES[saved]) return saved;
+    } catch (err) { /* private mode */ }
+    return null;
+  }
+
   function init() {
     bindFixed();
     renderShowcase();
     measureChrome();
     window.addEventListener('resize', measureChrome);
 
-    let start = 'a';
-    try {
-      const q = new URL(window.location.href).searchParams.get('house');
-      if (q && q.toLowerCase().indexOf('o') === 0) start = 'b';
-    } catch (err) { /* default house */ }
-
-    setHouse(start, { announce: false });
+    const chosen = openingHouse();
+    setHouse(chosen || 'a', { announce: false });
 
     const bookingHouse = $('#booking-house');
     if (bookingHouse) {
       bookingHouse.addEventListener('change', function () { setHouse(bookingHouse.value); });
     }
+
+    // an unrecognised page (the back office) skips the gate entirely
+    const raw = (window.location.hash || '').replace('#', '').split('/')[0];
+    const isPublic = !raw || PUBLIC_PAGES.indexOf(raw) !== -1;
+
+    runIntro(function () {
+      if (chosen || !isPublic) {
+        if (chosen) enterHouse(chosen);
+        return;
+      }
+      openGate();
+    });
   }
 
   // the house the rest of the page (booking form, admin) reads from
@@ -1444,7 +1648,8 @@
     get name() { return HOUSES[current].name; },
     get short() { return HOUSES[current].short; },
     all: HOUSES,
-    set: setHouse
+    set: setHouse,
+    addReview: addReview
   };
 
   if (document.readyState === 'loading') {
@@ -1635,7 +1840,67 @@
       if (img) img.src = exp.image;
     });
 
+    renderHomeCards(house);
+
     if (typeof calculateBookingTotal === 'function') calculateBookingTotal();
+  }
+
+  // The home page previews the house's real rooms and real venues — never a
+  // generic set — so what is advertised is what can actually be booked.
+  function renderHomeCards(house) {
+    const cfg = (window.DXHouse && window.DXHouse.all[guestHouseKey()]) || null;
+
+    const roomWrap = document.getElementById('home-room-cards');
+    if (roomWrap) {
+      roomWrap.innerHTML = Object.keys(house.rooms).map((key) => {
+        const r = house.rooms[key];
+        const meta = cfg && cfg.roomMeta ? (cfg.roomMeta[key] || '') : '';
+        return `
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
+            <img src="${r.image}" class="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" alt="${escapeHtml(r.name)}">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">${escapeHtml(meta)}</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">${escapeHtml(r.name)}</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">${escapeHtml(r.description)}</p>
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-sm" style="color:var(--brass)">${fmtNaira(r.price)} <span class="text-xs" style="color:var(--stone)">/ night</span></span>
+            <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">Reserve <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    const lifeWrap = document.getElementById('home-lifestyle-cards');
+    if (lifeWrap) {
+      lifeWrap.innerHTML = Object.keys(house.experiences).map((key) => {
+        const e = house.experiences[key];
+        const meta = cfg && cfg.lifestyleMeta ? (cfg.lifestyleMeta[key] || '') : '';
+        return `
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
+            <img src="${e.image}" class="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" alt="${escapeHtml(e.title)}">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">${escapeHtml(meta)}</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">${escapeHtml(e.title)}</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">${escapeHtml(e.description)}</p>
+          <a href="#experience/${key}" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            Explore <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>`;
+      }).join('');
+    }
+
+    // the navigation names this house's venues, not the other one's
+    [['bar', 'bar'], ['pool', 'pool'], ['gym', 'gym']].forEach(([key]) => {
+      const label = house.experiences[key] ? house.experiences[key].title : '';
+      ['nav-exp-' + key, 'nav-exp-' + key + '-m'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && label) el.textContent = label;
+      });
+    });
+
+    if (window.lucide) window.lucide.createIcons();
   }
 
   // ---------------- public API used by the booking/complaint forms ----------------
