@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { useProperty } from '../context/PropertyContext';
 import { Plate } from '../components/primitives';
 import { useCarousel } from '../lib/useCarousel';
-import { asset } from '../lib/asset';
+import { photo } from '../lib/images';
 import HomeNav from '../components/HomeNav';
 import SwanMark from '../components/SwanMark';
 
 /* Ambient establishing shots, alternating houses so the rotation itself says there are
    two of them. */
 const HERO_SHOTS = [
-  { src: asset('images/exclusive/pool.jpg'), alt: 'The pool at Divic Exclusive, after dark' },
-  { src: asset('images/urban/bar.jpg'), alt: 'The bar at Divic Urban' },
-  { src: asset('images/urban/pool.jpg'), alt: 'The pool at Divic Urban' },
-  { src: asset('images/exclusive/indoorbar.jpg'), alt: 'The indoor bar at Divic Exclusive' },
+  { src: photo('exclusive', 'pool'), alt: 'The pool at Divic Exclusive, after dark' },
+  { src: photo('urban', 'bar'), alt: 'The bar at Divic Urban' },
+  { src: photo('urban', 'pool'), alt: 'The pool at Divic Urban' },
+  { src: photo('exclusive', 'indoorbar'), alt: 'The indoor bar at Divic Exclusive' },
 ];
 
 /* On black the property accents are lifted so they still read. Same two hues as the rest
