@@ -6,13 +6,15 @@ import { useCarousel } from '../lib/useCarousel';
 import HomeNav from '../components/HomeNav';
 import SwanMark from '../components/SwanMark';
 
+
+const BASE = import.meta.env.BASE_URL;
 /* Ambient establishing shots, alternating houses so the rotation itself says there are
    two of them. */
 const HERO_SHOTS = [
-  { src: '/images/exclusive/pool.jpg', alt: 'The pool at Divic Exclusive, after dark' },
-  { src: '/images/urban/bar.jpg', alt: 'The bar at Divic Urban' },
-  { src: '/images/urban/pool.jpg', alt: 'The pool at Divic Urban' },
-  { src: '/images/exclusive/indoorbar.jpg', alt: 'The indoor bar at Divic Exclusive' },
+  { src: `${BASE}images/exclusive/pool.jpg`, alt: 'The pool at Divic Exclusive, after dark' },
+  { src: `${BASE}images/urban/bar.jpg`, alt: 'The bar at Divic Urban' },
+  { src: `${BASE}images/urban/pool.jpg`, alt: 'The pool at Divic Urban' },
+  { src: `${BASE}images/exclusive/indoorbar.jpg`, alt: 'The indoor bar at Divic Exclusive' },
 ];
 
 /* On black the property accents are lifted so they still read. Same two hues as the rest
