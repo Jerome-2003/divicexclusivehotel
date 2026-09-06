@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useProperty } from '../context/PropertyContext';
-import { PROPERTY_LIST } from '../data/properties';
 import SwanMark from './SwanMark';
 
 const NAV = [
   { to: '/exclusive', label: 'Exclusive' },
   { to: '/urban', label: 'Urban' },
   { to: '/contact', label: 'Contact' },
+  { to: '/book', label: 'Book' },
 ];
 
 /**
@@ -16,7 +16,7 @@ const NAV = [
  * navigates to that property — it is a change of place, not a filter.
  */
 function PropertySwitcher({ compact = false, onDark = false }) {
-  const { propertyId, choose } = useProperty();
+  const { propertyId, choose, properties } = useProperty();
   return (
     <div
       role="tablist"
@@ -34,12 +34,12 @@ function PropertySwitcher({ compact = false, onDark = false }) {
           transform: propertyId === 'urban' ? 'translateX(100%)' : 'translateX(0)',
         }}
       />
-      {PROPERTY_LIST.map((p) => {
+      {properties.map((p) => {
         const active = propertyId === p.id;
         return (
           <Link
             key={p.id}
-            to={`/${p.slug}`}
+            to={`/${p.id}`}
             role="tab"
             aria-selected={active}
             onClick={() => choose(p.id)}

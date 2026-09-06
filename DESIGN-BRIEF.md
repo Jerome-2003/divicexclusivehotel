@@ -2,7 +2,7 @@
 
 **Direction:** Limestone
 **Applies to:** Divic Exclusive (15 rooms) and Divic Urban (21 rooms), Festac, Lagos
-**Status:** Front end built. Booking flow pending the PMS contract.
+**Status:** Front end built, booking flow wired to the PMS public API.
 
 ---
 
@@ -146,12 +146,55 @@ motion. The two grades must be identifiable side by side at thumbnail size.
 
 ---
 
-## 9. Still to do
+## 9. Booking
 
-- **Booking flow.** Deferred until `API.md` lands. The contact page carries a stay
-  *enquiry* — it collects intent and hands it to the desk; it holds no inventory and
-  quotes no rate. Its field names are chosen to line up with a reservation payload.
-- **`booking-widget.js`.** To be adapted rather than rebuilt, once supplied.
-- **Content and photography.** Everything in `src/data/properties.js` is placeholder,
-  written to be plausible rather than accurate. Room counts (15 and 21) are the only
-  facts taken as given, and the room-type inventory adds up to them.
+The reservation flow is four steps against the PMS's public endpoints, styled to the same
+system as everything else.
+
+| Step | What happens |
+|---|---|
+| 1. Dates | House, arrival, departure, adults, children. Validated client-side for the contract's rules — not in the past, after arrival, 60 nights maximum |
+| 2. Room | `GET /availability` returns free counts and totals. Sold-out types are shown and disabled rather than hidden, so the guest can see what they missed |
+| 3. Details | Name and telephone required, email and requests optional. Empty optional fields are omitted rather than sent blank |
+| 4. Confirmation | Leads with **"No room is held yet"**, shows the server's `message` word for word, then reference, quoted rate and total, and a button to call the house |
+
+A running summary sits alongside every step, and `/booking-status` lets a guest look up a
+reference.
+
+Three rules the UI follows because the contract requires them:
+
+- **No `total` is ever sent.** The server recalculates; a figure from a browser is never
+  trusted. The estimate on screen is labelled as such.
+- **A request is not a booking.** Nothing on the confirmation screen may imply a held
+  room — that would put a guest at a full hotel at midnight.
+- **Rates are never hardcoded.** They come from `/properties`; the local seed exists only
+  so the site renders before the API is reachable, and the UI says when it could not check.
+
+Errors are surfaced in the guest's language: `400` asks them to check dates and details,
+`429` asks them to wait a few minutes, anything else offers the telephone.
+
+---
+
+## 10. Photography
+
+Wide, quiet, architectural, with human presence implied rather than modelled.
+**Exclusive** is graded warm and low: lamplight, texture, stillness. **Urban** is graded
+bright and cool-neutral: daylight, hard shadow, geometry. The two grades should be
+identifiable side by side at thumbnail size.
+
+Supplied Urban imagery arrives as marketing flyers with overlaid text, price and logo;
+`scripts/prepare-images.mjs` crops to the photograph alone. No price is ever burnt into
+an image — the PMS owns prices.
+
+Exclusive has no photography yet, and renders its designed plate rather than stock.
+
+---
+
+## 11. Still to do
+
+- **Photography for Divic Exclusive.** The only reason that house looks quieter than
+  Urban right now.
+- **Editorial copy review.** Room descriptions, character lines and amenity notes are
+  written to be plausible; every hard fact comes from `API.md`.
+- **Deposits.** The contract supports an optional `paystackReference`; the flow does not
+  take payment, and the client is ready for it when you are.

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { PROPERTIES, formatNGN } from '../data/properties';
+import { formatNGN } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
 import { Plate, Reveal, SectionHead, SpecList } from '../components/primitives';
 
@@ -26,22 +26,23 @@ function RoomRow({ room, index }) {
           <SpecList
             className="mt-1"
             items={[
-              { label: 'Size', value: `${room.sizeSqm} m²` },
-              { label: 'Sleeps', value: `${room.maxOccupancy} guests` },
-              { label: 'Bed', value: room.bed },
-              { label: 'In this house', value: `${room.count} rooms` },
+              { label: 'In this house', value: `${room.roomCount} rooms` },
+              {
+                label: room.floors?.length > 1 ? 'Floors' : 'Floor',
+                value: (room.floors || []).map((f) => (f === 0 ? 'Ground' : `${f}`)).join(', ') || '—',
+              },
             ]}
           />
 
           <div className="mt-2 flex items-baseline gap-2">
             <span className="font-display text-3xl" style={{ color: 'rgb(var(--accent))' }}>
-              {formatNGN(room.baseRateNGN)}
+              {formatNGN(room.rate)}
             </span>
             <span className="text-micro uppercase text-mute">per night, from</span>
           </div>
 
-          <Link to="/contact" className="link-quiet self-start">
-            Enquire about this room &rarr;
+          <Link to={`/book?roomType=${room.type}`} className="link-quiet self-start">
+            Request this room &rarr;
           </Link>
         </div>
       </article>
@@ -51,8 +52,8 @@ function RoomRow({ room, index }) {
 
 export default function Property() {
   const { slug } = useParams();
-  const property = PROPERTIES[slug];
-  const { choose, propertyId } = useProperty();
+  const { choose, propertyId, byId, ratesAreLive } = useProperty();
+  const property = byId[slug];
 
   // arriving directly at a property URL is itself a choice
   useEffect(() => {
@@ -65,7 +66,7 @@ export default function Property() {
 
   if (!property) return <Navigate to="/" replace />;
 
-  const totalFrom = Math.min(...property.roomTypes.map((r) => r.baseRateNGN));
+  const totalFrom = Math.min(...property.roomTypes.map((r) => r.rate));
 
   return (
     <>
@@ -77,21 +78,18 @@ export default function Property() {
           priority
           className="absolute inset-0"
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 z-20 bg-gradient-to-b from-obsidian/55 via-obsidian/20 to-obsidian/88"
-        />
+        <div aria-hidden="true" className="absolute inset-0 z-20" style={{ background: 'linear-gradient(to bottom, rgba(11,10,8,.45) 0%, rgba(11,10,8,.14) 32%, rgba(11,10,8,.72) 70%, rgba(11,10,8,.96) 100%)' }} />
         <div className="shell relative z-30 pb-16 pt-32">
           <p className="text-micro uppercase" style={{ color: '#E8D9AE' }}>
-            {property.character} &middot; {property.roomCount} rooms
+            {property.character} &middot; {property.totalRooms} rooms
           </p>
           <h1 className="mt-4 max-w-[14ch] font-display text-d1 font-light text-bone">
             {property.name}
           </h1>
           <p className="mt-5 max-w-[46ch] text-lg text-bone/75">{property.tagline}</p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link to="/contact" className="btn btn-onDark">
-              Enquire about a stay
+            <Link to="/book" className="btn btn-onDark">
+              Request a stay
             </Link>
             <span className="text-micro uppercase text-bone/50">
               From {formatNGN(totalFrom)} per night
@@ -110,7 +108,7 @@ export default function Property() {
             <p className="prose-body">{property.stayPitch}</p>
             <SpecList
               items={[
-                { label: 'Rooms', value: String(property.roomCount) },
+                { label: 'Rooms', value: String(property.totalRooms) },
                 { label: 'Address', value: property.address },
                 { label: 'Position', value: property.coords },
               ]}
@@ -125,7 +123,9 @@ export default function Property() {
           <SectionHead
             eyebrow="Rooms & rates"
             title={`Every room at ${property.name}`}
-            lead={`${property.roomTypes.length} room types, ${property.roomCount} rooms in total. Rates shown are nightly, from — final pricing depends on dates and length of stay.`}
+            lead={`${property.roomTypes.length} room types, ${property.totalRooms} rooms in total. Rates are nightly and ${
+              ratesAreLive ? 'come live from the hotel system' : 'are the published rates'
+            } — the total for your dates is calculated when you request a stay.`}
           />
           <div className="mt-16 flex flex-col gap-20 lg:gap-28">
             {property.roomTypes.map((room, i) => (
@@ -183,12 +183,12 @@ export default function Property() {
               {property.name}
             </p>
             <h2 className="mt-4 max-w-[18ch] font-display text-d2 font-light">
-              Come and see the room first.
+              Request the room, and we will call you.
             </h2>
           </div>
           <div className="flex flex-col gap-4">
-            <Link to="/contact" className="btn btn-onDark">
-              Enquire about a stay
+            <Link to="/book" className="btn btn-onDark">
+              Request a stay
             </Link>
             <a
               href={property.mapUrl}

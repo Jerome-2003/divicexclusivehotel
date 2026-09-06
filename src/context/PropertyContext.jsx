@@ -1,10 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { PROPERTIES } from '../data/properties';
+import { useProperties } from '../lib/useProperties';
 
 const PropertyContext = createContext(null);
 
 const STORAGE_KEY = 'divic:property';
-const isValid = (id) => Boolean(id && PROPERTIES[id]);
+const IDS = ['exclusive', 'urban'];
+const isValid = (id) => IDS.includes(id);
 
 function readInitial() {
   if (typeof window === 'undefined') return null;
@@ -20,8 +21,8 @@ function readInitial() {
 }
 
 export function PropertyProvider({ children }) {
-  // null means the guest has not chosen yet, which is what raises the gate
   const [propertyId, setPropertyId] = useState(readInitial);
+  const { properties, ratesAreLive, loading } = useProperties();
 
   // The document carries the active property so CSS resolves one accent for the whole
   // tree. No component needs to know which property it is rendering.
@@ -44,30 +45,21 @@ export function PropertyProvider({ children }) {
     }
   }, []);
 
-  const clear = useCallback(() => {
-    setPropertyId(null);
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      /* private browsing */
-    }
-    const url = new URL(window.location.href);
-    url.searchParams.delete('property');
-    window.history.replaceState(null, '', url);
-  }, []);
-
-  const value = useMemo(
-    () => ({
+  const value = useMemo(() => {
+    const byId = Object.fromEntries(properties.map((p) => [p.id, p]));
+    return {
       propertyId,
-      property: propertyId ? PROPERTIES[propertyId] : null,
+      properties,
+      byId,
+      property: propertyId ? byId[propertyId] : null,
       // before a choice is made, fall back to Exclusive so nothing renders empty
-      activeProperty: PROPERTIES[propertyId || 'exclusive'],
+      activeProperty: byId[propertyId || 'exclusive'],
       hasChosen: Boolean(propertyId),
+      ratesAreLive,
+      loading,
       choose,
-      clear,
-    }),
-    [propertyId, choose, clear],
-  );
+    };
+  }, [propertyId, properties, ratesAreLive, loading, choose]);
 
   return <PropertyContext.Provider value={value}>{children}</PropertyContext.Provider>;
 }

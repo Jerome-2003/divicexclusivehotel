@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BRAND, PROPERTY_LIST } from '../data/properties';
+import { BRAND } from '../data/properties';
+import { useProperty } from '../context/PropertyContext';
 import SwanMark from './SwanMark';
 
 /**
@@ -7,6 +8,7 @@ import SwanMark from './SwanMark';
  * directory, not a feature surface, so it stays outside the property switch.
  */
 export default function Footer() {
+  const { properties } = useProperty();
   return (
     <footer className="bg-obsidian text-bone">
       <div className="shell py-section">
@@ -17,7 +19,7 @@ export default function Footer() {
             <p className="mt-2 text-micro uppercase text-bone/50">{BRAND.line}</p>
           </div>
 
-          {PROPERTY_LIST.map((p) => (
+          {properties.map((p) => (
             <div key={p.id} className="lg:col-span-3">
               <p className="text-micro uppercase" style={{ color: '#C9A961' }}>
                 {p.name}
@@ -28,16 +30,11 @@ export default function Footer() {
                   {p.phone}
                 </a>
               </p>
-              <p className="mt-1 text-sm text-bone/70">
-                <a href={`mailto:${p.email}`} className="hover:text-bone">
-                  {p.email}
-                </a>
-              </p>
               <Link
-                to={`/${p.slug}`}
+                to={`/${p.id}`}
                 className="mt-4 inline-flex text-micro uppercase text-bone/60 underline-offset-4 hover:text-bone hover:underline"
               >
-                {p.roomCount} rooms &middot; View house
+                {p.totalRooms} rooms &middot; View house
               </Link>
             </div>
           ))}
