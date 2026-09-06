@@ -6,6 +6,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Property from './pages/Property';
 import Contact from './pages/Contact';
+import Book from './pages/Book';
+import BookingStatus from './pages/BookingStatus';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -25,6 +27,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/book" element={<Book />} />
+          <Route path="/booking-status" element={<BookingStatus />} />
           {/* one template serves both houses; an unknown slug redirects home */}
           <Route path="/:slug" element={<Property />} />
         </Routes>

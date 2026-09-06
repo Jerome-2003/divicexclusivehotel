@@ -61,8 +61,10 @@
   .section { @apply py-section; }
 
   /* --- type roles --- */
+  /* A label earns its place only when it says something the heading does not.
+     Sentence case, not the tracked-out all-caps eyebrow. */
   .eyebrow {
-    @apply text-micro uppercase font-medium;
+    @apply text-sm font-medium;
     color: rgb(var(--accent));
   }
   .lead { @apply text-lead text-slate max-w-measure; }
@@ -74,7 +76,7 @@
 
   /* --- controls --- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 text-label uppercase
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 text-[0.9375rem]
            font-medium transition-colors duration-400 ease-quiet;
   }
   .btn-solid {
@@ -96,12 +98,12 @@
   .btn-onDark:hover { @apply bg-bone text-obsidian border-bone; }
 
   .link-quiet {
-    @apply inline-flex items-center gap-2 text-label uppercase font-medium pb-1
-           border-b transition-all duration-400 ease-quiet;
+    @apply inline-flex items-center text-[0.9375rem] font-medium pb-1
+           border-b transition-colors duration-400 ease-quiet;
     color: rgb(var(--accent));
     border-color: rgb(var(--accent) / 0.35);
   }
-  .link-quiet:hover { @apply gap-3.5; border-color: rgb(var(--accent)); }
+  .link-quiet:hover { border-color: rgb(var(--accent)); }
 
   /* --- media --- */
   /* Every media well carries a designed plate underneath, so a slow or missing
@@ -125,15 +127,6 @@
     transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .plate > img.is-loaded { @apply opacity-100; }
-
-  /* --- reveal on scroll --- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal.is-in { opacity: 1; transform: none; }
 
   .sr-only-focusable:not(:focus) {
     @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
