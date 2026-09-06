@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useProperty } from '../context/PropertyContext';
-import { PROPERTY_LIST } from '../data/properties';
 import SwanMark from './SwanMark';
 
 const NAV = [
   { to: '/exclusive', label: 'Exclusive' },
   { to: '/urban', label: 'Urban' },
   { to: '/contact', label: 'Contact' },
+  { to: '/book', label: 'Book' },
 ];
 
 /**
@@ -16,7 +16,7 @@ const NAV = [
  * navigates to that property — it is a change of place, not a filter.
  */
 function PropertySwitcher({ compact = false, onDark = false }) {
-  const { propertyId, choose } = useProperty();
+  const { propertyId, choose, properties } = useProperty();
   return (
     <div
       role="tablist"
@@ -34,17 +34,17 @@ function PropertySwitcher({ compact = false, onDark = false }) {
           transform: propertyId === 'urban' ? 'translateX(100%)' : 'translateX(0)',
         }}
       />
-      {PROPERTY_LIST.map((p) => {
+      {properties.map((p) => {
         const active = propertyId === p.id;
         return (
           <Link
             key={p.id}
-            to={`/${p.slug}`}
+            to={`/${p.id}`}
             role="tab"
             aria-selected={active}
             onClick={() => choose(p.id)}
-            className={`relative z-10 whitespace-nowrap rounded-full uppercase transition-opacity duration-400 ${
-              compact ? 'px-3 py-1.5 text-[0.62rem] tracking-[0.14em]' : 'px-4 py-2 text-micro'
+            className={`relative z-10 whitespace-nowrap rounded-full transition-opacity duration-400 ${
+              compact ? 'px-3 py-1.5 text-[0.78rem]' : 'px-4 py-2 text-sm'
             } ${onDark ? 'text-bone' : 'text-ink'} ${
               active ? 'font-semibold opacity-100' : 'font-medium opacity-55 hover:opacity-80'
             }`}
@@ -111,7 +111,7 @@ export default function Header() {
                 Divic
               </span>
               <span
-                className={`mt-1 text-[0.56rem] uppercase tracking-[0.3em] transition-colors duration-400 ${
+                className={`mt-1 text-[0.72rem] transition-colors duration-400 ${
                   onDark ? 'text-bone/60' : 'text-mute'
                 }`}
               >
@@ -126,7 +126,7 @@ export default function Header() {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `relative py-1 text-micro uppercase font-medium transition-colors duration-400 ${
+                  `relative py-1 text-sm font-medium transition-colors duration-400 ${
                     onDark
                       ? isActive
                         ? 'text-bone'
@@ -173,7 +173,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setMenuOpen(false)}
-            className="absolute right-gutter top-6 text-micro uppercase"
+            className="absolute right-gutter top-6 text-sm"
             style={{ color: 'rgb(var(--accent))' }}
           >
             Close
