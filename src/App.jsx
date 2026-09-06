@@ -10,6 +10,18 @@ import Contact from './pages/Contact';
 import Book from './pages/Book';
 import BookingStatus from './pages/BookingStatus';
 
+/* The homepage has its own search-bar navigation (HomeNav), so the site header steps
+   aside there rather than stacking two bars. Every other page keeps the site header. */
+function SiteChrome({ children }) {
+  const { pathname } = useLocation();
+  return (
+    <>
+      {pathname !== '/' && <Header />}
+      {children}
+    </>
+  );
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -25,7 +37,7 @@ export default function App() {
       {/* covers a page that is already mounted and interactive underneath */}
       <SplashScreen />
       <ScrollToTop />
-      <Header />
+      <SiteChrome>
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -36,6 +48,7 @@ export default function App() {
           <Route path="/:slug" element={<Property />} />
         </Routes>
       </main>
+      </SiteChrome>
       <Footer />
     </PropertyProvider>
   );

@@ -229,3 +229,43 @@ palette itself.
 If that is not acceptable, **Modernist Lagos** — off-white against ink-green, Bodoni Moda
 display, oxblood against signal green — moves decisively off the cluster and was the
 strongest of the three on distinctiveness. It needs commissioned photography to carry it.
+
+---
+
+## 13. The homepage — select your destination
+
+The homepage is a **dark portal** that opens into the light Limestone property pages. That
+is deliberate rather than a second system: the logo, the splash and the hero photography
+are all dark, so the entry is dark and the reading surfaces are light.
+
+**Shell.** A sticky bar carries the wordmark, the two houses as tabs, an inline search
+(check-in, check-out, adults, children) and a Search button, with a hamburger for
+secondary navigation. It is the homepage's own navigation — every other page keeps the
+site header, so nothing that has already been designed changes underneath it.
+
+**One control, one job.** The pattern this follows carries both location tabs *and* a
+separate location dropdown. Here the tabs are the search's location, and the dropdown is
+gone. Two controls for one decision is the thing this brief has removed twice already.
+
+**Search is not decoration.** It collects exactly what `GET /api/public/availability`
+needs and hands it to `/book` as query parameters; the booking flow opens on the room step
+with availability already fetched rather than asking for the same four answers again.
+
+**Hero.** Four ambient establishing shots crossfade behind a centred overlay — swan,
+wordmark, eyebrow, headline, rule, one line of description, the two destination cards, and
+dots. The rotation alternates houses so the carousel itself says there are two. It pauses
+on hover and does not advance under `prefers-reduced-motion`.
+
+**Colour on this shell.** Champagne `#C9A961` is the *brand* accent — Search, active tab,
+dots, wordmark. The property accents stay the *property* signal, lifted to read on black:
+Exclusive `#8A8258`, Urban `#C9704E`. Same two hues as the rest of the system, adjusted
+for their ground. Nothing here borrows the reference site's orange.
+
+**Below `xl`** the search cannot share a row with the wordmark, tabs and menu, so it
+collapses behind a Search button and opens as a panel — and below `sm` the tabs move into
+that panel, where they are the location control anyway. Measured to fit from 360 px up.
+
+**Two notes against the design calibration.** A centred hero and an all-caps eyebrow are
+both on `frontend-design`'s list of generated-design tells. They were specified, and they
+are genuine luxury-hospitality convention, so they stand — but they are the two places
+this page follows a pattern rather than making an argument.

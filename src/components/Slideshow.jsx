@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Plate } from './primitives';
+import { useCarousel } from '../lib/useCarousel';
 
 /**
  * Several shots of the same place — three angles on the bar, two on the gym — belong in
@@ -10,21 +11,9 @@ import { Plate } from './primitives';
  * `prefers-reduced-motion` it does not advance on its own at all; the dots still work.
  */
 export default function Slideshow({ images, alt = '', className = '', interval = 4500 }) {
-  const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const reduced = useRef(false);
-
-  useEffect(() => {
-    reduced.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
-
-  useEffect(() => {
-    if (paused || reduced.current || images.length < 2) return undefined;
-    const id = setInterval(() => setIndex((i) => (i + 1) % images.length), interval);
-    return () => clearInterval(id);
-  }, [paused, images.length, interval]);
-
-  const go = useCallback((i) => setIndex(i), []);
+  const [index, setIndex] = useCarousel({ length: images.length, interval, paused });
+  const go = useCallback((i) => setIndex(i), [setIndex]);
 
   if (!images?.length) return null;
   if (images.length === 1) {
