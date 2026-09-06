@@ -309,11 +309,31 @@ Touch targets `≥ 44px`. No hover-only path to any content or action.
 
 ---
 
-## 11. Deliverable
+## 11. Deliverables
 
-`dual-location-concept.html` — a single self-contained file implementing this brief:
-sticky glass header with the persistent house switcher, the split portal hero, the
-cross-property rail, the floating booking widget, asymmetric rooms/dining/experiences
-sections, the brand-story spread, and the footer. It is a **design concept**, not a
-production booking system — the existing `index.html` (live Lagos site, booking flow and
-admin panel) is untouched.
+**`dual-location-concept.html`** — the design concept: a single self-contained file
+implementing this brief at full strength. Sticky glass header with the persistent house
+switcher, split portal hero, cross-property rail, floating booking widget, asymmetric
+rooms/dining/experiences sections, the brand-story spread and the footer.
+
+**`index.html`** — the live site, with the dual-house pattern folded in:
+
+| Folded in | Where |
+|---|---|
+| House theming | Five custom properties swap on `<html data-property>`; espresso/brass becomes deep forest/champagne bronze over 1.1 s |
+| Persistent switcher | Header, desktop and mobile, `role="tablist"` with arrow traversal and a polite live region |
+| Split portal hero | Replaces the single home hero; hover expansion, resolve-to-full-bleed, stacked below 768 px |
+| Cross-property section | Both houses side by side with weather, altitude, coordinates and signature amenity |
+| House-bound details | Utility bar, contact page and footer carry each house's address, telephone and position |
+| Per-house rooms | Each house owns the same three room slots under its own names, rates, inventory, copy and imagery |
+| Booking | A House field synced with the switcher in both directions; the request records which house it belongs to |
+| Back office | A **Managing** selector scopes requests, calendar, pricing, content and analytics to one house |
+
+**Migration.** The admin store moves from `dx_hotel_admin_store_v1` to `_v2` on first load.
+Existing rooms, experiences, rates, inventory, closed dates, discounts, complaints and
+bookings become House I; House II is seeded from defaults. Nothing already saved is lost,
+and the v1 record is left in place.
+
+**Still single-house, by design, for a later pass:** closed dates and discount packages
+apply across both houses, and the reservation desk is one inbox. Splitting those needs a
+booking-rules decision from the operator, not a design one.

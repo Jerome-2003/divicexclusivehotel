@@ -88,6 +88,77 @@
   .admin-input-sm{background:var(--ink); border:1px solid rgba(184,144,90,.3); color:var(--ivory); border-radius:.5rem; padding:.4rem .6rem; font-size:.8rem;}
   .cal-cell-open{background:rgba(92,140,92,.15); color:#7fbf7f;}
   .cal-cell-full{background:rgba(180,80,80,.15); color:#e08a8a;}
+
+  /* ================= DUAL-HOUSE LAYER =================
+     House II re-themes the document by swapping a handful of values.
+     Type, spacing, structure and component anatomy do not change. */
+  :root[data-property="b"]{
+    --ink:#0F1713;        /* deep forest ground */
+    --ink-2:#17211C;
+    --ivory:#EFEDE4;      /* cooler parchment */
+    --stone:#9AA396;
+    --brass:#C9B489;      /* champagne bronze */
+    --brass-deep:#A08F65;
+    --burgundy:#3E5548;
+  }
+  body,.top-info-bar,header.main-nav,footer{transition:background-color 1.1s cubic-bezier(.16,1,.3,1),color 1.1s cubic-bezier(.16,1,.3,1);}
+
+  /* ---- house switcher: persistent, never buried in the menu ---- */
+  .house-switch{position:relative;display:inline-flex;align-items:center;border:1px solid rgba(184,144,90,.45);border-radius:9999px;padding:3px;}
+  .house-switch__ind{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:9999px;background:rgba(184,144,90,.18);border:1px solid rgba(184,144,90,.35);transition:transform .6s cubic-bezier(.16,1,.3,1);}
+  :root[data-property="b"] .house-switch__ind{transform:translateX(100%);}
+  .house-switch button{position:relative;z-index:1;padding:.4rem .9rem;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ivory);opacity:.55;white-space:nowrap;transition:opacity .3s;}
+  .house-switch button[aria-selected="true"]{opacity:1;font-weight:500;}
+
+  /* ---- split portal hero ---- */
+  /* the portal fills what is left of the viewport under the utility bar and nav,
+     so both "Enter this house" actions stay above the fold */
+  .portal{position:relative;display:flex;min-height:70vh;height:calc(100 * min(var(--vh, 1vh), 1vh) - var(--portal-offset, 106px));background:var(--ink);}
+  .portal__half{position:relative;flex:1 1 50%;overflow:hidden;display:flex;align-items:flex-end;transition:flex-basis .6s cubic-bezier(.16,1,.3,1),filter .6s cubic-bezier(.16,1,.3,1),opacity .6s cubic-bezier(.16,1,.3,1);}
+  .portal__half + .portal__half{border-left:1px solid rgba(184,144,90,.35);}
+  .portal__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s cubic-bezier(.16,1,.3,1);}
+  .portal__img.is-in{opacity:1;}
+  /* art plate: a designed surface underneath, so a missing photograph never breaks the composition */
+  .portal__plate{position:absolute;inset:0;background:
+      radial-gradient(120% 90% at 78% 12%, var(--p3) 0%, transparent 55%),
+      radial-gradient(110% 80% at 12% 88%, var(--p2) 0%, transparent 60%),
+      linear-gradient(168deg, var(--p2) 0%, var(--p1) 62%);}
+  .portal__half[data-house="a"]{--p1:#2B1E12;--p2:#7A5630;--p3:#C79A5E;}
+  .portal__half[data-house="b"]{--p1:#131E19;--p2:#3E5548;--p3:#93A48F;}
+  .portal__scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,5,.3) 0%,rgba(8,7,5,.12) 42%,rgba(8,7,5,.9) 100%);}
+  .portal__body{position:relative;z-index:3;width:100%;padding:2rem 1.75rem 3rem;display:flex;flex-direction:column;gap:1rem;}
+  .portal__mark{position:absolute;z-index:6;left:50%;top:14%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.75rem;transition:opacity .6s cubic-bezier(.16,1,.3,1);}
+  .portal__mark .disc{width:64px;height:64px;border-radius:50%;border:1px solid rgba(184,144,90,.55);display:flex;align-items:center;justify-content:center;background:rgba(11,10,8,.42);backdrop-filter:blur(6px);font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--brass);}
+  @media (hover:hover) and (min-width:1024px){
+    .portal:not([data-resolved]) .portal__half:hover{flex-basis:62%;}
+    .portal:not([data-resolved]):has(.portal__half:hover) .portal__half:not(:hover){filter:brightness(.42) saturate(.75);}
+    .portal:not([data-resolved]):has(.portal__half:hover) .portal__mark{opacity:0;}
+  }
+  .portal[data-resolved] .portal__mark{opacity:0;pointer-events:none;}
+  .portal[data-resolved="a"] .portal__half[data-house="a"],
+  .portal[data-resolved="b"] .portal__half[data-house="b"]{flex-basis:100%;}
+  .portal[data-resolved="a"] .portal__half[data-house="b"],
+  .portal[data-resolved="b"] .portal__half[data-house="a"]{flex-basis:0;opacity:0;border-left-color:transparent;}
+  .portal[data-resolved] .portal__enter{display:none;}
+  .portal__return{position:absolute;z-index:7;right:1.75rem;bottom:2rem;opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s;}
+  .portal[data-resolved] .portal__return{opacity:1;visibility:visible;}
+  @media (max-width:767px){
+    .portal{flex-direction:column;}
+    .portal__half{flex-basis:50%;}
+    .portal__half + .portal__half{border-left:0;border-top:1px solid rgba(184,144,90,.35);}
+    .portal__body{padding:1.25rem 1.25rem 1.5rem;gap:.55rem;}
+    .portal__mark{top:50%;transform:translate(-50%,-50%);}
+    .portal__mark span:last-child{display:none;}
+  }
+
+  /* ---- cross-property showcase ---- */
+  .house-card{display:flex;flex-direction:column;gap:1.25rem;}
+  .house-card__media{position:relative;aspect-ratio:4/5;max-height:540px;overflow:hidden;border-radius:.75rem;}
+  .house-card__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+  .house-card__media img.is-in{opacity:1;}
+  .house-card:hover .house-card__media img.is-in{transform:scale(1.04);}
+  .house-card__data div{display:flex;flex-direction:column;gap:.2rem;padding:.75rem 0;border-top:1px solid rgba(184,144,90,.18);}
+  .house-card.is-active .house-card__name{color:var(--brass);}
 </style>
 </head>
 <body class="w-full min-h-screen overflow-x-hidden">
@@ -98,8 +169,8 @@
 <div class="top-info-bar py-2.5 px-6">
   <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs tracking-wider" style="color:var(--stone)">
     <div class="flex flex-wrap items-center justify-center gap-6">
-      <a href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-500"></i> 1st Avenue, E Close, Festac, Lagos</a>
-      <a href="tel:08000000000" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="phone" class="w-3.5 h-3.5 text-amber-500"></i> 08000000000</a>
+      <a data-hb-href="mapUrl" href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="map-pin" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="address">1st Avenue, E Close, Festac, Lagos</span></a>
+      <a data-hb-href="telUrl" href="tel:08000000000" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="phone" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="phone">08000000000</span></a>
       <span class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-amber-500"></i> reservations@divicexclusive.com</span>
     </div>
     <a href="#book" data-page-link="book" class="hidden md:inline-flex items-center gap-1 hover:text-amber-400 transition" style="color:var(--brass)">
@@ -111,7 +182,7 @@
 <header class="main-nav sticky top-0 z-50">
   <nav class="max-w-7xl mx-auto px-6 py-4">
     <div class="hidden md:flex items-center justify-center">
-      <ul class="flex items-center gap-8">
+      <ul class="flex items-center gap-4 lg:gap-8">
         <li><a href="#home" data-page-link="home" class="nav-link">Home</a></li>
         <li><a href="#rooms" data-page-link="rooms" class="nav-link">Rooms</a></li>
         <li class="dropdown relative">
@@ -123,15 +194,29 @@
           </ul>
         </li>
       </ul>
-      <a href="#home" data-page-link="home" class="font-display text-3xl tracking-wide mx-12" style="color:var(--ivory)">DiviceXclusive</a>
-      <ul class="flex items-center gap-8">
+      <a href="#home" data-page-link="home" class="font-display text-2xl lg:text-3xl tracking-wide mx-5 lg:mx-12 whitespace-nowrap" style="color:var(--ivory)">DiviceXclusive</a>
+      <ul class="flex items-center gap-4 lg:gap-8">
         <li><a href="#book" data-page-link="book" class="nav-link">Book a Stay</a></li>
         <li><a href="#contact" data-page-link="contact" class="nav-link">Contact</a></li>
+        <li>
+          <div class="house-switch" role="tablist" aria-label="Choose house">
+            <span class="house-switch__ind" aria-hidden="true"></span>
+            <button role="tab" aria-selected="true"  data-house-switch="a" aria-label="The Lagoon House, Lagos">Lagos</button>
+            <button role="tab" aria-selected="false" data-house-switch="b" aria-label="The Plateau House, Obudu">Obudu</button>
+          </div>
+        </li>
       </ul>
     </div>
-    <div class="md:hidden flex items-center justify-between">
-      <a href="#home" data-page-link="home" class="font-display text-2xl tracking-wide" style="color:var(--ivory)">DiviceXclusive</a>
-      <button id="mobile-toggle" aria-label="Toggle menu"><i data-lucide="menu" class="w-6 h-6" style="color:var(--ivory)"></i></button>
+    <div class="md:hidden flex items-center justify-between gap-3">
+      <a href="#home" data-page-link="home" class="font-display text-xl tracking-wide" style="color:var(--ivory)">DiviceXclusive</a>
+      <div class="flex items-center gap-2">
+        <div class="house-switch" role="tablist" aria-label="Choose house">
+          <span class="house-switch__ind" aria-hidden="true"></span>
+          <button role="tab" aria-selected="true"  data-house-switch="a" aria-label="The Lagoon House, Lagos" style="padding:.35rem .6rem;letter-spacing:.14em">Lagos</button>
+          <button role="tab" aria-selected="false" data-house-switch="b" aria-label="The Plateau House, Obudu" style="padding:.35rem .6rem;letter-spacing:.14em">Obudu</button>
+        </div>
+        <button id="mobile-toggle" aria-label="Toggle menu"><i data-lucide="menu" class="w-6 h-6" style="color:var(--ivory)"></i></button>
+      </div>
     </div>
     <ul id="nav-links-mobile" class="hidden md:hidden flex-col gap-4 pt-5 pb-2">
       <li><a href="#home" data-page-link="home" class="nav-link block">Home</a></li>
@@ -150,18 +235,62 @@
 <!-- ============ PAGE: HOME ============ -->
 <section class="page" data-page="home">
 
-  <!-- HERO SECTION -->
-  <div id="hero" class="relative hero-height flex items-center justify-center pt-20 pb-20">
-    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2069&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="Hotel lobby at night">
-    <div class="absolute inset-0 hero-gradient"></div>
-    <div class="relative text-center px-6 z-10">
-      <p class="eyebrow mb-4">Victoria Island, Lagos</p>
-      <h1 class="font-display text-4xl sm:text-6xl md:text-8xl mb-6" style="color:var(--ivory)">DiviceXclusive Hotel</h1>
-      <p class="max-w-md mx-auto mb-8 text-sm sm:text-base" style="color:var(--stone)">Quiet luxury on the water's edge — considered rooms, unhurried service, a city view worth waking up to.</p>
-      <div class="rule rule-center mb-8"></div>
-      <a href="#book" data-page-link="book" class="btn-brass">Book Now</a>
+  <!-- HERO: SPLIT PORTAL — the guest chooses a house before anything else -->
+  <div id="hero" class="portal" aria-label="Choose your house">
+
+    <article class="portal__half" data-house="a">
+      <div class="portal__plate" aria-hidden="true"></div>
+      <img class="portal__img" data-house-img="a" alt="The Lagoon House, Lagos — brass, teak and Atlantic light">
+      <div class="portal__scrim" aria-hidden="true"></div>
+      <div class="portal__body">
+        <p class="eyebrow">House I · <span data-hb-a="region"></span></p>
+        <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl" style="color:var(--ivory);line-height:1;max-width:12ch" data-hb-a="name"></h1>
+        <p class="text-sm max-w-sm" style="color:rgba(241,234,222,.78)" data-hb-a="portalLine"></p>
+        <p class="text-[.6rem] uppercase tracking-[.24em] flex flex-wrap gap-x-5 gap-y-1" style="color:rgba(241,234,222,.65)">
+          <span data-hb-a="temp"></span><span data-hb-a="weather"></span><span data-hb-a="altitude"></span>
+        </p>
+        <button class="btn-brass portal__enter self-start mt-1" data-house-enter="a">Enter this house</button>
+      </div>
+    </article>
+
+    <article class="portal__half" data-house="b">
+      <div class="portal__plate" aria-hidden="true"></div>
+      <img class="portal__img" data-house-img="b" alt="The Plateau House, Obudu — basalt, wool and cloud">
+      <div class="portal__scrim" aria-hidden="true"></div>
+      <div class="portal__body">
+        <p class="eyebrow">House II · <span data-hb-b="region"></span></p>
+        <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl" style="color:var(--ivory);line-height:1;max-width:12ch" data-hb-b="name"></h1>
+        <p class="text-sm max-w-sm" style="color:rgba(241,234,222,.78)" data-hb-b="portalLine"></p>
+        <p class="text-[.6rem] uppercase tracking-[.24em] flex flex-wrap gap-x-5 gap-y-1" style="color:rgba(241,234,222,.65)">
+          <span data-hb-b="temp"></span><span data-hb-b="weather"></span><span data-hb-b="altitude"></span>
+        </p>
+        <button class="btn-brass portal__enter self-start mt-1" data-house-enter="b">Enter this house</button>
+      </div>
+    </article>
+
+    <div class="portal__mark" aria-hidden="true">
+      <span class="disc">DX</span>
+      <span class="text-[.6rem] uppercase tracking-[.28em]" style="color:var(--ivory);opacity:.75">Choose your journey</span>
     </div>
+
+    <button class="portal__return text-[.6rem] uppercase tracking-[.24em] pb-1 border-b" style="color:var(--brass);border-color:rgba(184,144,90,.4)" data-house-return>View both houses</button>
   </div>
+
+  <!-- SECTION: THE TWO HOUSES -->
+  <section class="py-20 sm:py-28 px-6" style="background:var(--ink-2)">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <p class="eyebrow mb-3">The two houses</p>
+        <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">One brand, two climates</h2>
+        <div class="rule rule-center mb-6"></div>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)">
+          Six hundred miles apart, and built for opposite instincts. The service, the linen and the standard
+          do not change — only the weather at the window.
+        </p>
+      </div>
+      <div id="house-showcase" class="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-14"></div>
+    </div>
+  </section>
 
   <!-- SECTION: ROOM TYPES -->
   <section class="py-20 sm:py-28 px-6">
@@ -432,7 +561,16 @@
 
       <div class="bg-[#1c1712]/90 backdrop-blur-md p-6 sm:p-10 rounded-2xl shadow-2xl" style="border: 1px solid rgba(184,144,90,.25)">
         <form id="booking-form" class="space-y-5 text-left">
-          
+
+          <!-- HOUSE — kept in sync with the header switcher, both directions -->
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="booking-house">Which House</label>
+            <select id="booking-house" class="w-full rounded-lg px-4 py-3 text-sm cursor-pointer" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+              <option value="a">Lagos — The Lagoon House</option>
+              <option value="b">Obudu — The Plateau House</option>
+            </select>
+          </div>
+
           <!-- NAME & PHONE NUMBER INPUTS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -583,18 +721,25 @@
     <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">Contact &amp; Location</h1>
     <div class="rule rule-center"></div>
   </div>
-  <div class="max-w-5xl mx-auto px-6 pb-24 sm:pb-32 grid md:grid-cols-2 gap-12 text-center">
-    <div>
-      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Reservations</h3>
-      <p class="mb-2"><a href="tel:08000000000" style="color:var(--stone)" class="hover:text-amber-400 transition">08000000000</a></p>
-      <p class="mb-2" style="color:var(--stone)">reservations@divicexclusive.com</p>
-      <p style="color:var(--stone)">Front desk &amp; concierge — available 24 hours</p>
+  <div class="max-w-5xl mx-auto px-6 pb-10 grid md:grid-cols-2 gap-12">
+    <div class="text-center md:text-left">
+      <p class="eyebrow mb-2">House I</p>
+      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)" data-hb-a="name"></h3>
+      <p class="mb-2"><a data-hb-a-href="telUrl" href="tel:08000000000" style="color:var(--stone)" class="hover:text-amber-400 transition" data-hb-a="phone"></a></p>
+      <p class="mb-2" style="color:var(--stone)" data-hb-a="email"></p>
+      <p><a data-hb-a-href="mapUrl" href="#" target="_blank" rel="noopener" style="color:var(--stone)" class="hover:text-amber-400 transition underline" data-hb-a="address"></a></p>
+      <p class="mt-2 text-xs uppercase tracking-[.2em]" style="color:var(--stone);opacity:.7"><span data-hb-a="coords"></span> · <span data-hb-a="altitude"></span></p>
     </div>
-    <div>
-      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Getting Here</h3>
-      <p><a href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" style="color:var(--stone)" class="hover:text-amber-400 transition underline">1st Avenue, E Close, Festac, Lagos, Nigeria</a></p>
+    <div class="text-center md:text-left">
+      <p class="eyebrow mb-2">House II</p>
+      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)" data-hb-b="name"></h3>
+      <p class="mb-2"><a data-hb-b-href="telUrl" href="#" style="color:var(--stone)" class="hover:text-amber-400 transition" data-hb-b="phone"></a></p>
+      <p class="mb-2" style="color:var(--stone)" data-hb-b="email"></p>
+      <p><a data-hb-b-href="mapUrl" href="#" target="_blank" rel="noopener" style="color:var(--stone)" class="hover:text-amber-400 transition underline" data-hb-b="address"></a></p>
+      <p class="mt-2 text-xs uppercase tracking-[.2em]" style="color:var(--stone);opacity:.7"><span data-hb-b="coords"></span> · <span data-hb-b="altitude"></span></p>
     </div>
   </div>
+  <p class="text-center text-sm px-6 pb-24 sm:pb-32" style="color:var(--stone)">One reservations desk serves both houses — front desk &amp; concierge available 24 hours.</p>
 
   <!-- Complaints / Feedback -->
   <div class="max-w-2xl mx-auto px-6 pb-24 sm:pb-32">
@@ -649,7 +794,16 @@
           <p class="eyebrow mb-2">Back Office</p>
           <h1 class="font-display text-3xl sm:text-4xl" style="color:var(--ivory)">DiviceXclusive Admin</h1>
         </div>
-        <button id="admin-logout" class="btn-brass py-2 px-5 text-xs">Log Out</button>
+        <div class="flex flex-wrap items-center gap-4">
+          <div>
+            <label class="block text-xs mb-1" style="color:var(--stone)" for="admin-house">Managing</label>
+            <select id="admin-house" class="admin-input-sm" style="min-width:230px">
+              <option value="a">Lagos — The Lagoon House</option>
+              <option value="b">Obudu — The Plateau House</option>
+            </select>
+          </div>
+          <button id="admin-logout" class="btn-brass py-2 px-5 text-xs">Log Out</button>
+        </div>
       </div>
 
       <!-- Tabs -->
@@ -754,7 +908,25 @@
   <div class="py-12 sm:py-16 px-6">
     <div class="max-w-6xl mx-auto text-center border-t pt-10 sm:pt-14" style="border-color:rgba(184,144,90,.15)">
       <p class="font-display text-2xl sm:text-3xl mb-3" style="color:var(--ivory)">DiviceXclusive Hotel</p>
-      <p class="eyebrow mb-6">Quiet Luxury, Considered Detail</p>
+      <p class="eyebrow mb-8">Two Houses · One Code</p>
+
+      <div class="grid sm:grid-cols-2 gap-8 sm:gap-12 max-w-3xl mx-auto mb-10 text-center sm:text-left">
+        <div>
+          <p class="eyebrow mb-2" style="font-size:.6rem">House I</p>
+          <p class="font-display text-xl mb-2" style="color:var(--ivory)" data-hb-a="name"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-a="address"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-a="phone"></p>
+          <p class="text-xs opacity-70" style="color:var(--stone)" data-hb-a="coords"></p>
+        </div>
+        <div>
+          <p class="eyebrow mb-2" style="font-size:.6rem">House II</p>
+          <p class="font-display text-xl mb-2" style="color:var(--ivory)" data-hb-b="name"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-b="address"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-b="phone"></p>
+          <p class="text-xs opacity-70" style="color:var(--stone)" data-hb-b="coords"></p>
+        </div>
+      </div>
+
       <div class="flex items-center justify-center gap-6 mb-8">
         <a href="#" aria-label="Instagram" style="color:var(--stone)" class="hover:text-white"><i data-lucide="instagram" class="w-4 h-4"></i></a>
         <a href="#" aria-label="Facebook" style="color:var(--stone)" class="hover:text-white"><i data-lucide="facebook" class="w-4 h-4"></i></a>
@@ -883,10 +1055,14 @@
         const rate = parseInt((summaryRate.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
         const total = parseInt((summaryTotal.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
 
+        const houseKey = window.DXHouse ? window.DXHouse.current : 'a';
+
         window.DXAdmin.addBooking({
           name: document.getElementById('guest-name').value.trim(),
           phone: document.getElementById('guest-phone').value.trim(),
           email: document.getElementById('guest-email').value.trim(),
+          house: houseKey,
+          houseName: window.DXHouse ? window.DXHouse.name : '',
           roomType,
           roomTypeName: selectedOption.text.split('—')[0].trim(),
           checkin: checkinInput.value,
@@ -1027,6 +1203,259 @@
 </script>
 
 <!-- ============================================================
+     DUAL-HOUSE ENGINE
+
+     Every house-specific string, datum and image lives in HOUSES
+     below. Re-pointing the brand to different properties is one
+     edit to this object — the markup binds through data attributes
+     and never names a house itself.
+     ============================================================ -->
+<script>
+(function () {
+  const HOUSES = {
+    a: {
+      key: 'a', code: 'House I', short: 'Lagos', name: 'The Lagoon House',
+      region: 'Festac, Lagos', address: '1st Avenue, E Close, Festac, Lagos',
+      phone: '08000000000', email: 'reservations@divicexclusive.com',
+      coords: '6.4654° N, 3.2836° E', altitude: '4 m above sea',
+      temp: '31°', weather: 'Humid, hard sun',
+      signature: 'The Amber Room — poured nightly until two',
+      portalLine: 'Four metres above the Atlantic. Warm nights, teak and aged brass, the lagoon working quietly below the balconies.',
+      blurb: 'A city house. Low light, long counters, and a lagoon that changes colour three times before dinner.',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac',
+      telUrl: 'tel:08000000000',
+      portalImg: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2069&auto=format&fit=crop',
+      cardImg: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop'
+    },
+    b: {
+      key: 'b', code: 'House II', short: 'Obudu', name: 'The Plateau House',
+      region: 'Obudu Mountain, Cross River', address: 'Obudu Plateau, Cross River State',
+      phone: '08000000011', email: 'plateau@divicexclusive.com',
+      coords: '6.3833° N, 9.3667° E', altitude: '1,576 m above sea',
+      temp: '17°', weather: 'Misted, soft light',
+      signature: 'The Cloud Terrace — served from first light',
+      portalLine: 'Fifteen hundred metres up. Cold mornings, basalt and oak, cloud crossing the terrace while breakfast is laid.',
+      blurb: 'A quiet house. Wool, woodsmoke, and a valley that fills with cloud before it empties again by ten.',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Obudu+Mountain+Resort%2C+Cross+River',
+      telUrl: 'tel:08000000011',
+      portalImg: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop',
+      cardImg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop'
+    }
+  };
+
+  const $  = (sel, ctx) => (ctx || document).querySelector(sel);
+  const $$ = (sel, ctx) => Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let current = 'a';
+
+  // an image that fails leaves the art plate showing, rather than a broken well
+  function setImg(el, url) {
+    if (!el) return;
+    el.classList.remove('is-in');
+    el.onload = function () { el.classList.add('is-in'); };
+    el.onerror = function () { el.style.display = 'none'; };
+    el.src = url;
+    if (el.complete && el.naturalWidth) el.classList.add('is-in');
+  }
+
+  function bindFixed() {
+    ['a', 'b'].forEach(function (key) {
+      const house = HOUSES[key];
+      $$('[data-hb-' + key + ']').forEach(function (el) {
+        const val = house[el.getAttribute('data-hb-' + key)];
+        if (val != null) el.textContent = val;
+      });
+      $$('[data-hb-' + key + '-href]').forEach(function (el) {
+        const val = house[el.getAttribute('data-hb-' + key + '-href')];
+        if (val != null) el.setAttribute('href', val);
+      });
+      setImg($('[data-house-img="' + key + '"]'), house.portalImg);
+    });
+  }
+
+  function bindActive() {
+    const house = HOUSES[current];
+    $$('[data-hb]').forEach(function (el) {
+      const val = house[el.getAttribute('data-hb')];
+      if (val != null) el.textContent = val;
+    });
+    $$('[data-hb-href]').forEach(function (el) {
+      const val = house[el.getAttribute('data-hb-href')];
+      if (val != null) el.setAttribute('href', val);
+    });
+  }
+
+  function renderShowcase() {
+    const wrap = $('#house-showcase');
+    if (!wrap) return;
+    wrap.innerHTML = ['a', 'b'].map(function (key) {
+      const h = HOUSES[key];
+      return '' +
+        '<article class="house-card' + (key === current ? ' is-active' : '') + '" data-house-card="' + key + '">' +
+          '<div class="house-card__media portal__half" data-house="' + key + '">' +
+            '<div class="portal__plate" aria-hidden="true"></div>' +
+            '<img data-card-img="' + key + '" alt="' + h.name + ', ' + h.region + '">' +
+          '</div>' +
+          '<div>' +
+            '<p class="eyebrow mb-2">' + h.code + ' · ' + h.region + '</p>' +
+            '<h3 class="house-card__name font-display text-2xl sm:text-3xl mb-3" style="color:var(--ivory)">' + h.name + '</h3>' +
+            '<p class="text-sm" style="color:var(--stone)">' + h.blurb + '</p>' +
+          '</div>' +
+          '<div class="house-card__data text-[.62rem] uppercase tracking-[.2em]" style="color:var(--stone)">' +
+            '<div><span style="opacity:.6">Now</span><span style="color:var(--ivory)">' + h.temp + ' · ' + h.weather + '</span></div>' +
+            '<div><span style="opacity:.6">Altitude</span><span style="color:var(--ivory)">' + h.altitude + '</span></div>' +
+            '<div><span style="opacity:.6">Position</span><span style="color:var(--ivory)">' + h.coords + '</span></div>' +
+            '<div><span style="opacity:.6">Signature</span><span style="color:var(--ivory)">' + h.signature + '</span></div>' +
+          '</div>' +
+          '<button class="btn-brass self-start" data-house-enter="' + key + '">Enter this house</button>' +
+        '</article>';
+    }).join('');
+    ['a', 'b'].forEach(function (key) {
+      setImg($('[data-card-img="' + key + '"]'), HOUSES[key].cardImg);
+    });
+  }
+
+  function announce(msg) {
+    let live = $('#house-live');
+    if (!live) {
+      live = document.createElement('p');
+      live.id = 'house-live';
+      live.className = 'sr-only';
+      live.setAttribute('role', 'status');
+      live.setAttribute('aria-live', 'polite');
+      document.body.appendChild(live);
+    }
+    live.textContent = msg;
+  }
+
+  function setHouse(key, opts) {
+    if (!HOUSES[key]) return;
+    const options = opts || {};
+    current = key;
+    document.documentElement.setAttribute('data-property', key);
+
+    $$('[data-house-switch]').forEach(function (btn) {
+      btn.setAttribute('aria-selected', String(btn.getAttribute('data-house-switch') === key));
+    });
+    $$('[data-house-card]').forEach(function (card) {
+      card.classList.toggle('is-active', card.getAttribute('data-house-card') === key);
+    });
+
+    const bookingHouse = $('#booking-house');
+    if (bookingHouse && bookingHouse.value !== key) bookingHouse.value = key;
+
+    bindActive();
+
+    // rooms, rates and dining copy belong to the house, so re-render them
+    if (window.DXAdmin && window.DXAdmin.refreshPublicSite) window.DXAdmin.refreshPublicSite();
+
+    if (options.announce !== false) {
+      announce('Now viewing ' + HOUSES[key].name + ', ' + HOUSES[key].region + '.');
+    }
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('house', HOUSES[key].short.toLowerCase());
+      window.history.replaceState(null, '', url);
+    } catch (err) { /* older browsers simply keep the current URL */ }
+  }
+
+  function enterHouse(key) {
+    setHouse(key);
+    const portal = $('#hero');
+    if (!portal) return;
+    portal.setAttribute('data-resolved', key);
+    $$('.portal__half', portal).forEach(function (half) {
+      const off = half.getAttribute('data-house') !== key;
+      half.setAttribute('aria-hidden', String(off));
+      $$('button, a', half).forEach(function (el) { el.tabIndex = off ? -1 : 0; });
+    });
+  }
+
+  function bothHouses() {
+    const portal = $('#hero');
+    if (!portal) return;
+    portal.removeAttribute('data-resolved');
+    $$('.portal__half', portal).forEach(function (half) {
+      half.removeAttribute('aria-hidden');
+      $$('button, a', half).forEach(function (el) { el.tabIndex = 0; });
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    const sw = e.target.closest('[data-house-switch]');
+    if (sw) { setHouse(sw.getAttribute('data-house-switch')); return; }
+
+    const enter = e.target.closest('[data-house-enter]');
+    if (enter) {
+      e.preventDefault();
+      enterHouse(enter.getAttribute('data-house-enter'));
+      if (!enter.closest('#hero')) {
+        window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
+      }
+      return;
+    }
+
+    if (e.target.closest('[data-house-return]')) { bothHouses(); return; }
+  });
+
+  // arrow-key traversal across the switcher, per tablist semantics
+  document.addEventListener('keydown', function (e) {
+    const btn = e.target.closest && e.target.closest('[data-house-switch]');
+    if (!btn || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+    e.preventDefault();
+    const next = btn.getAttribute('data-house-switch') === 'a' ? 'b' : 'a';
+    const target = btn.parentNode.querySelector('[data-house-switch="' + next + '"]');
+    if (target) target.focus();
+    setHouse(next);
+  });
+
+  // the sticky utility bar and nav vary in height across breakpoints, so measure them
+  function measureChrome() {
+    const bar = $('.top-info-bar');
+    const nav = $('header.main-nav');
+    const offset = (bar ? bar.offsetHeight : 0) + (nav ? nav.offsetHeight : 0);
+    if (offset) document.documentElement.style.setProperty('--portal-offset', offset + 'px');
+  }
+
+  function init() {
+    bindFixed();
+    renderShowcase();
+    measureChrome();
+    window.addEventListener('resize', measureChrome);
+
+    let start = 'a';
+    try {
+      const q = new URL(window.location.href).searchParams.get('house');
+      if (q && q.toLowerCase().indexOf('o') === 0) start = 'b';
+    } catch (err) { /* default house */ }
+
+    setHouse(start, { announce: false });
+
+    const bookingHouse = $('#booking-house');
+    if (bookingHouse) {
+      bookingHouse.addEventListener('change', function () { setHouse(bookingHouse.value); });
+    }
+  }
+
+  // the house the rest of the page (booking form, admin) reads from
+  window.DXHouse = {
+    get current() { return current; },
+    get name() { return HOUSES[current].name; },
+    get short() { return HOUSES[current].short; },
+    all: HOUSES,
+    set: setHouse
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- ============================================================
      ADMIN PANEL ENGINE
      Hidden page: no nav link points here. It only renders when
      someone types the exact hash into the address bar:
@@ -1050,22 +1479,47 @@
 (function () {
   const ADMIN_HASH = 'dx-control-9247';
   const ADMIN_PASSWORD = 'DivX-Admin-2026';
-  const STORE_KEY = 'dx_hotel_admin_store_v1';
+  const STORE_KEY = 'dx_hotel_admin_store_v2';
+  const LEGACY_KEY = 'dx_hotel_admin_store_v1';
 
-  const ROOM_LABELS = { classic: 'The Classic Room', deluxe: 'The Deluxe Suite', presidential: 'The Presidential Suite' };
+  const HOUSE_LABELS = { a: 'Lagos — The Lagoon House', b: 'Obudu — The Plateau House' };
 
-  function defaultStore() {
+  // Each house owns the same three room slots, under its own names, rates and inventory.
+  function defaultHouseA() {
     return {
       rooms: {
-        classic:       { price: 85000,  inventory: 20, description: '32sqm of warm timber and linen, a rain shower, and a private balcony looking toward the lagoon. Built for effortless living with smart climate controls and high-speed connections.', image: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop' },
-        deluxe:        { price: 145000, inventory: 15, description: 'A separate sitting room, deep soaking tub, and curated minibar — built for longer stays and slower mornings. Offers floor-to-ceiling windows with panoramic city skyline views.', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop' },
-        presidential:  { price: 320000, inventory: 7,  description: 'Two bedrooms, a private dining room, and a wraparound terrace — with a dedicated butler on call. The pinnacle of quiet luxury designed for distinguished executive relaxation.', image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop' }
+        classic:       { name: 'The Classic Room',      price: 85000,  inventory: 20, description: '32sqm of warm timber and linen, a rain shower, and a private balcony looking toward the lagoon. Built for effortless living with smart climate controls and high-speed connections.', image: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop' },
+        deluxe:        { name: 'The Deluxe Suite',      price: 145000, inventory: 15, description: 'A separate sitting room, deep soaking tub, and curated minibar — built for longer stays and slower mornings. Offers floor-to-ceiling windows with panoramic city skyline views.', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop' },
+        presidential:  { name: 'The Presidential Suite', price: 320000, inventory: 7,  description: 'Two bedrooms, a private dining room, and a wraparound terrace — with a dedicated butler on call. The pinnacle of quiet luxury designed for distinguished executive relaxation.', image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop' }
       },
       experiences: {
         bar:  { title: 'The Amber Room', description: 'A low-lit bar built around a single long counter of aged brass and dark oak. The list runs from Nigerian-inflected classics to a rotating barrel-aged reserve — poured slowly, meant to be lingered over. Open nightly until 2am.', image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop' },
         pool: { title: 'The Sky Pool', description: 'Sixteen floors up, a heated infinity pool traces the edge of the building with an unbroken view of the lagoon. Cabanas, a light small-plates menu, and a resident DJ on Friday evenings.', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop' },
         gym:  { title: 'The Forge', description: 'A 24-hour fitness studio equipped with free weights, Technogym machines, and a dedicated stretch room. Personal trainers and in-room recovery treatments available on request.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop' }
+      }
+    };
+  }
+
+  function defaultHouseB() {
+    return {
+      rooms: {
+        classic:       { name: 'The Plateau Room',  price: 95000,  inventory: 8, description: 'Thirty-four square metres under a low oak ceiling, with a wool-dressed bed, a fire laid by four, and a window that frames only sky.', image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2070&auto=format&fit=crop' },
+        deluxe:        { name: 'The Cloudline Suite', price: 165000, inventory: 4, description: 'A sitting room with its own hearth, a stone bath set into the floor, and a terrace that sits inside the cloud until ten in the morning.', image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2070&auto=format&fit=crop' },
+        presidential:  { name: 'The Ridge House',   price: 380000, inventory: 2, description: 'A separate house at the end of the ridge. Three bedrooms, a private kitchen, a resident cook on request, and no neighbours in any direction.', image: 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=2070&auto=format&fit=crop' }
       },
+      experiences: {
+        bar:  { title: 'Stone & Ember', description: 'One long table, one fire, one menu decided the morning it is served. Almost everything is grown or grazed within an hour of the ridge; what is not, is not on the table.', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop' },
+        pool: { title: 'The Cloud Terrace', description: 'Breakfast from first light, served above the valley while it is still full of cloud. Blankets, a long pot of coffee, and nothing scheduled until it lifts.', image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=2070&auto=format&fit=crop' },
+        gym:  { title: 'The Ridge Room', description: 'A quiet studio at the end of the west wing — free weights, a stretch floor, and a guided dawn walk to the ridge head for anyone awake at five.', image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop' }
+      }
+    };
+  }
+
+  function defaultStore() {
+    return {
+      version: 2,
+      adminHouse: 'a',
+      houses: { a: defaultHouseA(), b: defaultHouseB() },
       closedDates: [],
       discounts: [],
       bookings: [],
@@ -1075,14 +1529,57 @@
 
   let store = null;
 
+  // v1 held a single property. Its rooms, experiences and bookings become House I;
+  // House II is seeded from defaults. Nothing a hotelier already saved is lost.
+  function migrateFromV1(old) {
+    const next = defaultStore();
+    if (old.rooms) {
+      Object.keys(next.houses.a.rooms).forEach(function (key) {
+        if (!old.rooms[key]) return;
+        const label = next.houses.a.rooms[key].name;
+        next.houses.a.rooms[key] = Object.assign({}, old.rooms[key]);
+        if (!next.houses.a.rooms[key].name) next.houses.a.rooms[key].name = label;
+      });
+    }
+    if (old.experiences) next.houses.a.experiences = old.experiences;
+    next.closedDates = old.closedDates || [];
+    next.discounts = old.discounts || [];
+    next.complaints = old.complaints || [];
+    next.bookings = (old.bookings || []).map(function (b) {
+      return Object.assign({ house: 'a', houseName: 'The Lagoon House' }, b);
+    });
+    return next;
+  }
+
   function loadStore() {
     try {
       const raw = localStorage.getItem(STORE_KEY);
-      store = raw ? JSON.parse(raw) : defaultStore();
+      if (raw) {
+        store = JSON.parse(raw);
+      } else {
+        const legacy = localStorage.getItem(LEGACY_KEY);
+        store = legacy ? migrateFromV1(JSON.parse(legacy)) : defaultStore();
+        saveStore();
+      }
     } catch (err) {
       console.error('Admin store failed to load, resetting.', err);
       store = defaultStore();
     }
+    if (!store.houses) store = defaultStore();
+    if (!store.adminHouse || !store.houses[store.adminHouse]) store.adminHouse = 'a';
+  }
+
+  // the house the admin is currently editing
+  function H() { return store.houses[store.adminHouse]; }
+
+  // bookings belong to a house; anything logged before the second house existed is House I
+  function houseBookings() {
+    return store.bookings.filter(b => (b.house || 'a') === store.adminHouse);
+  }
+
+  // the house the public site is currently showing
+  function guestHouseKey() {
+    return (window.DXHouse && store.houses[window.DXHouse.current]) ? window.DXHouse.current : 'a';
   }
 
   function saveStore() {
@@ -1108,13 +1605,15 @@
 
   // ---------------- apply live data to the public-facing site ----------------
   function applyCmsToPublicSite() {
-    Object.keys(store.rooms).forEach((key) => {
-      const room = store.rooms[key];
+    const house = store.houses[guestHouseKey()];
+
+    Object.keys(house.rooms).forEach((key) => {
+      const room = house.rooms[key];
       const title = document.getElementById(`cms-${key}-title`);
       const desc = document.getElementById(`cms-${key}-desc`);
       const img = document.getElementById(`cms-${key}-img`);
       const price = document.getElementById(`cms-${key}-price`);
-      if (title) title.textContent = ROOM_LABELS[key];
+      if (title) title.textContent = room.name;
       if (desc) desc.textContent = room.description;
       if (img) img.src = room.image;
       if (price) price.textContent = fmtNaira(room.price);
@@ -1122,12 +1621,12 @@
       const opt = document.getElementById(`opt-${key}`);
       if (opt) {
         opt.dataset.price = room.price;
-        opt.textContent = `${ROOM_LABELS[key]} — ${fmtNaira(room.price)} / night`;
+        opt.textContent = `${room.name} — ${fmtNaira(room.price)} / night`;
       }
     });
 
-    Object.keys(store.experiences).forEach((key) => {
-      const exp = store.experiences[key];
+    Object.keys(house.experiences).forEach((key) => {
+      const exp = house.experiences[key];
       const title = document.getElementById(`cms-${key}-title`);
       const desc = document.getElementById(`cms-${key}-desc`);
       const img = document.getElementById(`cms-${key}-img`);
@@ -1176,7 +1675,13 @@
     renderAll();
   }
 
-  window.DXAdmin = { addBooking, addComplaint, findActiveDiscount, isDateClosed };
+  // the public site calls this when the guest switches house, so rooms,
+  // rates and dining copy follow the switcher
+  function refreshPublicSite() {
+    if (store) applyCmsToPublicSite();
+  }
+
+  window.DXAdmin = { addBooking, addComplaint, findActiveDiscount, isDateClosed, refreshPublicSite };
 
   // ================= ADMIN UI =================
   let currentReqFilter = 'all';
@@ -1185,10 +1690,10 @@
   function renderRequests() {
     const container = document.getElementById('requests-list');
     if (!container) return;
-    const list = store.bookings.filter(b => currentReqFilter === 'all' || b.status === currentReqFilter);
+    const list = houseBookings().filter(b => currentReqFilter === 'all' || b.status === currentReqFilter);
 
     if (!list.length) {
-      container.innerHTML = `<p class="text-sm" style="color:var(--stone)">No requests in this view.</p>`;
+      container.innerHTML = `<p class="text-sm" style="color:var(--stone)">No requests for ${escapeHtml(HOUSE_LABELS[store.adminHouse])} in this view.</p>`;
       return;
     }
 
@@ -1202,6 +1707,7 @@
           <span class="status-pill status-${b.status}">${b.status.replace('-', ' ')}</span>
         </div>
         <div class="grid sm:grid-cols-2 gap-2 text-sm mb-4" style="color:var(--stone)">
+          <p><span style="color:var(--brass)">House:</span> ${escapeHtml(b.houseName || HOUSE_LABELS[b.house || 'a'])}</p>
           <p><span style="color:var(--brass)">Room:</span> ${escapeHtml(b.roomTypeName || b.roomType)}${b.roomNumber ? ' · #' + escapeHtml(b.roomNumber) : ''}</p>
           <p><span style="color:var(--brass)">Stay:</span> ${fmtDate(b.checkin)} → ${fmtDate(b.checkout)} (${b.nights} nights)</p>
           <p><span style="color:var(--brass)">Rate:</span> ${fmtNaira(b.rate)} / night</p>
@@ -1230,7 +1736,7 @@
       days.push(d.toISOString().split('T')[0]);
     }
 
-    const roomKeys = Object.keys(store.rooms);
+    const roomKeys = Object.keys(H().rooms);
     let html = '<table class="w-full text-xs border-collapse"><thead><tr>';
     html += `<th class="p-2 text-left" style="color:var(--brass)">Room Type</th>`;
     days.forEach(d => {
@@ -1240,10 +1746,10 @@
     html += '</tr></thead><tbody>';
 
     roomKeys.forEach(key => {
-      const inv = store.rooms[key].inventory;
-      html += `<tr><td class="p-2" style="color:var(--ivory)">${ROOM_LABELS[key]}</td>`;
+      const inv = H().rooms[key].inventory;
+      html += `<tr><td class="p-2" style="color:var(--ivory)">${H().rooms[key].name}</td>`;
       days.forEach(d => {
-        const booked = store.bookings.filter(b =>
+        const booked = houseBookings().filter(b =>
           b.roomType === key &&
           (b.status === 'approved' || b.status === 'checked-in') &&
           d >= b.checkin && d < b.checkout
@@ -1260,11 +1766,11 @@
   function renderPricing() {
     const container = document.getElementById('pricing-rooms');
     if (container) {
-      container.innerHTML = Object.keys(store.rooms).map(key => {
-        const r = store.rooms[key];
+      container.innerHTML = Object.keys(H().rooms).map(key => {
+        const r = H().rooms[key];
         return `
         <div class="admin-card">
-          <p class="font-display text-lg mb-3" style="color:var(--ivory)">${ROOM_LABELS[key]}</p>
+          <p class="font-display text-lg mb-3" style="color:var(--ivory)">${H().rooms[key].name}</p>
           <label class="block text-xs mb-1" style="color:var(--stone)">Price / night (₦)</label>
           <input type="number" class="admin-input-sm w-full mb-3" id="price-${key}" value="${r.price}">
           <label class="block text-xs mb-1" style="color:var(--stone)">Total Rooms in Inventory</label>
@@ -1291,7 +1797,7 @@
         ? store.discounts.map(d => `
           <div class="admin-card flex flex-wrap items-center justify-between gap-3">
             <div class="text-sm" style="color:var(--stone)">
-              <span style="color:var(--ivory)">${escapeHtml(d.name)}</span> — ${d.percent}% off ${ROOM_LABELS[d.roomType]}, ${fmtDate(d.start)} → ${fmtDate(d.end)}
+              <span style="color:var(--ivory)">${escapeHtml(d.name)}</span> — ${d.percent}% off ${H().rooms[d.roomType] ? H().rooms[d.roomType].name : d.roomType}, ${fmtDate(d.start)} → ${fmtDate(d.end)}
             </div>
             <button class="admin-btn-sm" data-action="remove-discount" data-id="${d.id}">Remove</button>
           </div>`).join('')
@@ -1327,13 +1833,13 @@
   function renderContent() {
     const roomsContainer = document.getElementById('content-rooms');
     if (roomsContainer) {
-      roomsContainer.innerHTML = Object.keys(store.rooms).map(key => {
-        const r = store.rooms[key];
+      roomsContainer.innerHTML = Object.keys(H().rooms).map(key => {
+        const r = H().rooms[key];
         return `
         <div class="admin-card grid md:grid-cols-[120px_1fr] gap-4 items-start">
           <img src="${r.image}" class="w-full h-24 object-cover rounded-lg" alt="">
           <div>
-            <p class="font-display text-lg mb-2" style="color:var(--ivory)">${ROOM_LABELS[key]}</p>
+            <p class="font-display text-lg mb-2" style="color:var(--ivory)">${H().rooms[key].name}</p>
             <label class="block text-xs mb-1" style="color:var(--stone)">Description</label>
             <textarea class="admin-input-sm w-full mb-2" rows="2" id="content-desc-${key}">${escapeHtml(r.description)}</textarea>
             <label class="block text-xs mb-1" style="color:var(--stone)">Image URL</label>
@@ -1346,8 +1852,8 @@
 
     const expContainer = document.getElementById('content-experiences');
     if (expContainer) {
-      expContainer.innerHTML = Object.keys(store.experiences).map(key => {
-        const e = store.experiences[key];
+      expContainer.innerHTML = Object.keys(H().experiences).map(key => {
+        const e = H().experiences[key];
         return `
         <div class="admin-card grid md:grid-cols-[120px_1fr] gap-4 items-start">
           <img src="${e.image}" class="w-full h-24 object-cover rounded-lg" alt="">
@@ -1370,22 +1876,22 @@
     if (!container) return;
     const todayStr = new Date().toISOString().split('T')[0];
 
-    const totalInventory = Object.values(store.rooms).reduce((s, r) => s + r.inventory, 0);
-    const occupiedToday = store.bookings.filter(b =>
+    const totalInventory = Object.values(H().rooms).reduce((s, r) => s + r.inventory, 0);
+    const occupiedToday = houseBookings().filter(b =>
       (b.status === 'checked-in') ||
       (b.status === 'approved' && todayStr >= b.checkin && todayStr < b.checkout)
     ).length;
     const occupancyPct = totalInventory ? Math.round((occupiedToday / totalInventory) * 100) : 0;
 
-    const todaysRevenue = store.bookings
+    const todaysRevenue = houseBookings()
       .filter(b => (b.status === 'approved' || b.status === 'checked-in' || b.status === 'checked-out') && b.checkin === todayStr)
       .reduce((s, b) => s + (b.total || 0), 0);
 
-    const totalRequests = store.bookings.length;
-    const approvedOrBeyond = store.bookings.filter(b => ['approved', 'checked-in', 'checked-out'].includes(b.status)).length;
+    const totalRequests = houseBookings().length;
+    const approvedOrBeyond = houseBookings().filter(b => ['approved', 'checked-in', 'checked-out'].includes(b.status)).length;
     const conversionPct = totalRequests ? Math.round((approvedOrBeyond / totalRequests) * 100) : 0;
 
-    const pendingCount = store.bookings.filter(b => b.status === 'pending').length;
+    const pendingCount = houseBookings().filter(b => b.status === 'pending').length;
     const openComplaints = store.complaints.filter(c => c.status === 'open').length;
 
     const cards = [
@@ -1482,8 +1988,8 @@
       const key = btn.dataset.key;
       const price = parseInt(document.getElementById(`price-${key}`).value, 10) || 0;
       const inventory = parseInt(document.getElementById(`inventory-${key}`).value, 10) || 0;
-      store.rooms[key].price = price;
-      store.rooms[key].inventory = inventory;
+      H().rooms[key].price = price;
+      H().rooms[key].inventory = inventory;
       saveStore();
       applyCmsToPublicSite();
       renderAll();
@@ -1536,8 +2042,8 @@
       const btn = e.target.closest('button[data-action="save-content-room"]');
       if (!btn) return;
       const key = btn.dataset.key;
-      store.rooms[key].description = document.getElementById(`content-desc-${key}`).value.trim();
-      store.rooms[key].image = document.getElementById(`content-img-${key}`).value.trim();
+      H().rooms[key].description = document.getElementById(`content-desc-${key}`).value.trim();
+      H().rooms[key].image = document.getElementById(`content-img-${key}`).value.trim();
       saveStore();
       applyCmsToPublicSite();
       renderContent();
@@ -1547,9 +2053,9 @@
       const btn = e.target.closest('button[data-action="save-content-exp"]');
       if (!btn) return;
       const key = btn.dataset.key;
-      store.experiences[key].title = document.getElementById(`content-title-${key}`).value.trim();
-      store.experiences[key].description = document.getElementById(`content-desc-${key}`).value.trim();
-      store.experiences[key].image = document.getElementById(`content-img-${key}`).value.trim();
+      H().experiences[key].title = document.getElementById(`content-title-${key}`).value.trim();
+      H().experiences[key].description = document.getElementById(`content-desc-${key}`).value.trim();
+      H().experiences[key].image = document.getElementById(`content-img-${key}`).value.trim();
       saveStore();
       applyCmsToPublicSite();
       renderContent();
@@ -1581,6 +2087,13 @@
       sessionStorage.removeItem('dx_admin_ok');
       showLogin();
     });
+
+    // which house the back office is managing — every tab follows it
+    document.getElementById('admin-house').addEventListener('change', (e) => {
+      store.adminHouse = e.target.value;
+      saveStore();
+      renderAll();
+    });
   }
 
   function showDashboard() {
@@ -1591,6 +2104,7 @@
     document.querySelector('.admin-tab-btn[data-tab="requests"]').classList.add('active');
     document.querySelector('.req-filter-btn[data-filter="all"]').classList.add('active');
     document.querySelector('.cmp-filter-btn[data-filter="all"]').classList.add('active');
+    document.getElementById('admin-house').value = store.adminHouse;
     renderAll();
   }
 
