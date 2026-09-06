@@ -1,0 +1,2401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiviceXclusive Hotel — Lagos</title>
+<meta name="description" content="DiviceXclusive Hotel, Lagos. Quiet luxury, considered detail — rooms, dining, wellness and events.">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --ink:#14100c;        /* near-black warm charcoal — base ground */
+    --ink-2:#1c1712;      /* slightly lifted panel tone */
+    --ivory:#f4ecdd;      /* warm ivory — primary text on dark */
+    --stone:#a89e8d;      /* muted secondary text */
+    --brass:#b8905a;      /* aged brass — accent, links, rules */
+    --brass-deep:#8c6a3f; /* brass hover/pressed */
+    --burgundy:#5c2a2e;   /* quiet secondary accent, used sparingly */
+  }
+  html{scroll-behavior:auto;}
+  body{
+    font-family:'Jost',sans-serif;
+    background:var(--ink);
+    color:var(--ivory);
+    font-weight:300;
+    letter-spacing:.01em;
+  }
+  .font-display{font-family:'Cormorant Garamond',serif; font-weight:500;}
+  .eyebrow{font-family:'Jost',sans-serif; letter-spacing:.35em; text-transform:uppercase; font-size:.68rem; color:var(--brass); font-weight:500;}
+  .rule{width:44px;height:1px;background:var(--brass);}
+  .rule-center{margin-left:auto;margin-right:auto;}
+  .btn-brass{
+    display:inline-flex; align-items:center; gap:.6rem;
+    border:1px solid var(--brass); color:var(--ivory);
+    padding:.9rem 2.4rem; font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+    transition:background .35s ease,color .35s ease;
+    background:transparent;
+  }
+  .btn-brass:hover{background:var(--brass); color:var(--ink);}
+  .btn-brass-solid{
+    background:var(--brass); color:var(--ink); border:1px solid var(--brass);
+  }
+  .btn-brass-solid:hover{background:var(--brass-deep); border-color:var(--brass-deep); color:var(--ivory);}
+
+  /* ---- pages / routing ---- */
+  .page{display:none;}
+  .page.is-active{display:block; animation:pageIn .5s ease both;}
+  @keyframes pageIn{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+  .sweep{position:fixed; top:0; left:0; height:2px; width:0%; background:var(--brass); z-index:200; transition:width .4s ease;}
+
+  /* ---- utility bar / nav ---- */
+  .top-info-bar{background:var(--ink-2); border-bottom:1px solid rgba(184,144,90,.2);}
+  header.main-nav{background:rgba(20,16,12,.95); backdrop-filter:blur(10px); border-bottom:1px solid rgba(184,144,90,.15);}
+  .nav-link{font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--stone); transition:color .25s;}
+  .nav-link:hover, .nav-link.active{color:var(--brass);}
+  .dropdown-menu{display:none;}
+  .dropdown.active .dropdown-menu{display:block;}
+  .dropdown-menu{background:var(--ink-2); border:1px solid rgba(184,144,90,.2);}
+
+  /* ---- hero ---- */
+  .hero-height{min-height:75vh; height:calc(100 * min(var(--vh, 1vh), 1vh));}
+  .hero-gradient{background:linear-gradient(180deg, rgba(20,16,12,.35) 0%, rgba(20,16,12,.15) 45%, rgba(20,16,12,.85) 100%);}
+
+  /* ---- cards ---- */
+  .facility-icon{width:58px;height:58px;border-radius:9999px;border:1px solid rgba(184,144,90,.4); display:flex;align-items:center;justify-content:center;}
+  .review-card{border:1px solid rgba(184,144,90,.18); background:var(--ink-2);}
+  .plaque-num{font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--brass); font-size:.95rem;}
+
+  .whatsapp-btn{position:fixed; bottom:24px; right:24px; z-index:150; width:56px;height:56px;border-radius:50%; background:#25D366; display:flex;align-items:center;justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.4); transition:transform .2s;}
+  .whatsapp-btn:hover{transform:scale(1.1);}
+
+  ::selection{background:var(--brass); color:var(--ink);}
+  input:focus, select:focus, textarea:focus{outline:none; border-color:var(--brass) !important;}
+
+  /* ---- admin panel ---- */
+  .admin-tab-btn.active, .req-filter-btn.active, .cmp-filter-btn.active{background:var(--brass); color:var(--ink) !important; border-color:var(--brass) !important;}
+  .admin-card{background:var(--ink-2); border:1px solid rgba(184,144,90,.2); border-radius:.75rem; padding:1.25rem;}
+  .status-pill{display:inline-block; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; padding:.25rem .65rem; border-radius:9999px;}
+  .status-pending{background:rgba(184,144,90,.18); color:var(--brass);}
+  .status-approved{background:rgba(92,140,92,.18); color:#7fbf7f;}
+  .status-declined{background:rgba(180,80,80,.18); color:#e08a8a;}
+  .status-checked-in{background:rgba(90,130,190,.2); color:#8fb3e0;}
+  .status-checked-out{background:rgba(150,150,150,.18); color:#c2c2c2;}
+  .admin-btn-sm{font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; padding:.4rem .9rem; border-radius:.5rem; border:1px solid rgba(184,144,90,.35); color:var(--ivory); transition:background .2s;}
+  .admin-btn-sm:hover{background:rgba(184,144,90,.15);}
+  .admin-input-sm{background:var(--ink); border:1px solid rgba(184,144,90,.3); color:var(--ivory); border-radius:.5rem; padding:.4rem .6rem; font-size:.8rem;}
+  .cal-cell-open{background:rgba(92,140,92,.15); color:#7fbf7f;}
+  .cal-cell-full{background:rgba(180,80,80,.15); color:#e08a8a;}
+
+  /* ================= DUAL-HOUSE LAYER =================
+     House II re-themes the document by swapping a handful of values.
+     Type, spacing, structure and component anatomy do not change. */
+  :root[data-property="b"]{
+    --ink:#0F1713;        /* deep forest ground */
+    --ink-2:#17211C;
+    --ivory:#EFEDE4;      /* cooler parchment */
+    --stone:#9AA396;
+    --brass:#C9B489;      /* champagne bronze */
+    --brass-deep:#A08F65;
+    --burgundy:#3E5548;
+  }
+  body,.top-info-bar,header.main-nav,footer{transition:background-color 1.1s cubic-bezier(.16,1,.3,1),color 1.1s cubic-bezier(.16,1,.3,1);}
+
+  /* ---- house switcher: persistent, never buried in the menu ---- */
+  .house-switch{position:relative;display:inline-flex;align-items:center;border:1px solid rgba(184,144,90,.45);border-radius:9999px;padding:3px;}
+  .house-switch__ind{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:9999px;background:rgba(184,144,90,.18);border:1px solid rgba(184,144,90,.35);transition:transform .6s cubic-bezier(.16,1,.3,1);}
+  :root[data-property="b"] .house-switch__ind{transform:translateX(100%);}
+  .house-switch button{position:relative;z-index:1;padding:.4rem .9rem;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ivory);opacity:.55;white-space:nowrap;transition:opacity .3s;}
+  .house-switch button[aria-selected="true"]{opacity:1;font-weight:500;}
+
+  /* ---- split portal hero ---- */
+  /* the portal fills what is left of the viewport under the utility bar and nav,
+     so both "Enter this house" actions stay above the fold */
+  .portal{position:relative;display:flex;min-height:70vh;height:calc(100 * min(var(--vh, 1vh), 1vh) - var(--portal-offset, 106px));background:var(--ink);}
+  .portal__half{position:relative;flex:1 1 50%;overflow:hidden;display:flex;align-items:flex-end;transition:flex-basis .6s cubic-bezier(.16,1,.3,1),filter .6s cubic-bezier(.16,1,.3,1),opacity .6s cubic-bezier(.16,1,.3,1);}
+  .portal__half + .portal__half{border-left:1px solid rgba(184,144,90,.35);}
+  .portal__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s cubic-bezier(.16,1,.3,1);}
+  .portal__img.is-in{opacity:1;}
+  /* art plate: a designed surface underneath, so a missing photograph never breaks the composition */
+  .portal__plate{position:absolute;inset:0;background:
+      radial-gradient(120% 90% at 78% 12%, var(--p3) 0%, transparent 55%),
+      radial-gradient(110% 80% at 12% 88%, var(--p2) 0%, transparent 60%),
+      linear-gradient(168deg, var(--p2) 0%, var(--p1) 62%);}
+  .portal__half[data-house="a"]{--p1:#2B1E12;--p2:#7A5630;--p3:#C79A5E;}
+  .portal__half[data-house="b"]{--p1:#131E19;--p2:#3E5548;--p3:#93A48F;}
+  .portal__scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,5,.3) 0%,rgba(8,7,5,.12) 42%,rgba(8,7,5,.9) 100%);}
+  .portal__body{position:relative;z-index:3;width:100%;padding:2rem 1.75rem 3rem;display:flex;flex-direction:column;gap:1rem;}
+  .portal__mark{position:absolute;z-index:6;left:50%;top:14%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.75rem;transition:opacity .6s cubic-bezier(.16,1,.3,1);}
+  .portal__mark .disc{width:64px;height:64px;border-radius:50%;border:1px solid rgba(184,144,90,.55);display:flex;align-items:center;justify-content:center;background:rgba(11,10,8,.42);backdrop-filter:blur(6px);font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--brass);}
+  @media (hover:hover) and (min-width:1024px){
+    .portal:not([data-resolved]) .portal__half:hover{flex-basis:62%;}
+    .portal:not([data-resolved]):has(.portal__half:hover) .portal__half:not(:hover){filter:brightness(.42) saturate(.75);}
+    .portal:not([data-resolved]):has(.portal__half:hover) .portal__mark{opacity:0;}
+  }
+  .portal[data-resolved] .portal__mark{opacity:0;pointer-events:none;}
+  .portal[data-resolved="a"] .portal__half[data-house="a"],
+  .portal[data-resolved="b"] .portal__half[data-house="b"]{flex-basis:100%;}
+  .portal[data-resolved="a"] .portal__half[data-house="b"],
+  .portal[data-resolved="b"] .portal__half[data-house="a"]{flex-basis:0;opacity:0;border-left-color:transparent;}
+  .portal[data-resolved] .portal__enter{display:none;}
+  .portal__return{position:absolute;z-index:7;right:1.75rem;bottom:2rem;opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s;}
+  .portal[data-resolved] .portal__return{opacity:1;visibility:visible;}
+  @media (max-width:767px){
+    .portal{flex-direction:column;}
+    .portal__half{flex-basis:50%;}
+    .portal__half + .portal__half{border-left:0;border-top:1px solid rgba(184,144,90,.35);}
+    .portal__body{padding:1.25rem 1.25rem 1.5rem;gap:.55rem;}
+    .portal__mark{top:50%;transform:translate(-50%,-50%);}
+    .portal__mark span:last-child{display:none;}
+  }
+
+  /* ================= LOADING SEQUENCE =================
+     The swan drifts in from a distance, settles onto the golden sun,
+     flaps into position, and the ripples it makes carry the wordmark up.
+     One timeline, expressed as delays — no animation library. */
+  #loader{position:fixed;inset:0;z-index:300;background:#0B0A08;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s cubic-bezier(.16,1,.3,1),visibility .8s;}
+  #loader.is-done{opacity:0;visibility:hidden;}
+  .ld-stage{position:relative;width:min(78vw,460px);aspect-ratio:1/1.18;display:flex;align-items:center;justify-content:center;}
+
+  /* the whole lock-up settles into its final position at the end */
+  .ld-lockup{position:absolute;inset:0;animation:ldLock 1s cubic-bezier(.16,1,.3,1) 4.5s both;}
+  @keyframes ldLock{from{transform:translateY(0) scale(1);}to{transform:translateY(-4%) scale(.94);}}
+
+  .ld-mark{position:absolute;left:0;right:0;top:0;height:74%;}
+  .ld-svg{width:100%;height:100%;overflow:visible;}
+
+  /* the sun: present from the first frame, distant and dim, then warms as the swan nears */
+  .ld-sun{transform-origin:350px 252px;animation:ldSun 2.4s cubic-bezier(.16,1,.3,1) .2s both;}
+  @keyframes ldSun{
+    0%{opacity:.18;transform:scale(.82);}
+    70%{opacity:.85;transform:scale(1.02);}
+    100%{opacity:1;transform:scale(1);}
+  }
+
+  /* approach: far away and small, drifting in across the water */
+  .ld-travel{animation:ldTravel 2.1s cubic-bezier(.33,.02,.2,1) .1s both;transform-origin:245px 444px;}
+  @keyframes ldTravel{
+    0%{transform:translate(-46%,14%) scale(.14);opacity:0;}
+    12%{opacity:.5;}
+    100%{transform:translate(0,0) scale(1);opacity:1;}
+  }
+  /* riding the water the whole way */
+  .ld-bob{animation:ldBob 2.6s ease-in-out .1s 2, ldSettle .9s cubic-bezier(.16,1,.3,1) 2.1s both;transform-origin:245px 444px;}
+  @keyframes ldBob{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-2.2%) rotate(-.7deg);}}
+  @keyframes ldSettle{0%{transform:translateY(-1.6%);}55%{transform:translateY(1.4%);}100%{transform:translateY(0);}}
+
+  /* settling in: two wingbeats, the way a swan shrugs into position */
+  .ld-wing{transform-origin:400px 350px;animation:ldFlap .85s cubic-bezier(.4,0,.3,1) 2.05s 2 both;}
+  @keyframes ldFlap{
+    0%{transform:rotate(0deg) translateY(0);}
+    30%{transform:rotate(26deg) translateY(-10px);}   /* wing lifts clear of the back */
+    58%{transform:rotate(-3deg) translateY(2px);}     /* and drops back through */
+    80%{transform:rotate(9deg) translateY(-3px);}
+    100%{transform:rotate(0deg) translateY(0);}
+  }
+
+  /* the ripples those wingbeats push out */
+  .ld-ripple{transform-origin:245px 580px;opacity:0;}
+  .ld-ripple.r1{animation:ldRipple 2.1s cubic-bezier(.16,1,.3,1) 2.5s both;}
+  .ld-ripple.r2{animation:ldRipple 2.1s cubic-bezier(.16,1,.3,1) 2.85s both;}
+  .ld-ripple.r3{animation:ldRipple 2.1s cubic-bezier(.16,1,.3,1) 3.2s both;}
+  @keyframes ldRipple{
+    0%{transform:scale(.16);opacity:0;}
+    18%{opacity:.75;}
+    100%{transform:scale(1.75);opacity:0;}
+  }
+
+  /* the words rise out of the ripple line */
+  .ld-word{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:'Cormorant Garamond',serif;color:#F4F1EA;line-height:1.06;letter-spacing:.02em;}
+  .ld-word span{display:block;overflow:hidden;}
+  .ld-word i{display:block;font-style:normal;}
+  .ld-w1{font-size:clamp(1.5rem,7vw,2.6rem);}
+  .ld-w2{font-size:clamp(1.7rem,8vw,3rem);}
+  .ld-w1 i{animation:ldRise 1.1s cubic-bezier(.16,1,.3,1) 3.35s both;}
+  .ld-w2 i{animation:ldRise 1.1s cubic-bezier(.16,1,.3,1) 3.6s both;}
+  @keyframes ldRise{
+    0%{transform:translateY(105%);opacity:0;filter:blur(6px);}
+    60%{opacity:1;filter:blur(0);}
+    100%{transform:translateY(0);opacity:1;filter:blur(0);}
+  }
+
+  .ld-skip{position:absolute;bottom:clamp(1.25rem,4vh,2.5rem);left:50%;transform:translateX(-50%);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(244,241,234,.45);padding:.6rem 1.2rem;opacity:0;animation:ldSkip .6s ease 1.6s both;transition:color .3s;}
+  .ld-skip:hover{color:var(--brass);}
+  @keyframes ldSkip{to{opacity:1;}}
+
+  /* reduced motion: hold the finished logo briefly instead of animating to it */
+  @media (prefers-reduced-motion:reduce){
+    .ld-lockup,.ld-sun,.ld-travel,.ld-bob,.ld-wing,.ld-ripple,.ld-w1 i,.ld-w2 i,.ld-skip{animation:none!important;opacity:1;transform:none;}
+    .ld-ripple{opacity:.25;}
+  }
+
+  /* ---- branch gate: the choice is made before the site opens ---- */
+  body.gate-open{overflow:hidden;}
+  .portal.is-gate{position:fixed;inset:0;z-index:60;height:100%;min-height:0;}
+  /* .page.is-active keeps a transform from its entry animation, which would make it
+     the containing block for the fixed gate — drop it while the gate is up */
+  body.gate-open .page.is-active{animation:none;transform:none;}
+  body.gate-open .whatsapp-btn{display:none;}
+
+  /* ---- cross-property showcase ---- */
+  .house-card{display:flex;flex-direction:column;gap:1.25rem;}
+  .house-card__media{position:relative;aspect-ratio:4/5;max-height:540px;overflow:hidden;border-radius:.75rem;}
+  .house-card__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+  .house-card__media img.is-in{opacity:1;}
+  .house-card:hover .house-card__media img.is-in{transform:scale(1.04);}
+  .house-card__data div{display:flex;flex-direction:column;gap:.2rem;padding:.75rem 0;border-top:1px solid rgba(184,144,90,.18);}
+  .house-card.is-active .house-card__name{color:var(--brass);}
+</style>
+</head>
+<body class="w-full min-h-screen overflow-x-hidden">
+
+<!-- ============ LOADING SEQUENCE ============ -->
+<div id="loader" role="status" aria-label="Divic Exclusive Hotel — loading">
+  <div class="ld-stage">
+    <div class="ld-lockup">
+      <div class="ld-mark">
+        <svg class="ld-svg" viewBox="-20 0 600 620" aria-hidden="true">
+          <!-- the golden sun the swan is making for -->
+          <ellipse class="ld-sun" cx="350" cy="252" rx="210" ry="252" fill="#D9C79A"/>
+
+          <!-- ripples pushed out as it settles onto the water -->
+          <g fill="none" stroke="#D9C79A" stroke-width="2.5">
+            <ellipse class="ld-ripple r1" cx="245" cy="580" rx="228" ry="34"/>
+            <ellipse class="ld-ripple r2" cx="245" cy="580" rx="228" ry="34"/>
+            <ellipse class="ld-ripple r3" cx="245" cy="580" rx="228" ry="34"/>
+          </g>
+
+          <g class="ld-travel">
+            <g class="ld-bob">
+              <!-- neck and head: the tall, open S of the mark, with the sun
+                   showing through the sliver between neck and head -->
+              <path d="M350 445 C334 378 298 348 296 282 C294 214 306 166 344 156 C384 146 408 182 398 226"
+                    fill="none" stroke="#F4F1EA" stroke-width="54" stroke-linecap="round"/>
+              <circle cx="398" cy="226" r="31" fill="#F4F1EA"/>
+              <!-- beak -->
+              <path d="M414 206 L474 232 L412 252 Z" fill="#F4F1EA"/>
+              <!-- body, tail point at the left -->
+              <path d="M0 300 C24 330 30 356 22 380
+                       C8 470 96 598 250 598
+                       C400 598 490 520 490 430
+                       C490 340 410 290 300 290
+                       C200 290 110 306 60 306
+                       C34 306 12 304 0 300 Z" fill="#F4F1EA"/>
+              <!-- the wing: flush with the body at rest, opening only on the wingbeat -->
+              <path class="ld-wing"
+                    d="M170 348 C270 312 390 340 442 404 C470 440 456 496 410 522
+                       C336 562 232 548 190 496 C162 462 150 380 170 348 Z"
+                    fill="#F4F1EA"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="ld-word">
+        <span class="ld-w1"><i>Divic Exclusive</i></span>
+        <span class="ld-w2"><i>Hotel</i></span>
+      </div>
+    </div>
+  </div>
+  <button class="ld-skip" type="button" id="loader-skip">Skip</button>
+</div>
+
+<div class="sweep" id="sweep"></div>
+
+<!-- ============ HEADER & TOP CONTACT BAR ============ -->
+<div class="top-info-bar py-2.5 px-6">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs tracking-wider" style="color:var(--stone)">
+    <div class="flex flex-wrap items-center justify-center gap-6">
+      <a data-hb-href="mapUrl" href="https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="map-pin" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="address">1st Avenue, E Close, Festac, Lagos</span></a>
+      <a data-hb-href="telUrl" href="tel:08000000000" class="flex items-center gap-2 hover:text-amber-400 transition"><i data-lucide="phone" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="phone">08000000000</span></a>
+      <span class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5" style="color:var(--brass)"></i> <span data-hb="email"></span></span>
+    </div>
+    <a href="#book" data-page-link="book" class="hidden md:inline-flex items-center gap-1 hover:text-amber-400 transition" style="color:var(--brass)">
+      Book Online <i data-lucide="arrow-right" class="w-3 h-3"></i>
+    </a>
+  </div>
+</div>
+
+<header class="main-nav sticky top-0 z-50">
+  <nav class="max-w-7xl mx-auto px-6 py-4">
+    <div class="hidden md:flex items-center justify-center">
+      <ul class="flex items-center gap-4 lg:gap-8">
+        <li><a href="#home" data-page-link="home" class="nav-link">Home</a></li>
+        <li><a href="#rooms" data-page-link="rooms" class="nav-link">Rooms</a></li>
+        <li class="dropdown relative">
+          <button class="dropdown-trigger nav-link flex items-center gap-1">Dine &amp; Unwind <i data-lucide="chevron-down" class="w-3 h-3"></i></button>
+          <ul class="dropdown-menu absolute top-full left-0 mt-3 shadow-2xl py-2 min-w-[170px]">
+            <li><a href="#experience/bar" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5" id="nav-exp-bar">The Amber Room</a></li>
+            <li><a href="#experience/pool" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5" id="nav-exp-pool">The Sky Pool</a></li>
+            <li><a href="#experience/gym" data-page-link="experience" class="block px-5 py-2 nav-link hover:bg-white/5" id="nav-exp-gym">The Forge</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="#home" data-page-link="home" class="font-display text-2xl lg:text-3xl tracking-wide mx-5 lg:mx-12 whitespace-nowrap" style="color:var(--ivory)">DiviceXclusive</a>
+      <ul class="flex items-center gap-4 lg:gap-8">
+        <li><a href="#book" data-page-link="book" class="nav-link">Book a Stay</a></li>
+        <li><a href="#contact" data-page-link="contact" class="nav-link">Contact</a></li>
+        <li>
+          <div class="house-switch" role="tablist" aria-label="Choose house">
+            <span class="house-switch__ind" aria-hidden="true"></span>
+            <button role="tab" aria-selected="true"  data-house-switch="a" aria-label="The Lagoon House, Lagos">Lagos</button>
+            <button role="tab" aria-selected="false" data-house-switch="b" aria-label="The Plateau House, Obudu">Obudu</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="md:hidden flex items-center justify-between gap-3">
+      <a href="#home" data-page-link="home" class="font-display text-xl tracking-wide" style="color:var(--ivory)">DiviceXclusive</a>
+      <div class="flex items-center gap-2">
+        <div class="house-switch" role="tablist" aria-label="Choose house">
+          <span class="house-switch__ind" aria-hidden="true"></span>
+          <button role="tab" aria-selected="true"  data-house-switch="a" aria-label="The Lagoon House, Lagos" style="padding:.35rem .6rem;letter-spacing:.14em">Lagos</button>
+          <button role="tab" aria-selected="false" data-house-switch="b" aria-label="The Plateau House, Obudu" style="padding:.35rem .6rem;letter-spacing:.14em">Obudu</button>
+        </div>
+        <button id="mobile-toggle" aria-label="Toggle menu"><i data-lucide="menu" class="w-6 h-6" style="color:var(--ivory)"></i></button>
+      </div>
+    </div>
+    <ul id="nav-links-mobile" class="hidden md:hidden flex-col gap-4 pt-5 pb-2">
+      <li><a href="#home" data-page-link="home" class="nav-link block">Home</a></li>
+      <li><a href="#rooms" data-page-link="rooms" class="nav-link block">Rooms</a></li>
+      <li><a href="#experience/bar" data-page-link="experience" class="nav-link block" id="nav-exp-bar-m">Bar</a></li>
+      <li><a href="#experience/pool" data-page-link="experience" class="nav-link block" id="nav-exp-pool-m">Pool</a></li>
+      <li><a href="#experience/gym" data-page-link="experience" class="nav-link block" id="nav-exp-gym-m">Gym</a></li>
+      <li><a href="#book" data-page-link="book" class="nav-link block">Book a Stay</a></li>
+      <li><a href="#contact" data-page-link="contact" class="nav-link block">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="pt-0">
+
+<!-- ============ PAGE: HOME ============ -->
+<section class="page" data-page="home">
+
+  <!-- HERO: SPLIT PORTAL — the guest chooses a house before anything else -->
+  <div id="hero" class="portal" aria-label="Choose your house">
+
+    <article class="portal__half" data-house="a">
+      <div class="portal__plate" aria-hidden="true"></div>
+      <img class="portal__img" data-house-img="a" alt="The Lagoon House, Lagos — brass, teak and Atlantic light">
+      <div class="portal__scrim" aria-hidden="true"></div>
+      <div class="portal__body">
+        <p class="eyebrow">House I · <span data-hb-a="region"></span></p>
+        <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl" style="color:var(--ivory);line-height:1;max-width:12ch" data-hb-a="name"></h1>
+        <p class="text-sm max-w-sm" style="color:rgba(241,234,222,.78)" data-hb-a="portalLine"></p>
+        <p class="text-[.6rem] uppercase tracking-[.24em] flex flex-wrap gap-x-5 gap-y-1" style="color:rgba(241,234,222,.65)">
+          <span data-hb-a="temp"></span><span data-hb-a="weather"></span><span data-hb-a="altitude"></span>
+        </p>
+        <button class="btn-brass portal__enter self-start mt-1" data-house-enter="a">Enter this house</button>
+      </div>
+    </article>
+
+    <article class="portal__half" data-house="b">
+      <div class="portal__plate" aria-hidden="true"></div>
+      <img class="portal__img" data-house-img="b" alt="The Plateau House, Obudu — basalt, wool and cloud">
+      <div class="portal__scrim" aria-hidden="true"></div>
+      <div class="portal__body">
+        <p class="eyebrow">House II · <span data-hb-b="region"></span></p>
+        <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl" style="color:var(--ivory);line-height:1;max-width:12ch" data-hb-b="name"></h1>
+        <p class="text-sm max-w-sm" style="color:rgba(241,234,222,.78)" data-hb-b="portalLine"></p>
+        <p class="text-[.6rem] uppercase tracking-[.24em] flex flex-wrap gap-x-5 gap-y-1" style="color:rgba(241,234,222,.65)">
+          <span data-hb-b="temp"></span><span data-hb-b="weather"></span><span data-hb-b="altitude"></span>
+        </p>
+        <button class="btn-brass portal__enter self-start mt-1" data-house-enter="b">Enter this house</button>
+      </div>
+    </article>
+
+    <div class="portal__mark" aria-hidden="true">
+      <span class="disc">DX</span>
+      <span class="text-[.6rem] uppercase tracking-[.28em]" style="color:var(--ivory);opacity:.75">Choose your journey</span>
+    </div>
+
+    <button class="portal__return text-[.6rem] uppercase tracking-[.24em] pb-1 border-b" style="color:var(--brass);border-color:rgba(184,144,90,.4)" data-house-return>View both houses</button>
+  </div>
+
+  <!-- SECTION: THE TWO HOUSES -->
+  <section class="py-20 sm:py-28 px-6" style="background:var(--ink-2)">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <p class="eyebrow mb-3">The two houses</p>
+        <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">One brand, two climates</h2>
+        <div class="rule rule-center mb-6"></div>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)">
+          Six hundred miles apart, and built for opposite instincts. The service, the linen and the standard
+          do not change — only the weather at the window.
+        </p>
+      </div>
+      <div id="house-showcase" class="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-14"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: ROOM TYPES -->
+  <section class="py-20 sm:py-28 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <p class="eyebrow mb-3">Accommodation · <span data-hb="short"></span></p>
+        <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">Our Room Collections</h2>
+        <div class="rule rule-center mb-6"></div>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)" data-hb="roomsIntro"></p>
+      </div>
+
+      <div id="home-room-cards" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: DINE & UNWIND / COMMUNAL SPACES -->
+  <section class="py-20 sm:py-28 px-6 border-t" style="background:var(--ink-2); border-color:rgba(184,144,90,.15)">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <p class="eyebrow mb-3">Lifestyle &amp; Recreation · <span data-hb="short"></span></p>
+        <h2 class="font-display text-3xl sm:text-5xl mb-4" style="color:var(--ivory)">Dine, Unwind &amp; Recharge</h2>
+        <div class="rule rule-center mb-6"></div>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)" data-hb="lifestyleIntro"></p>
+      </div>
+
+      <div id="home-lifestyle-cards" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- Facilities Summary Grid -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="eyebrow mb-3">A Different Kind of Stay</p>
+      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl mb-6" style="color:var(--ivory)" data-hb="staySummary"></h2>
+      <div class="rule rule-center mb-12 sm:mb-16"></div>
+      <div id="home-facilities" class="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10"></div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ============ PAGE: ROOMS (HORIZONTAL ALTERNATING LAYOUT) ============ -->
+<section class="page" data-page="rooms">
+  <div class="pt-32 sm:pt-40 pb-12 sm:pb-20 px-6 text-center">
+    <p class="eyebrow mb-3">Extraordinary Accommodation</p>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">Choose Your Room</h1>
+    <div class="rule rule-center mb-6"></div>
+    <p class="max-w-2xl mx-auto text-sm sm:text-base" style="color:var(--stone)" data-hb="roomsIntro"></p>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 pb-24 sm:pb-32 space-y-16 sm:space-y-24">
+    
+    <!-- ROOM 1: Image Left, Text Right -->
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-classic-img" src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="Classic room">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.25)"></div>
+      </div>
+      <div>
+        <span class="plaque-num mb-2 block">I</span>
+        <h2 id="cms-classic-title" class="font-display text-3xl sm:text-4xl mb-3" style="color:var(--ivory)">The Classic Room</h2>
+        <div class="rule mb-5"></div>
+        <p id="cms-classic-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">32sqm of warm timber and linen, a rain shower, and a private balcony looking toward the lagoon. Built for effortless living with smart climate controls and high-speed connections.</p>
+        <p class="font-display text-2xl mb-6" style="color:var(--brass)">From <span id="cms-classic-price">₦85,000</span> / night</p>
+        <a href="#book" data-page-link="book" class="btn-brass-solid py-3 px-8 text-xs">Reserve Classic Room</a>
+      </div>
+    </div>
+
+    <!-- ROOM 2: Text Left, Image Right -->
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="order-2 md:order-1">
+        <span class="plaque-num mb-2 block">II</span>
+        <h2 id="cms-deluxe-title" class="font-display text-3xl sm:text-4xl mb-3" style="color:var(--ivory)">The Deluxe Suite</h2>
+        <div class="rule mb-5"></div>
+        <p id="cms-deluxe-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">A separate sitting room, deep soaking tub, and curated minibar — built for longer stays and slower mornings. Offers floor-to-ceiling windows with panoramic city skyline views.</p>
+        <p class="font-display text-2xl mb-6" style="color:var(--brass)">From <span id="cms-deluxe-price">₦145,000</span> / night</p>
+        <a href="#book" data-page-link="book" class="btn-brass-solid py-3 px-8 text-xs">Reserve Deluxe Suite</a>
+      </div>
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96 order-1 md:order-2">
+        <img id="cms-deluxe-img" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="Deluxe suite">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.25)"></div>
+      </div>
+    </div>
+
+    <!-- ROOM 3: Image Left, Text Right -->
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-presidential-img" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="Presidential suite">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.25)"></div>
+      </div>
+      <div>
+        <span class="plaque-num mb-2 block">III</span>
+        <h2 id="cms-presidential-title" class="font-display text-3xl sm:text-4xl mb-3" style="color:var(--ivory)">The Presidential Suite</h2>
+        <div class="rule mb-5"></div>
+        <p id="cms-presidential-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">Two bedrooms, a private dining room, and a wraparound terrace — with a dedicated butler on call. The pinnacle of quiet luxury designed for distinguished executive relaxation.</p>
+        <p class="font-display text-2xl mb-6" style="color:var(--brass)">From <span id="cms-presidential-price">₦320,000</span> / night</p>
+        <a href="#book" data-page-link="book" class="btn-brass-solid py-3 px-8 text-xs">Reserve Presidential Suite</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ PAGE: EXPERIENCE (DINE & UNWIND HORIZONTAL LAYOUT) ============ -->
+<section class="page" data-page="experience">
+  <div class="pt-32 sm:pt-40 pb-12 sm:pb-20 px-6 text-center">
+    <p class="eyebrow mb-3">Dine &amp; Unwind</p>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">The Experience</h1>
+    <div class="rule rule-center"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 pb-24 sm:pb-32 space-y-16 sm:space-y-24">
+    
+    <!-- EXPERIENCE 1: Image Left, Text Right -->
+    <div id="bar" class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-bar-img" src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="The Amber Room bar">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.3)"></div>
+      </div>
+      <div>
+        <p class="plaque-num mb-2">I</p>
+        <h2 id="cms-bar-title" class="font-display text-3xl sm:text-4xl mb-4" style="color:var(--ivory)">The Amber Room</h2>
+        <div class="rule mb-6"></div>
+        <p id="cms-bar-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">A low-lit bar built around a single long counter of aged brass and dark oak. The list runs from Nigerian-inflected classics to a rotating barrel-aged reserve — poured slowly, meant to be lingered over. Open nightly until 2am.</p>
+        <a href="#book" data-page-link="book" class="btn-brass py-2.5 px-6 text-xs">Book Table</a>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE 2: Text Left, Image Right -->
+    <div id="pool" class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="order-2 md:order-1">
+        <p class="plaque-num mb-2">II</p>
+        <h2 id="cms-pool-title" class="font-display text-3xl sm:text-4xl mb-4" style="color:var(--ivory)">The Sky Pool</h2>
+        <div class="rule mb-6"></div>
+        <p id="cms-pool-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">Sixteen floors up, a heated infinity pool traces the edge of the building with an unbroken view of the lagoon. Cabanas, a light small-plates menu, and a resident DJ on Friday evenings.</p>
+        <a href="#book" data-page-link="book" class="btn-brass py-2.5 px-6 text-xs">Reserve Cabana</a>
+      </div>
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96 order-1 md:order-2">
+        <img id="cms-pool-img" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="The Sky Pool">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.3)"></div>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE 3: Image Left, Text Right -->
+    <div id="gym" class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+      <div class="relative overflow-hidden rounded-xl h-72 sm:h-96">
+        <img id="cms-gym-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition duration-700" loading="lazy" alt="The Forge gym">
+        <div class="absolute inset-0 rounded-xl" style="border:1px solid rgba(184,144,90,.3)"></div>
+      </div>
+      <div>
+        <p class="plaque-num mb-2">III</p>
+        <h2 id="cms-gym-title" class="font-display text-3xl sm:text-4xl mb-4" style="color:var(--ivory)">The Forge</h2>
+        <div class="rule mb-6"></div>
+        <p id="cms-gym-desc" class="text-sm sm:text-base leading-relaxed mb-6" style="color:var(--stone)">A 24-hour fitness studio equipped with free weights, Technogym machines, and a dedicated stretch room. Personal trainers and in-room recovery treatments available on request.</p>
+        <a href="#contact" data-page-link="contact" class="btn-brass py-2.5 px-6 text-xs">Inquire Gym Membership</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ PAGE: BOOK ============ -->
+<section class="page" data-page="book">
+  <div class="relative min-h-[85vh] flex items-center justify-center pt-28 sm:pt-36 pb-16 sm:pb-24 px-6">
+    <img id="book-hero-img" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" loading="lazy" alt="Suite background">
+    <div class="absolute inset-0 hero-gradient" style="background: linear-gradient(180deg, rgba(20,16,12,.75) 0%, rgba(20,16,12,.85) 100%);"></div>
+
+    <div class="relative z-10 max-w-xl w-full mx-auto">
+      <div class="text-center mb-8 sm:mb-10">
+        <p class="eyebrow mb-3">Reserve Your Stay</p>
+        <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-4" style="color:var(--ivory)">Book a Stay</h1>
+        <div class="rule rule-center"></div>
+      </div>
+
+      <div class="bg-[#1c1712]/90 backdrop-blur-md p-6 sm:p-10 rounded-2xl shadow-2xl" style="border: 1px solid rgba(184,144,90,.25)">
+        <form id="booking-form" class="space-y-5 text-left">
+
+          <!-- HOUSE — kept in sync with the header switcher, both directions -->
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="booking-house">Which House</label>
+            <select id="booking-house" class="w-full rounded-lg px-4 py-3 text-sm cursor-pointer" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+              <option value="a">Lagos — The Lagoon House</option>
+              <option value="b">Obudu — The Plateau House</option>
+            </select>
+          </div>
+
+          <!-- NAME & PHONE NUMBER INPUTS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="guest-name">Full Name</label>
+              <input id="guest-name" type="text" placeholder="e.g. Alexander Cole" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="guest-phone">Phone Number</label>
+              <input id="guest-phone" type="tel" placeholder="+234 800 000 0000" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+          </div>
+
+          <!-- EMAIL ADDRESS INPUT -->
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="guest-email">Email Address</label>
+            <input id="guest-email" type="email" placeholder="alexander@example.com" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="room-type">Room Collection &amp; Nightly Rate</label>
+            <select id="room-type" class="w-full rounded-lg px-4 py-3 text-sm cursor-pointer" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+              <option id="opt-classic" value="classic" data-price="85000">The Classic Room — ₦85,000 / night</option>
+              <option id="opt-deluxe" value="deluxe" data-price="145000">The Deluxe Suite — ₦145,000 / night</option>
+              <option id="opt-presidential" value="presidential" data-price="320000">The Presidential Suite — ₦320,000 / night</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="checkin">Check In</label>
+              <input id="checkin" type="date" required class="w-full rounded-lg px-4 py-3 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="checkout">Check Out</label>
+              <input id="checkout" type="date" required class="w-full rounded-lg px-4 py-3 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+          </div>
+
+          <!-- DYNAMIC PRICE SUMMARY CALCULATOR -->
+          <div class="p-5 rounded-xl border mt-4" style="background:var(--ink); border-color:rgba(184,144,90,.25)">
+            <p class="eyebrow mb-3">Stay Summary</p>
+            <div class="space-y-2 text-xs sm:text-sm" style="color:var(--stone)">
+              <div class="flex justify-between">
+                <span>Room Type:</span>
+                <span id="summary-room" class="font-medium text-white">The Classic Room</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Duration of Stay:</span>
+                <span id="summary-nights" class="font-medium text-white">0 Nights</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Rate per Night:</span>
+                <span id="summary-rate" class="font-medium text-white">₦85,000</span>
+              </div>
+            </div>
+            <div class="border-t mt-4 pt-3 flex justify-between items-center" style="border-color:rgba(184,144,90,.2)">
+              <span class="uppercase tracking-wider text-xs font-semibold" style="color:var(--ivory)">Estimated Total Fee:</span>
+              <span id="summary-total" class="font-display text-2xl sm:text-3xl font-bold" style="color:var(--brass)">₦0</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-brass-solid w-full py-4 rounded-lg tracking-[0.2em] uppercase text-sm font-medium mt-2">Submit Reservation</button>
+        </form>
+        <p id="booking-success" class="hidden mt-4 font-medium text-center text-sm sm:text-base" style="color:var(--brass)">Booking request submitted — our reservations team will confirm shortly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews & Submission Section -->
+  <div class="py-16 sm:py-20 px-6 border-t" style="background:var(--ink-2); border-color:rgba(184,144,90,.15)">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center">
+        <p class="eyebrow mb-3">In Their Words</p>
+        <h2 class="font-display text-3xl sm:text-4xl mb-6" style="color:var(--ivory)">Guest Reviews</h2>
+        <div class="rule rule-center mb-10 sm:mb-14"></div>
+      </div>
+
+      <div id="reviews-list" class="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16"></div>
+
+      <div class="max-w-2xl mx-auto p-6 sm:p-8 rounded-xl" style="background:var(--ink); border: 1px solid rgba(184,144,90,.2)">
+        <h3 class="font-display text-2xl text-center mb-2" style="color:var(--ivory)">Leave a Review</h3>
+        <p class="text-xs sm:text-sm text-center mb-6" style="color:var(--stone)">Share your recent experience staying with us</p>
+
+        <form id="review-form" class="space-y-5 text-left">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="reviewer-name">Your Name</label>
+              <input id="reviewer-name" type="text" placeholder="e.g. Samuel K." required class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+            <div>
+              <label class="block mb-1 text-sm" style="color:var(--stone)" for="reviewer-location">Location (optional)</label>
+              <input id="reviewer-location" type="text" placeholder="e.g. Abuja" class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)">Your Rating</label>
+            <div id="star-selector" class="flex items-center gap-2 cursor-pointer">
+              <button type="button" data-rating="1" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="2" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="3" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="4" class="star-btn text-stone-500 hover:text-amber-400 transition"><i data-lucide="star" class="w-6 h-6"></i></button>
+              <button type="button" data-rating="5" class="star-btn text-amber-400 transition"><i data-lucide="star" class="w-6 h-6 fill-amber-400 stroke-amber-400"></i></button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="review-text">Review</label>
+            <textarea id="review-text" rows="3" required placeholder="Tell us about your stay..." class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)"></textarea>
+          </div>
+
+          <button type="submit" class="btn-brass-solid w-full py-3 rounded-lg tracking-[0.18em] uppercase text-xs font-medium">Post Review</button>
+        </form>
+        <p id="review-success" class="hidden mt-4 font-medium text-center text-sm" style="color:var(--brass)">Thank you for your feedback! Your review has been added.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE: CONTACT ============ -->
+<section class="page" data-page="contact">
+  <div class="pt-32 sm:pt-40 pb-16 sm:pb-20 px-6 text-center">
+    <p class="eyebrow mb-3">Get in Touch</p>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl mb-6" style="color:var(--ivory)">Contact &amp; Location</h1>
+    <div class="rule rule-center"></div>
+  </div>
+  <div class="max-w-5xl mx-auto px-6 pb-10 grid md:grid-cols-2 gap-12">
+    <div class="text-center md:text-left">
+      <p class="eyebrow mb-2">House I</p>
+      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)" data-hb-a="name"></h3>
+      <p class="mb-2"><a data-hb-a-href="telUrl" href="tel:08000000000" style="color:var(--stone)" class="hover:text-amber-400 transition" data-hb-a="phone"></a></p>
+      <p class="mb-2" style="color:var(--stone)" data-hb-a="email"></p>
+      <p><a data-hb-a-href="mapUrl" href="#" target="_blank" rel="noopener" style="color:var(--stone)" class="hover:text-amber-400 transition underline" data-hb-a="address"></a></p>
+      <p class="mt-2 text-xs uppercase tracking-[.2em]" style="color:var(--stone);opacity:.7"><span data-hb-a="coords"></span> · <span data-hb-a="altitude"></span></p>
+    </div>
+    <div class="text-center md:text-left">
+      <p class="eyebrow mb-2">House II</p>
+      <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)" data-hb-b="name"></h3>
+      <p class="mb-2"><a data-hb-b-href="telUrl" href="#" style="color:var(--stone)" class="hover:text-amber-400 transition" data-hb-b="phone"></a></p>
+      <p class="mb-2" style="color:var(--stone)" data-hb-b="email"></p>
+      <p><a data-hb-b-href="mapUrl" href="#" target="_blank" rel="noopener" style="color:var(--stone)" class="hover:text-amber-400 transition underline" data-hb-b="address"></a></p>
+      <p class="mt-2 text-xs uppercase tracking-[.2em]" style="color:var(--stone);opacity:.7"><span data-hb-b="coords"></span> · <span data-hb-b="altitude"></span></p>
+    </div>
+  </div>
+  <p class="text-center text-sm px-6 pb-24 sm:pb-32" style="color:var(--stone)">One reservations desk serves both houses — front desk &amp; concierge available 24 hours.</p>
+
+  <!-- Complaints / Feedback -->
+  <div class="max-w-2xl mx-auto px-6 pb-24 sm:pb-32">
+    <div class="p-6 sm:p-8 rounded-xl" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.2)">
+      <h3 class="font-display text-2xl text-center mb-2" style="color:var(--ivory)">Raise a Concern</h3>
+      <p class="text-xs sm:text-sm text-center mb-6" style="color:var(--stone)">Had an issue during your stay? Let our team know and we'll follow up directly.</p>
+      <form id="complaint-form" class="space-y-5 text-left">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="complaint-name">Your Name</label>
+            <input id="complaint-name" type="text" required placeholder="e.g. Samuel K." class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+          <div>
+            <label class="block mb-1 text-sm" style="color:var(--stone)" for="complaint-email">Email or Phone</label>
+            <input id="complaint-email" type="text" required placeholder="you@example.com" class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+        </div>
+        <div>
+          <label class="block mb-1 text-sm" style="color:var(--stone)" for="complaint-message">What happened?</label>
+          <textarea id="complaint-message" rows="4" required placeholder="Tell us what went wrong..." class="w-full bg-transparent border rounded-lg px-4 py-2.5 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)"></textarea>
+        </div>
+        <button type="submit" class="btn-brass-solid w-full py-3 rounded-lg tracking-[0.18em] uppercase text-xs font-medium">Submit</button>
+      </form>
+      <p id="complaint-success" class="hidden mt-4 font-medium text-center text-sm" style="color:var(--brass)">Thank you — your concern has been logged and our team will reach out shortly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE: ADMIN (HIDDEN — no nav link, reached only via typing the URL hash manually) ============ -->
+<section class="page" data-page="dx-control-9247">
+  <div class="max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-24">
+
+    <!-- LOGIN GATE -->
+    <div id="admin-login-gate" class="max-w-sm mx-auto text-center py-16 sm:py-24">
+      <p class="eyebrow mb-3">Staff Only</p>
+      <h1 class="font-display text-3xl mb-6" style="color:var(--ivory)">Admin Sign In</h1>
+      <form id="admin-login-form" class="space-y-4 text-left">
+        <div>
+          <label class="block mb-1 text-sm" style="color:var(--stone)">Password</label>
+          <input id="admin-password" type="password" required class="w-full bg-transparent border rounded-lg px-4 py-3 text-sm" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">
+        </div>
+        <button type="submit" class="btn-brass-solid w-full py-3 rounded-lg tracking-[0.18em] uppercase text-xs font-medium">Enter</button>
+      </form>
+      <p id="admin-login-error" class="hidden mt-4 text-sm" style="color:#e08a8a">Incorrect password.</p>
+      <p class="mt-8 text-xs opacity-50" style="color:var(--stone)">This panel is not linked anywhere on the site.</p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="admin-dashboard" class="hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div>
+          <p class="eyebrow mb-2">Back Office</p>
+          <h1 class="font-display text-3xl sm:text-4xl" style="color:var(--ivory)">DiviceXclusive Admin</h1>
+        </div>
+        <div class="flex flex-wrap items-center gap-4">
+          <div>
+            <label class="block text-xs mb-1" style="color:var(--stone)" for="admin-house">Managing</label>
+            <select id="admin-house" class="admin-input-sm" style="min-width:230px">
+              <option value="a">Lagos — The Lagoon House</option>
+              <option value="b">Obudu — The Plateau House</option>
+            </select>
+          </div>
+          <button id="admin-logout" class="btn-brass py-2 px-5 text-xs">Log Out</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap gap-2 mb-10 border-b pb-5" style="border-color:rgba(184,144,90,.2)">
+        <button data-tab="requests" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Requests</button>
+        <button data-tab="calendar" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Calendar</button>
+        <button data-tab="pricing" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Rooms &amp; Pricing</button>
+        <button data-tab="complaints" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Complaints</button>
+        <button data-tab="content" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Content</button>
+        <button data-tab="analytics" class="admin-tab-btn text-xs uppercase tracking-widest px-4 py-2 rounded-full border" style="border-color:rgba(184,144,90,.3); color:var(--ivory)">Analytics</button>
+      </div>
+
+      <!-- TAB: REQUESTS -->
+      <div id="admin-tab-requests" class="admin-tab-panel">
+        <div class="flex flex-wrap gap-2 mb-6" id="requests-filter">
+          <button data-filter="all" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">All</button>
+          <button data-filter="pending" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Pending</button>
+          <button data-filter="approved" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Approved</button>
+          <button data-filter="checked-in" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Checked In</button>
+          <button data-filter="checked-out" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Checked Out</button>
+          <button data-filter="declined" class="req-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Declined</button>
+        </div>
+        <div id="requests-list" class="space-y-4"></div>
+      </div>
+
+      <!-- TAB: CALENDAR -->
+      <div id="admin-tab-calendar" class="admin-tab-panel hidden">
+        <p class="text-sm mb-6" style="color:var(--stone)">Room availability for the next 14 days, based on approved &amp; checked-in bookings.</p>
+        <div id="calendar-grid" class="overflow-x-auto"></div>
+      </div>
+
+      <!-- TAB: ROOMS & PRICING -->
+      <div id="admin-tab-pricing" class="admin-tab-panel hidden space-y-10">
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Rates &amp; Inventory</h3>
+          <div id="pricing-rooms" class="grid md:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Closed Dates</h3>
+          <p class="text-xs mb-3" style="color:var(--stone)">Dates the hotel is not accepting new check-ins.</p>
+          <div class="flex flex-wrap gap-3 mb-4">
+            <input id="closed-date-input" type="date" class="rounded-lg px-4 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <button id="add-closed-date" class="btn-brass py-2.5 px-5 text-xs">Close Date</button>
+          </div>
+          <div id="closed-dates-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Discount Packages</h3>
+          <div class="grid sm:grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+            <input id="discount-name" type="text" placeholder="Package name" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <select id="discount-room" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+              <option value="classic">Classic Room</option>
+              <option value="deluxe">Deluxe Suite</option>
+              <option value="presidential">Presidential Suite</option>
+            </select>
+            <input id="discount-percent" type="number" min="1" max="90" placeholder="% off" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <input id="discount-start" type="date" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+            <input id="discount-end" type="date" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--ink-2); border:1px solid rgba(184,144,90,.3); color:var(--ivory)">
+          </div>
+          <button id="add-discount" class="btn-brass py-2.5 px-5 text-xs mb-5">Add Package</button>
+          <div id="discounts-list" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- TAB: COMPLAINTS -->
+      <div id="admin-tab-complaints" class="admin-tab-panel hidden">
+        <div class="flex flex-wrap gap-2 mb-6" id="complaints-filter">
+          <button data-filter="all" class="cmp-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">All</button>
+          <button data-filter="open" class="cmp-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Open</button>
+          <button data-filter="resolved" class="cmp-filter-btn text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border" style="border-color:rgba(184,144,90,.3)">Resolved</button>
+        </div>
+        <div id="complaints-list" class="space-y-4"></div>
+      </div>
+
+      <!-- TAB: CONTENT (CMS) -->
+      <div id="admin-tab-content" class="admin-tab-panel hidden space-y-10">
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Room Descriptions &amp; Photos</h3>
+          <div id="content-rooms" class="space-y-6"></div>
+        </div>
+        <div>
+          <h3 class="font-display text-2xl mb-4" style="color:var(--ivory)">Dine &amp; Unwind Content</h3>
+          <div id="content-experiences" class="space-y-6"></div>
+        </div>
+      </div>
+
+      <!-- TAB: ANALYTICS -->
+      <div id="admin-tab-analytics" class="admin-tab-panel hidden">
+        <div id="analytics-cards" class="grid sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative" style="background:var(--ink-2)">
+  <div class="py-12 sm:py-16 px-6">
+    <div class="max-w-6xl mx-auto text-center border-t pt-10 sm:pt-14" style="border-color:rgba(184,144,90,.15)">
+      <p class="font-display text-2xl sm:text-3xl mb-3" style="color:var(--ivory)">DiviceXclusive Hotel</p>
+      <p class="eyebrow mb-8">Two Houses · One Code</p>
+
+      <div class="grid sm:grid-cols-2 gap-8 sm:gap-12 max-w-3xl mx-auto mb-10 text-center sm:text-left">
+        <div>
+          <p class="eyebrow mb-2" style="font-size:.6rem">House I</p>
+          <p class="font-display text-xl mb-2" style="color:var(--ivory)" data-hb-a="name"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-a="address"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-a="phone"></p>
+          <p class="text-xs opacity-70" style="color:var(--stone)" data-hb-a="coords"></p>
+        </div>
+        <div>
+          <p class="eyebrow mb-2" style="font-size:.6rem">House II</p>
+          <p class="font-display text-xl mb-2" style="color:var(--ivory)" data-hb-b="name"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-b="address"></p>
+          <p class="text-xs" style="color:var(--stone)" data-hb-b="phone"></p>
+          <p class="text-xs opacity-70" style="color:var(--stone)" data-hb-b="coords"></p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-6 mb-8">
+        <a href="#" aria-label="Instagram" style="color:var(--stone)" class="hover:text-white"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="#" aria-label="Facebook" style="color:var(--stone)" class="hover:text-white"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="#" aria-label="Twitter" style="color:var(--stone)" class="hover:text-white"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+      <p class="text-xs sm:text-sm opacity-60">© 2026 DiviceXclusive Hotel. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<a data-hb-href="whatsapp" href="https://wa.me/2348000000000" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" aria-label="Contact us on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
+  lucide.createIcons();
+
+  // ---------- dropdown (desktop) ----------
+  document.querySelectorAll('.dropdown-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const parent = btn.closest('.dropdown');
+      const wasActive = parent.classList.contains('active');
+      document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+      if (!wasActive) parent.classList.add('active');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+  });
+
+  // ---------- mobile menu ----------
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    const nav = document.getElementById('nav-links-mobile');
+    nav.classList.toggle('hidden');
+    nav.classList.toggle('flex');
+  });
+
+  // ---------- DYNAMIC BOOKING TOTAL CALCULATOR ----------
+  const roomSelect = document.getElementById('room-type');
+  const checkinInput = document.getElementById('checkin');
+  const checkoutInput = document.getElementById('checkout');
+  const summaryRoom = document.getElementById('summary-room');
+  const summaryNights = document.getElementById('summary-nights');
+  const summaryRate = document.getElementById('summary-rate');
+  const summaryTotal = document.getElementById('summary-total');
+
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  if (checkinInput && checkoutInput) {
+    checkinInput.value = today.toISOString().split('T')[0];
+    checkoutInput.value = tomorrow.toISOString().split('T')[0];
+    checkinInput.min = today.toISOString().split('T')[0];
+
+    function calculateBookingTotal() {
+      const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+      const roomName = selectedOption.text.split('—')[0].trim();
+      const roomType = roomSelect.value;
+      let pricePerNight = parseInt(selectedOption.dataset.price, 10) || 0;
+
+      const checkInDate = new Date(checkinInput.value);
+      const checkOutDate = new Date(checkoutInput.value);
+
+      let diffTime = checkOutDate.getTime() - checkInDate.getTime();
+      let diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
+
+      if (isNaN(diffDays) || diffDays <= 0) {
+        diffDays = 0;
+      }
+
+      let rateNote = '';
+      if (window.DXAdmin) {
+        const discount = window.DXAdmin.findActiveDiscount(roomType, checkinInput.value);
+        if (discount) {
+          const discounted = Math.round(pricePerNight * (1 - discount.percent / 100));
+          rateNote = ` (${discount.percent}% off — ${discount.name})`;
+          pricePerNight = discounted;
+        }
+      }
+
+      const totalFee = diffDays * pricePerNight;
+
+      summaryRoom.textContent = roomName;
+      summaryNights.textContent = `${diffDays} ${diffDays === 1 ? 'Night' : 'Nights'}`;
+      summaryRate.textContent = `₦${pricePerNight.toLocaleString()}${rateNote}`;
+      summaryTotal.textContent = `₦${totalFee.toLocaleString()}`;
+    }
+
+    roomSelect.addEventListener('change', calculateBookingTotal);
+    checkinInput.addEventListener('change', () => {
+      if (checkinInput.value) {
+        checkoutInput.min = checkinInput.value;
+        if (checkoutInput.value && checkoutInput.value <= checkinInput.value) {
+          const nextDay = new Date(checkinInput.value);
+          nextDay.setDate(nextDay.getDate() + 1);
+          checkoutInput.value = nextDay.toISOString().split('T')[0];
+        }
+      }
+      calculateBookingTotal();
+    });
+    checkoutInput.addEventListener('change', calculateBookingTotal);
+
+    calculateBookingTotal();
+  }
+
+  // ---------- booking form submission ----------
+  const bookingForm = document.getElementById('booking-form');
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (window.DXAdmin && window.DXAdmin.isDateClosed(checkinInput.value)) {
+        alert('We are not accepting check-ins on the selected date. Please choose another date.');
+        return;
+      }
+
+      // persist the request into the admin store so staff can act on it
+      if (window.DXAdmin) {
+        const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+        const roomType = roomSelect.value;
+        const nights = parseInt(summaryNights.textContent, 10) || 0;
+        const rate = parseInt((summaryRate.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+        const total = parseInt((summaryTotal.textContent || '').replace(/[^\d]/g, ''), 10) || 0;
+
+        const houseKey = window.DXHouse ? window.DXHouse.current : 'a';
+
+        window.DXAdmin.addBooking({
+          name: document.getElementById('guest-name').value.trim(),
+          phone: document.getElementById('guest-phone').value.trim(),
+          email: document.getElementById('guest-email').value.trim(),
+          house: houseKey,
+          houseName: window.DXHouse ? window.DXHouse.name : '',
+          roomType,
+          roomTypeName: selectedOption.text.split('—')[0].trim(),
+          checkin: checkinInput.value,
+          checkout: checkoutInput.value,
+          nights, rate, total
+        });
+      }
+
+      document.getElementById('booking-success').classList.remove('hidden');
+      bookingForm.reset();
+      calculateBookingTotal();
+    });
+  }
+
+  // ---------- complaint form submission ----------
+  const complaintForm = document.getElementById('complaint-form');
+  if (complaintForm) {
+    complaintForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (window.DXAdmin) {
+        window.DXAdmin.addComplaint({
+          name: document.getElementById('complaint-name').value.trim(),
+          contact: document.getElementById('complaint-email').value.trim(),
+          message: document.getElementById('complaint-message').value.trim()
+        });
+      }
+      document.getElementById('complaint-success').classList.remove('hidden');
+      complaintForm.reset();
+    });
+  }
+
+  // ---------- review star rating selector ----------
+  let selectedRating = 5;
+  const starButtons = document.querySelectorAll('#star-selector .star-btn');
+  
+  starButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedRating = parseInt(btn.dataset.rating);
+      updateStarUI();
+    });
+  });
+
+  function updateStarUI() {
+    starButtons.forEach(btn => {
+      const r = parseInt(btn.dataset.rating);
+      const icon = btn.querySelector('svg');
+      if (r <= selectedRating) {
+        btn.classList.add('text-amber-400');
+        btn.classList.remove('text-stone-500');
+        if (icon) {
+          icon.setAttribute('fill', '#fbbf24');
+          icon.setAttribute('stroke', '#fbbf24');
+        }
+      } else {
+        btn.classList.remove('text-amber-400');
+        btn.classList.add('text-stone-500');
+        if (icon) {
+          icon.setAttribute('fill', 'none');
+          icon.setAttribute('stroke', 'currentColor');
+        }
+      }
+    });
+  }
+
+  // ---------- review submission logic ----------
+  const reviewForm = document.getElementById('review-form');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reviewer-name').value.trim();
+      const location = document.getElementById('reviewer-location').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+
+      // the review belongs to the house being viewed, and stays with it
+      if (window.DXHouse) {
+        window.DXHouse.addReview({
+          text,
+          cite: name + (location ? ', ' + location : ''),
+          rating: selectedRating
+        });
+      }
+
+      document.getElementById('review-success').classList.remove('hidden');
+      reviewForm.reset();
+      selectedRating = 5;
+      updateStarUI();
+    });
+  }
+
+  // ---------- true page routing ----------
+  const pages = document.querySelectorAll('.page[data-page]');
+  const navLinks = document.querySelectorAll('[data-page-link]');
+  const sweep = document.getElementById('sweep');
+  const validPages = Array.from(pages).map(p => p.dataset.page);
+
+  function route() {
+    let raw = window.location.hash.replace('#', '') || 'home';
+    let [pageId, sectionId] = raw.split('/');
+    if (!validPages.includes(pageId)) pageId = 'home';
+
+    sweep.style.width = '0%';
+    requestAnimationFrame(() => { sweep.style.width = '100%'; });
+
+    pages.forEach(p => p.classList.toggle('is-active', p.dataset.page === pageId));
+    navLinks.forEach(l => l.classList.toggle('active', l.dataset.pageLink === pageId));
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    if (sectionId) {
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 60);
+    }
+
+    setTimeout(() => { sweep.style.width = '0%'; }, 500);
+
+    const mobileNav = document.getElementById('nav-links-mobile');
+    mobileNav.classList.add('hidden');
+    mobileNav.classList.remove('flex');
+  }
+
+  window.addEventListener('hashchange', route);
+  document.addEventListener('DOMContentLoaded', route);
+  route();
+
+  function setVh() {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+</script>
+
+<!-- ============================================================
+     DUAL-HOUSE ENGINE
+
+     Every house-specific string, datum and image lives in HOUSES
+     below. Re-pointing the brand to different properties is one
+     edit to this object — the markup binds through data attributes
+     and never names a house itself.
+     ============================================================ -->
+<script>
+(function () {
+  const HOUSES = {
+    a: {
+      key: 'a', code: 'House I', short: 'Lagos', name: 'The Lagoon House',
+      region: 'Festac, Lagos', address: '1st Avenue, E Close, Festac, Lagos',
+      phone: '08000000000', email: 'reservations@divicexclusive.com',
+      coords: '6.4654° N, 3.2836° E', altitude: '4 m above sea',
+      temp: '31°', weather: 'Humid, hard sun',
+      signature: 'The Amber Room — poured nightly until two',
+      portalLine: 'Four metres above the Atlantic. Warm nights, teak and aged brass, the lagoon working quietly below the balconies.',
+      blurb: 'A city house. Low light, long counters, and a lagoon that changes colour three times before dinner.',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=1st+Avenue%2C+E+close%2C+Festac',
+      telUrl: 'tel:08000000000',
+      portalImg: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2069&auto=format&fit=crop',
+      cardImg: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop',
+      bookImg: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2070&auto=format&fit=crop',
+      whatsapp: 'https://wa.me/2348000000000',
+      roomsIntro: 'Twenty-two rooms above the lagoon — teak, unbleached linen, and shutters that actually close against the morning.',
+      lifestyleIntro: 'The city house keeps late hours. The bar runs until two, the pool until midnight.',
+      staySummary: 'What every stay in Festac includes',
+      roomMeta: { classic: 'Double bed · 2 guests', deluxe: 'King bed · mood lighting', presidential: 'Two kings · 2–4 guests' },
+      lifestyleMeta: { bar: 'Signature lounge', pool: 'Sixteen floors up', gym: 'Fitness & health' },
+      facilities: [
+        { icon: 'wifi', label: 'Complimentary Wi-Fi' },
+        { icon: 'bed-double', label: '42 Rooms & Suites' },
+        { icon: 'wine', label: 'Signature Cocktail Bar' },
+        { icon: 'waves', label: 'Rooftop Infinity Pool' },
+        { icon: 'dumbbell', label: '24-Hour Fitness Studio' },
+        { icon: 'clock', label: 'Round-the-Clock Concierge' }
+      ],
+      reviews: [
+        { text: 'Every detail felt deliberate — from the scent in the lobby to the note left by housekeeping. The Sky Pool at sunset is worth the trip alone.', cite: 'Amara O., Lagos' },
+        { text: "Quiet, precise, warm. The Amber Room's bartenders remembered our order on night two. This is what a city hotel should feel like.", cite: 'Tunde A., London' }
+      ]
+    },
+    b: {
+      key: 'b', code: 'House II', short: 'Obudu', name: 'The Plateau House',
+      region: 'Obudu Mountain, Cross River', address: 'Obudu Plateau, Cross River State',
+      phone: '08000000011', email: 'plateau@divicexclusive.com',
+      coords: '6.3833° N, 9.3667° E', altitude: '1,576 m above sea',
+      temp: '17°', weather: 'Misted, soft light',
+      signature: 'The Cloud Terrace — served from first light',
+      portalLine: 'Fifteen hundred metres up. Cold mornings, basalt and oak, cloud crossing the terrace while breakfast is laid.',
+      blurb: 'A quiet house. Wool, woodsmoke, and a valley that fills with cloud before it empties again by ten.',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Obudu+Mountain+Resort%2C+Cross+River',
+      telUrl: 'tel:08000000011',
+      portalImg: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop',
+      cardImg: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop',
+      bookImg: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2070&auto=format&fit=crop',
+      whatsapp: 'https://wa.me/2348000000011',
+      roomsIntro: 'Fourteen rooms along a single stone ridge — wool, oak, deep windows, and a fire laid in each one by four.',
+      lifestyleIntro: 'The plateau house keeps early hours. Breakfast from first light; dinner at half past seven, once.',
+      staySummary: 'What every stay on the plateau includes',
+      roomMeta: { classic: 'Wool-dressed bed · 2 guests', deluxe: 'Private hearth · king bed', presidential: 'Three bedrooms · own kitchen' },
+      lifestyleMeta: { bar: 'One table, one fire', pool: 'Above the cloud', gym: 'Ridge & recovery' },
+      facilities: [
+        { icon: 'flame', label: 'A Fire Laid by Four' },
+        { icon: 'bed-double', label: '14 Rooms & Suites' },
+        { icon: 'sunrise', label: 'Guided Dawn Ridge Walks' },
+        { icon: 'cloud', label: 'Cloud Terrace Breakfast' },
+        { icon: 'utensils', label: 'One Table, One Fire' },
+        { icon: 'car', label: 'Transfer from Calabar' }
+      ],
+      reviews: [
+        { text: 'We woke at five for the ridge walk and came back to a fire already lit and the coffee poured. Nobody had to be asked.', cite: 'Ngozi E., Abuja' },
+        { text: 'One table, one fire, one menu decided that morning. I have not eaten better anywhere on the continent.', cite: 'Peter M., Cape Town' }
+      ]
+    }
+  };
+
+  const $  = (sel, ctx) => (ctx || document).querySelector(sel);
+  const $$ = (sel, ctx) => Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let current = 'a';
+
+  // an image that fails leaves the art plate showing, rather than a broken well
+  function setImg(el, url) {
+    if (!el) return;
+    el.classList.remove('is-in');
+    el.onload = function () { el.classList.add('is-in'); };
+    el.onerror = function () { el.style.display = 'none'; };
+    el.src = url;
+    if (el.complete && el.naturalWidth) el.classList.add('is-in');
+  }
+
+  function bindFixed() {
+    ['a', 'b'].forEach(function (key) {
+      const house = HOUSES[key];
+      $$('[data-hb-' + key + ']').forEach(function (el) {
+        const val = house[el.getAttribute('data-hb-' + key)];
+        if (val != null) el.textContent = val;
+      });
+      $$('[data-hb-' + key + '-href]').forEach(function (el) {
+        const val = house[el.getAttribute('data-hb-' + key + '-href')];
+        if (val != null) el.setAttribute('href', val);
+      });
+      setImg($('[data-house-img="' + key + '"]'), house.portalImg);
+    });
+  }
+
+  function bindActive() {
+    const house = HOUSES[current];
+    $$('[data-hb]').forEach(function (el) {
+      const val = house[el.getAttribute('data-hb')];
+      if (val != null) el.textContent = val;
+    });
+    $$('[data-hb-href]').forEach(function (el) {
+      const val = house[el.getAttribute('data-hb-href')];
+      if (val != null) el.setAttribute('href', val);
+    });
+  }
+
+  function renderShowcase() {
+    const wrap = $('#house-showcase');
+    if (!wrap) return;
+    wrap.innerHTML = ['a', 'b'].map(function (key) {
+      const h = HOUSES[key];
+      return '' +
+        '<article class="house-card' + (key === current ? ' is-active' : '') + '" data-house-card="' + key + '">' +
+          '<div class="house-card__media portal__half" data-house="' + key + '">' +
+            '<div class="portal__plate" aria-hidden="true"></div>' +
+            '<img data-card-img="' + key + '" alt="' + h.name + ', ' + h.region + '">' +
+          '</div>' +
+          '<div>' +
+            '<p class="eyebrow mb-2">' + h.code + ' · ' + h.region + '</p>' +
+            '<h3 class="house-card__name font-display text-2xl sm:text-3xl mb-3" style="color:var(--ivory)">' + h.name + '</h3>' +
+            '<p class="text-sm" style="color:var(--stone)">' + h.blurb + '</p>' +
+          '</div>' +
+          '<div class="house-card__data text-[.62rem] uppercase tracking-[.2em]" style="color:var(--stone)">' +
+            '<div><span style="opacity:.6">Now</span><span style="color:var(--ivory)">' + h.temp + ' · ' + h.weather + '</span></div>' +
+            '<div><span style="opacity:.6">Altitude</span><span style="color:var(--ivory)">' + h.altitude + '</span></div>' +
+            '<div><span style="opacity:.6">Position</span><span style="color:var(--ivory)">' + h.coords + '</span></div>' +
+            '<div><span style="opacity:.6">Signature</span><span style="color:var(--ivory)">' + h.signature + '</span></div>' +
+          '</div>' +
+          '<button class="btn-brass self-start" data-house-enter="' + key + '">Enter this house</button>' +
+        '</article>';
+    }).join('');
+    ['a', 'b'].forEach(function (key) {
+      setImg($('[data-card-img="' + key + '"]'), HOUSES[key].cardImg);
+    });
+  }
+
+  /* ---------- house-specific home content ----------
+     Reviews, amenities and imagery belong to one house and never appear
+     under the other. Room and dining cards are rendered by the back office
+     from that house's own records, so nothing here can contradict booking. */
+  const addedReviews = { a: [], b: [] };
+
+  function stars(n) {
+    let out = '';
+    for (let i = 0; i < n; i++) out += '<i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>';
+    return out;
+  }
+
+  function renderFacilities() {
+    const wrap = $('#home-facilities');
+    if (!wrap) return;
+    wrap.innerHTML = HOUSES[current].facilities.map(function (f) {
+      return '<div class="flex flex-col items-center gap-4">' +
+               '<div class="facility-icon"><i data-lucide="' + f.icon + '" class="w-5 h-5" style="color:var(--brass)"></i></div>' +
+               '<p class="text-sm">' + f.label + '</p>' +
+             '</div>';
+    }).join('');
+  }
+
+  function renderReviews() {
+    const wrap = $('#reviews-list');
+    if (!wrap) return;
+    const list = HOUSES[current].reviews.concat(addedReviews[current]);
+    wrap.innerHTML = list.map(function (r) {
+      return '<blockquote class="review-card p-6 sm:p-8 rounded-xl text-left">' +
+               '<div class="flex items-center gap-1 mb-3 text-amber-400">' + stars(r.rating || 5) + '</div>' +
+               '<p class="italic mb-4 text-sm sm:text-base leading-relaxed" style="color:var(--stone)">&ldquo;' + r.text + '&rdquo;</p>' +
+               '<cite class="not-italic text-sm" style="color:var(--brass)">— ' + r.cite + '</cite>' +
+             '</blockquote>';
+    }).join('');
+  }
+
+  // a review is left about one house, and stays with it
+  function addReview(review) {
+    addedReviews[current].push(review);
+    renderReviews();
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function paintIcons() {
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function announce(msg) {
+    let live = $('#house-live');
+    if (!live) {
+      live = document.createElement('p');
+      live.id = 'house-live';
+      live.className = 'sr-only';
+      live.setAttribute('role', 'status');
+      live.setAttribute('aria-live', 'polite');
+      document.body.appendChild(live);
+    }
+    live.textContent = msg;
+  }
+
+  function setHouse(key, opts) {
+    if (!HOUSES[key]) return;
+    const options = opts || {};
+    current = key;
+    document.documentElement.setAttribute('data-property', key);
+
+    $$('[data-house-switch]').forEach(function (btn) {
+      btn.setAttribute('aria-selected', String(btn.getAttribute('data-house-switch') === key));
+    });
+    $$('[data-house-card]').forEach(function (card) {
+      card.classList.toggle('is-active', card.getAttribute('data-house-card') === key);
+    });
+
+    const bookingHouse = $('#booking-house');
+    if (bookingHouse && bookingHouse.value !== key) bookingHouse.value = key;
+
+    bindActive();
+    renderFacilities();
+    renderReviews();
+
+    const bookImg = $('#book-hero-img');
+    if (bookImg) bookImg.src = HOUSES[key].bookImg;
+    document.title = 'Divic Exclusive Hotel — ' + HOUSES[key].region;
+    const meta = $('meta[name="description"]');
+    if (meta) meta.setAttribute('content', HOUSES[key].name + ', ' + HOUSES[key].region + '. ' + HOUSES[key].blurb);
+
+    // rooms, rates and dining copy belong to the house, so re-render them
+    if (window.DXAdmin && window.DXAdmin.refreshPublicSite) window.DXAdmin.refreshPublicSite();
+    paintIcons();
+
+    if (options.announce !== false) {
+      announce('Now viewing ' + HOUSES[key].name + ', ' + HOUSES[key].region + '.');
+    }
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('house', HOUSES[key].short.toLowerCase());
+      window.history.replaceState(null, '', url);
+    } catch (err) { /* older browsers simply keep the current URL */ }
+  }
+
+  /* ---------- the branch gate ----------
+     The guest chooses a house before the site opens. The header switcher
+     lets them change their mind at any point afterwards. */
+  const HOUSE_KEY = 'dx_house_choice';
+  const PUBLIC_PAGES = ['home', 'rooms', 'experience', 'book', 'contact'];
+  let pendingHash = null;
+
+  function openGate() {
+    const portal = $('#hero');
+    if (!portal) return;
+    // the gate lives inside the home page, so hold any deep link until a house is picked
+    const raw = (window.location.hash || '').replace('#', '').split('/')[0];
+    if (raw && raw !== 'home' && PUBLIC_PAGES.indexOf(raw) !== -1) {
+      pendingHash = (window.location.hash || '').replace('#', '');
+      window.location.hash = 'home';
+    }
+    portal.removeAttribute('data-resolved');
+    portal.classList.add('is-gate');
+    document.body.classList.add('gate-open');
+    $$('.portal__half', portal).forEach(function (half) {
+      half.removeAttribute('aria-hidden');
+      $$('button, a', half).forEach(function (el) { el.tabIndex = 0; });
+    });
+  }
+
+  function closeGate() {
+    const portal = $('#hero');
+    if (portal) portal.classList.remove('is-gate');
+    document.body.classList.remove('gate-open');
+    if (pendingHash) {
+      const target = pendingHash;
+      pendingHash = null;
+      window.location.hash = target;
+    }
+  }
+
+  function enterHouse(key) {
+    setHouse(key);
+    try { sessionStorage.setItem(HOUSE_KEY, key); } catch (err) { /* private mode */ }
+    const portal = $('#hero');
+    if (!portal) return;
+    portal.setAttribute('data-resolved', key);
+    $$('.portal__half', portal).forEach(function (half) {
+      const off = half.getAttribute('data-house') !== key;
+      half.setAttribute('aria-hidden', String(off));
+      $$('button, a', half).forEach(function (el) { el.tabIndex = off ? -1 : 0; });
+    });
+    closeGate();
+  }
+
+  // "View both houses" hands the choice back
+  function bothHouses() {
+    try { sessionStorage.removeItem(HOUSE_KEY); } catch (err) { /* private mode */ }
+    openGate();
+  }
+
+  document.addEventListener('click', function (e) {
+    const sw = e.target.closest('[data-house-switch]');
+    if (sw) { setHouse(sw.getAttribute('data-house-switch')); return; }
+
+    const enter = e.target.closest('[data-house-enter]');
+    if (enter) {
+      e.preventDefault();
+      enterHouse(enter.getAttribute('data-house-enter'));
+      if (!enter.closest('#hero')) {
+        window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
+      }
+      return;
+    }
+
+    if (e.target.closest('[data-house-return]')) { bothHouses(); return; }
+  });
+
+  // arrow-key traversal across the switcher, per tablist semantics
+  document.addEventListener('keydown', function (e) {
+    const btn = e.target.closest && e.target.closest('[data-house-switch]');
+    if (!btn || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+    e.preventDefault();
+    const next = btn.getAttribute('data-house-switch') === 'a' ? 'b' : 'a';
+    const target = btn.parentNode.querySelector('[data-house-switch="' + next + '"]');
+    if (target) target.focus();
+    setHouse(next);
+  });
+
+  // the sticky utility bar and nav vary in height across breakpoints, so measure them
+  function measureChrome() {
+    const bar = $('.top-info-bar');
+    const nav = $('header.main-nav');
+    const offset = (bar ? bar.offsetHeight : 0) + (nav ? nav.offsetHeight : 0);
+    if (offset) document.documentElement.style.setProperty('--portal-offset', offset + 'px');
+  }
+
+  /* ---------- the loading sequence ----------
+     Runs once per session: swan in from a distance, settles on the sun,
+     wingbeats, ripples, the words rise, the logo locks, the site opens. */
+  const INTRO_KEY = 'dx_intro_seen';
+  const INTRO_MS = 6000;
+  let introEnded = false;
+
+  function endIntro(afterwards) {
+    if (introEnded) return;
+    introEnded = true;
+    const loader = $('#loader');
+    try { sessionStorage.setItem(INTRO_KEY, '1'); } catch (err) { /* private mode */ }
+    if (loader) {
+      loader.classList.add('is-done');
+      setTimeout(function () { loader.style.display = 'none'; }, 850);
+    }
+    if (afterwards) afterwards();
+  }
+
+  function runIntro(afterwards) {
+    const loader = $('#loader');
+    if (!loader) { if (afterwards) afterwards(); return; }
+
+    let seen = false;
+    try { seen = sessionStorage.getItem(INTRO_KEY) === '1'; } catch (err) { /* private mode */ }
+    if (seen) {
+      loader.style.display = 'none';
+      introEnded = true;
+      if (afterwards) afterwards();
+      return;
+    }
+
+    const skip = function () { endIntro(afterwards); };
+    $('#loader-skip').addEventListener('click', skip);
+    loader.addEventListener('click', skip);
+    document.addEventListener('keydown', function onKey(e) {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { document.removeEventListener('keydown', onKey); skip(); }
+    });
+
+    setTimeout(skip, REDUCED ? 1800 : INTRO_MS);
+  }
+
+  function openingHouse() {
+    try {
+      const q = new URL(window.location.href).searchParams.get('house');
+      if (q) return q.toLowerCase().indexOf('o') === 0 ? 'b' : 'a';
+    } catch (err) { /* fall through */ }
+    try {
+      const saved = sessionStorage.getItem(HOUSE_KEY);
+      if (saved && HOUSES[saved]) return saved;
+    } catch (err) { /* private mode */ }
+    return null;
+  }
+
+  function init() {
+    bindFixed();
+    renderShowcase();
+    measureChrome();
+    window.addEventListener('resize', measureChrome);
+
+    const chosen = openingHouse();
+    setHouse(chosen || 'a', { announce: false });
+
+    const bookingHouse = $('#booking-house');
+    if (bookingHouse) {
+      bookingHouse.addEventListener('change', function () { setHouse(bookingHouse.value); });
+    }
+
+    // an unrecognised page (the back office) skips the gate entirely
+    const raw = (window.location.hash || '').replace('#', '').split('/')[0];
+    const isPublic = !raw || PUBLIC_PAGES.indexOf(raw) !== -1;
+
+    runIntro(function () {
+      if (chosen || !isPublic) {
+        if (chosen) enterHouse(chosen);
+        return;
+      }
+      openGate();
+    });
+  }
+
+  // the house the rest of the page (booking form, admin) reads from
+  window.DXHouse = {
+    get current() { return current; },
+    get name() { return HOUSES[current].name; },
+    get short() { return HOUSES[current].short; },
+    all: HOUSES,
+    set: setHouse,
+    addReview: addReview
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- ============================================================
+     ADMIN PANEL ENGINE
+     Hidden page: no nav link points here. It only renders when
+     someone types the exact hash into the address bar:
+
+         yoursite.html#dx-control-9247
+
+     CHANGE THE SECRET: search this file for "dx-control-9247" and
+     replace every occurrence (there are two: the section's
+     data-page attribute above, and ADMIN_HASH below) with your own
+     private string.
+
+     CHANGE THE PASSWORD: edit ADMIN_PASSWORD below.
+
+     NOTE ON SECURITY: this is a client-side-only demo. Anyone who
+     views the page source can read ADMIN_PASSWORD and the secret
+     hash. This is "hidden from casual browsing", not "secure
+     against a technical visitor". For real protection you'd need
+     server-side login and a real database instead of localStorage.
+     ============================================================ -->
+<script>
+(function () {
+  const ADMIN_HASH = 'dx-control-9247';
+  const ADMIN_PASSWORD = 'DivX-Admin-2026';
+  const STORE_KEY = 'dx_hotel_admin_store_v2';
+  const LEGACY_KEY = 'dx_hotel_admin_store_v1';
+
+  const HOUSE_LABELS = { a: 'Lagos — The Lagoon House', b: 'Obudu — The Plateau House' };
+
+  // Each house owns the same three room slots, under its own names, rates and inventory.
+  function defaultHouseA() {
+    return {
+      rooms: {
+        classic:       { name: 'The Classic Room',      price: 85000,  inventory: 20, description: '32sqm of warm timber and linen, a rain shower, and a private balcony looking toward the lagoon. Built for effortless living with smart climate controls and high-speed connections.', image: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1974&auto=format&fit=crop' },
+        deluxe:        { name: 'The Deluxe Suite',      price: 145000, inventory: 15, description: 'A separate sitting room, deep soaking tub, and curated minibar — built for longer stays and slower mornings. Offers floor-to-ceiling windows with panoramic city skyline views.', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop' },
+        presidential:  { name: 'The Presidential Suite', price: 320000, inventory: 7,  description: 'Two bedrooms, a private dining room, and a wraparound terrace — with a dedicated butler on call. The pinnacle of quiet luxury designed for distinguished executive relaxation.', image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop' }
+      },
+      experiences: {
+        bar:  { title: 'The Amber Room', description: 'A low-lit bar built around a single long counter of aged brass and dark oak. The list runs from Nigerian-inflected classics to a rotating barrel-aged reserve — poured slowly, meant to be lingered over. Open nightly until 2am.', image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=2070&auto=format&fit=crop' },
+        pool: { title: 'The Sky Pool', description: 'Sixteen floors up, a heated infinity pool traces the edge of the building with an unbroken view of the lagoon. Cabanas, a light small-plates menu, and a resident DJ on Friday evenings.', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2073&auto=format&fit=crop' },
+        gym:  { title: 'The Forge', description: 'A 24-hour fitness studio equipped with free weights, Technogym machines, and a dedicated stretch room. Personal trainers and in-room recovery treatments available on request.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1974&auto=format&fit=crop' }
+      }
+    };
+  }
+
+  function defaultHouseB() {
+    return {
+      rooms: {
+        classic:       { name: 'The Plateau Room',  price: 95000,  inventory: 8, description: 'Thirty-four square metres under a low oak ceiling, with a wool-dressed bed, a fire laid by four, and a window that frames only sky.', image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2070&auto=format&fit=crop' },
+        deluxe:        { name: 'The Cloudline Suite', price: 165000, inventory: 4, description: 'A sitting room with its own hearth, a stone bath set into the floor, and a terrace that sits inside the cloud until ten in the morning.', image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2070&auto=format&fit=crop' },
+        presidential:  { name: 'The Ridge House',   price: 380000, inventory: 2, description: 'A separate house at the end of the ridge. Three bedrooms, a private kitchen, a resident cook on request, and no neighbours in any direction.', image: 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=2070&auto=format&fit=crop' }
+      },
+      experiences: {
+        bar:  { title: 'Stone & Ember', description: 'One long table, one fire, one menu decided the morning it is served. Almost everything is grown or grazed within an hour of the ridge; what is not, is not on the table.', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop' },
+        pool: { title: 'The Cloud Terrace', description: 'Breakfast from first light, served above the valley while it is still full of cloud. Blankets, a long pot of coffee, and nothing scheduled until it lifts.', image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=2070&auto=format&fit=crop' },
+        gym:  { title: 'The Ridge Room', description: 'A quiet studio at the end of the west wing — free weights, a stretch floor, and a guided dawn walk to the ridge head for anyone awake at five.', image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop' }
+      }
+    };
+  }
+
+  function defaultStore() {
+    return {
+      version: 2,
+      adminHouse: 'a',
+      houses: { a: defaultHouseA(), b: defaultHouseB() },
+      closedDates: [],
+      discounts: [],
+      bookings: [],
+      complaints: []
+    };
+  }
+
+  let store = null;
+
+  // v1 held a single property. Its rooms, experiences and bookings become House I;
+  // House II is seeded from defaults. Nothing a hotelier already saved is lost.
+  function migrateFromV1(old) {
+    const next = defaultStore();
+    if (old.rooms) {
+      Object.keys(next.houses.a.rooms).forEach(function (key) {
+        if (!old.rooms[key]) return;
+        const label = next.houses.a.rooms[key].name;
+        next.houses.a.rooms[key] = Object.assign({}, old.rooms[key]);
+        if (!next.houses.a.rooms[key].name) next.houses.a.rooms[key].name = label;
+      });
+    }
+    if (old.experiences) next.houses.a.experiences = old.experiences;
+    next.closedDates = old.closedDates || [];
+    next.discounts = old.discounts || [];
+    next.complaints = old.complaints || [];
+    next.bookings = (old.bookings || []).map(function (b) {
+      return Object.assign({ house: 'a', houseName: 'The Lagoon House' }, b);
+    });
+    return next;
+  }
+
+  function loadStore() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) {
+        store = JSON.parse(raw);
+      } else {
+        const legacy = localStorage.getItem(LEGACY_KEY);
+        store = legacy ? migrateFromV1(JSON.parse(legacy)) : defaultStore();
+        saveStore();
+      }
+    } catch (err) {
+      console.error('Admin store failed to load, resetting.', err);
+      store = defaultStore();
+    }
+    if (!store.houses) store = defaultStore();
+    if (!store.adminHouse || !store.houses[store.adminHouse]) store.adminHouse = 'a';
+  }
+
+  // the house the admin is currently editing
+  function H() { return store.houses[store.adminHouse]; }
+
+  // bookings belong to a house; anything logged before the second house existed is House I
+  function houseBookings() {
+    return store.bookings.filter(b => (b.house || 'a') === store.adminHouse);
+  }
+
+  // the house the public site is currently showing
+  function guestHouseKey() {
+    return (window.DXHouse && store.houses[window.DXHouse.current]) ? window.DXHouse.current : 'a';
+  }
+
+  function saveStore() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    } catch (err) {
+      console.error('Admin store failed to save.', err);
+    }
+  }
+
+  function uid(prefix) {
+    return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  function fmtNaira(n) { return '₦' + (Number(n) || 0).toLocaleString(); }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  // ---------------- apply live data to the public-facing site ----------------
+  function applyCmsToPublicSite() {
+    const house = store.houses[guestHouseKey()];
+
+    Object.keys(house.rooms).forEach((key) => {
+      const room = house.rooms[key];
+      const title = document.getElementById(`cms-${key}-title`);
+      const desc = document.getElementById(`cms-${key}-desc`);
+      const img = document.getElementById(`cms-${key}-img`);
+      const price = document.getElementById(`cms-${key}-price`);
+      if (title) title.textContent = room.name;
+      if (desc) desc.textContent = room.description;
+      if (img) img.src = room.image;
+      if (price) price.textContent = fmtNaira(room.price);
+
+      const opt = document.getElementById(`opt-${key}`);
+      if (opt) {
+        opt.dataset.price = room.price;
+        opt.textContent = `${room.name} — ${fmtNaira(room.price)} / night`;
+      }
+    });
+
+    Object.keys(house.experiences).forEach((key) => {
+      const exp = house.experiences[key];
+      const title = document.getElementById(`cms-${key}-title`);
+      const desc = document.getElementById(`cms-${key}-desc`);
+      const img = document.getElementById(`cms-${key}-img`);
+      if (title) title.textContent = exp.title;
+      if (desc) desc.textContent = exp.description;
+      if (img) img.src = exp.image;
+    });
+
+    renderHomeCards(house);
+
+    if (typeof calculateBookingTotal === 'function') calculateBookingTotal();
+  }
+
+  // The home page previews the house's real rooms and real venues — never a
+  // generic set — so what is advertised is what can actually be booked.
+  function renderHomeCards(house) {
+    const cfg = (window.DXHouse && window.DXHouse.all[guestHouseKey()]) || null;
+
+    const roomWrap = document.getElementById('home-room-cards');
+    if (roomWrap) {
+      roomWrap.innerHTML = Object.keys(house.rooms).map((key) => {
+        const r = house.rooms[key];
+        const meta = cfg && cfg.roomMeta ? (cfg.roomMeta[key] || '') : '';
+        return `
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-72 sm:h-80 mb-4 bg-stone-900">
+            <img src="${r.image}" class="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" alt="${escapeHtml(r.name)}">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">${escapeHtml(meta)}</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">${escapeHtml(r.name)}</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">${escapeHtml(r.description)}</p>
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-sm" style="color:var(--brass)">${fmtNaira(r.price)} <span class="text-xs" style="color:var(--stone)">/ night</span></span>
+            <a href="#book" data-page-link="book" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">Reserve <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    const lifeWrap = document.getElementById('home-lifestyle-cards');
+    if (lifeWrap) {
+      lifeWrap.innerHTML = Object.keys(house.experiences).map((key) => {
+        const e = house.experiences[key];
+        const meta = cfg && cfg.lifestyleMeta ? (cfg.lifestyleMeta[key] || '') : '';
+        return `
+        <div class="flex flex-col">
+          <div class="overflow-hidden rounded-xl h-64 sm:h-72 mb-4">
+            <img src="${e.image}" class="w-full h-full object-cover hover:scale-105 transition duration-500" loading="lazy" alt="${escapeHtml(e.title)}">
+          </div>
+          <p class="text-xs uppercase tracking-widest font-medium mb-1" style="color:var(--stone)">${escapeHtml(meta)}</p>
+          <h3 class="font-display text-2xl mb-2" style="color:var(--ivory)">${escapeHtml(e.title)}</h3>
+          <p class="text-xs leading-relaxed mb-4 flex-grow" style="color:var(--stone)">${escapeHtml(e.description)}</p>
+          <a href="#experience/${key}" data-page-link="experience" class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1 hover:underline" style="color:var(--brass)">
+            Explore <i data-lucide="chevron-right" class="w-3 h-3"></i>
+          </a>
+        </div>`;
+      }).join('');
+    }
+
+    // the navigation names this house's venues, not the other one's
+    [['bar', 'bar'], ['pool', 'pool'], ['gym', 'gym']].forEach(([key]) => {
+      const label = house.experiences[key] ? house.experiences[key].title : '';
+      ['nav-exp-' + key, 'nav-exp-' + key + '-m'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && label) el.textContent = label;
+      });
+    });
+
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  // ---------------- public API used by the booking/complaint forms ----------------
+  function isDateClosed(dateStr) {
+    return store.closedDates.includes(dateStr);
+  }
+
+  function findActiveDiscount(roomType, checkinDate) {
+    if (!checkinDate) return null;
+    return store.discounts.find(d =>
+      d.roomType === roomType &&
+      checkinDate >= d.start &&
+      checkinDate <= d.end
+    ) || null;
+  }
+
+  function addBooking(data) {
+    store.bookings.unshift({
+      id: uid('BK'),
+      status: 'pending',
+      roomNumber: '',
+      createdAt: new Date().toISOString(),
+      ...data
+    });
+    saveStore();
+    renderAll();
+  }
+
+  function addComplaint(data) {
+    store.complaints.unshift({
+      id: uid('CX'),
+      status: 'open',
+      createdAt: new Date().toISOString(),
+      ...data
+    });
+    saveStore();
+    renderAll();
+  }
+
+  // the public site calls this when the guest switches house, so rooms,
+  // rates and dining copy follow the switcher
+  function refreshPublicSite() {
+    if (store) applyCmsToPublicSite();
+  }
+
+  window.DXAdmin = { addBooking, addComplaint, findActiveDiscount, isDateClosed, refreshPublicSite };
+
+  // ================= ADMIN UI =================
+  let currentReqFilter = 'all';
+  let currentCmpFilter = 'all';
+
+  function renderRequests() {
+    const container = document.getElementById('requests-list');
+    if (!container) return;
+    const list = houseBookings().filter(b => currentReqFilter === 'all' || b.status === currentReqFilter);
+
+    if (!list.length) {
+      container.innerHTML = `<p class="text-sm" style="color:var(--stone)">No requests for ${escapeHtml(HOUSE_LABELS[store.adminHouse])} in this view.</p>`;
+      return;
+    }
+
+    container.innerHTML = list.map(b => `
+      <div class="admin-card" data-id="${b.id}">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+          <div>
+            <p class="font-display text-lg" style="color:var(--ivory)">${escapeHtml(b.name)}</p>
+            <p class="text-xs" style="color:var(--stone)">${escapeHtml(b.phone)} · ${escapeHtml(b.email)}</p>
+          </div>
+          <span class="status-pill status-${b.status}">${b.status.replace('-', ' ')}</span>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-2 text-sm mb-4" style="color:var(--stone)">
+          <p><span style="color:var(--brass)">House:</span> ${escapeHtml(b.houseName || HOUSE_LABELS[b.house || 'a'])}</p>
+          <p><span style="color:var(--brass)">Room:</span> ${escapeHtml(b.roomTypeName || b.roomType)}${b.roomNumber ? ' · #' + escapeHtml(b.roomNumber) : ''}</p>
+          <p><span style="color:var(--brass)">Stay:</span> ${fmtDate(b.checkin)} → ${fmtDate(b.checkout)} (${b.nights} nights)</p>
+          <p><span style="color:var(--brass)">Rate:</span> ${fmtNaira(b.rate)} / night</p>
+          <p><span style="color:var(--brass)">Total:</span> ${fmtNaira(b.total)}</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          ${b.status === 'pending' ? `
+            <button class="admin-btn-sm" data-action="approve">Approve &amp; Assign Room</button>
+            <button class="admin-btn-sm" data-action="decline">Decline</button>
+          ` : ''}
+          ${b.status === 'approved' ? `<button class="admin-btn-sm" data-action="checkin">Check In</button>` : ''}
+          ${b.status === 'checked-in' ? `<button class="admin-btn-sm" data-action="checkout">Check Out</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderCalendar() {
+    const container = document.getElementById('calendar-grid');
+    if (!container) return;
+    const days = [];
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      days.push(d.toISOString().split('T')[0]);
+    }
+
+    const roomKeys = Object.keys(H().rooms);
+    let html = '<table class="w-full text-xs border-collapse"><thead><tr>';
+    html += `<th class="p-2 text-left" style="color:var(--brass)">Room Type</th>`;
+    days.forEach(d => {
+      const dd = new Date(d + 'T00:00:00');
+      html += `<th class="p-2 text-center" style="color:var(--stone)">${dd.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    roomKeys.forEach(key => {
+      const inv = H().rooms[key].inventory;
+      html += `<tr><td class="p-2" style="color:var(--ivory)">${H().rooms[key].name}</td>`;
+      days.forEach(d => {
+        const booked = houseBookings().filter(b =>
+          b.roomType === key &&
+          (b.status === 'approved' || b.status === 'checked-in') &&
+          d >= b.checkin && d < b.checkout
+        ).length;
+        const full = booked >= inv;
+        html += `<td class="p-2 text-center rounded ${full ? 'cal-cell-full' : 'cal-cell-open'}">${booked}/${inv}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  function renderPricing() {
+    const container = document.getElementById('pricing-rooms');
+    if (container) {
+      container.innerHTML = Object.keys(H().rooms).map(key => {
+        const r = H().rooms[key];
+        return `
+        <div class="admin-card">
+          <p class="font-display text-lg mb-3" style="color:var(--ivory)">${H().rooms[key].name}</p>
+          <label class="block text-xs mb-1" style="color:var(--stone)">Price / night (₦)</label>
+          <input type="number" class="admin-input-sm w-full mb-3" id="price-${key}" value="${r.price}">
+          <label class="block text-xs mb-1" style="color:var(--stone)">Total Rooms in Inventory</label>
+          <input type="number" class="admin-input-sm w-full mb-4" id="inventory-${key}" value="${r.inventory}">
+          <button class="admin-btn-sm w-full" data-action="save-room" data-key="${key}">Save</button>
+        </div>`;
+      }).join('');
+    }
+
+    const closedList = document.getElementById('closed-dates-list');
+    if (closedList) {
+      closedList.innerHTML = store.closedDates.length
+        ? store.closedDates.sort().map(d => `
+          <span class="status-pill status-declined flex items-center gap-2">
+            ${fmtDate(d)}
+            <button data-action="remove-closed" data-date="${d}" class="ml-1" style="color:inherit">✕</button>
+          </span>`).join('')
+        : `<p class="text-sm" style="color:var(--stone)">No closed dates.</p>`;
+    }
+
+    const discList = document.getElementById('discounts-list');
+    if (discList) {
+      discList.innerHTML = store.discounts.length
+        ? store.discounts.map(d => `
+          <div class="admin-card flex flex-wrap items-center justify-between gap-3">
+            <div class="text-sm" style="color:var(--stone)">
+              <span style="color:var(--ivory)">${escapeHtml(d.name)}</span> — ${d.percent}% off ${H().rooms[d.roomType] ? H().rooms[d.roomType].name : d.roomType}, ${fmtDate(d.start)} → ${fmtDate(d.end)}
+            </div>
+            <button class="admin-btn-sm" data-action="remove-discount" data-id="${d.id}">Remove</button>
+          </div>`).join('')
+        : `<p class="text-sm" style="color:var(--stone)">No active discount packages.</p>`;
+    }
+  }
+
+  function renderComplaints() {
+    const container = document.getElementById('complaints-list');
+    if (!container) return;
+    const list = store.complaints.filter(c => currentCmpFilter === 'all' || c.status === currentCmpFilter);
+    if (!list.length) {
+      container.innerHTML = `<p class="text-sm" style="color:var(--stone)">No complaints in this view.</p>`;
+      return;
+    }
+    container.innerHTML = list.map(c => `
+      <div class="admin-card" data-id="${c.id}">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
+          <div>
+            <p class="font-display text-lg" style="color:var(--ivory)">${escapeHtml(c.name)}</p>
+            <p class="text-xs" style="color:var(--stone)">${escapeHtml(c.contact)} · ${new Date(c.createdAt).toLocaleString()}</p>
+          </div>
+          <span class="status-pill ${c.status === 'open' ? 'status-pending' : 'status-approved'}">${c.status}</span>
+        </div>
+        <p class="text-sm mb-4" style="color:var(--stone)">${escapeHtml(c.message)}</p>
+        ${c.status === 'open'
+          ? `<button class="admin-btn-sm" data-action="resolve-complaint">Mark Resolved</button>`
+          : `<button class="admin-btn-sm" data-action="reopen-complaint">Reopen</button>`}
+      </div>
+    `).join('');
+  }
+
+  function renderContent() {
+    const roomsContainer = document.getElementById('content-rooms');
+    if (roomsContainer) {
+      roomsContainer.innerHTML = Object.keys(H().rooms).map(key => {
+        const r = H().rooms[key];
+        return `
+        <div class="admin-card grid md:grid-cols-[120px_1fr] gap-4 items-start">
+          <img src="${r.image}" class="w-full h-24 object-cover rounded-lg" alt="">
+          <div>
+            <p class="font-display text-lg mb-2" style="color:var(--ivory)">${H().rooms[key].name}</p>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Description</label>
+            <textarea class="admin-input-sm w-full mb-2" rows="2" id="content-desc-${key}">${escapeHtml(r.description)}</textarea>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Image URL</label>
+            <input type="text" class="admin-input-sm w-full mb-3" id="content-img-${key}" value="${r.image}">
+            <button class="admin-btn-sm" data-action="save-content-room" data-key="${key}">Save</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    const expContainer = document.getElementById('content-experiences');
+    if (expContainer) {
+      expContainer.innerHTML = Object.keys(H().experiences).map(key => {
+        const e = H().experiences[key];
+        return `
+        <div class="admin-card grid md:grid-cols-[120px_1fr] gap-4 items-start">
+          <img src="${e.image}" class="w-full h-24 object-cover rounded-lg" alt="">
+          <div>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Title</label>
+            <input type="text" class="admin-input-sm w-full mb-2" id="content-title-${key}" value="${escapeHtml(e.title)}">
+            <label class="block text-xs mb-1" style="color:var(--stone)">Description</label>
+            <textarea class="admin-input-sm w-full mb-2" rows="2" id="content-desc-${key}">${escapeHtml(e.description)}</textarea>
+            <label class="block text-xs mb-1" style="color:var(--stone)">Image URL</label>
+            <input type="text" class="admin-input-sm w-full mb-3" id="content-img-${key}" value="${e.image}">
+            <button class="admin-btn-sm" data-action="save-content-exp" data-key="${key}">Save</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  function renderAnalytics() {
+    const container = document.getElementById('analytics-cards');
+    if (!container) return;
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    const totalInventory = Object.values(H().rooms).reduce((s, r) => s + r.inventory, 0);
+    const occupiedToday = houseBookings().filter(b =>
+      (b.status === 'checked-in') ||
+      (b.status === 'approved' && todayStr >= b.checkin && todayStr < b.checkout)
+    ).length;
+    const occupancyPct = totalInventory ? Math.round((occupiedToday / totalInventory) * 100) : 0;
+
+    const todaysRevenue = houseBookings()
+      .filter(b => (b.status === 'approved' || b.status === 'checked-in' || b.status === 'checked-out') && b.checkin === todayStr)
+      .reduce((s, b) => s + (b.total || 0), 0);
+
+    const totalRequests = houseBookings().length;
+    const approvedOrBeyond = houseBookings().filter(b => ['approved', 'checked-in', 'checked-out'].includes(b.status)).length;
+    const conversionPct = totalRequests ? Math.round((approvedOrBeyond / totalRequests) * 100) : 0;
+
+    const pendingCount = houseBookings().filter(b => b.status === 'pending').length;
+    const openComplaints = store.complaints.filter(c => c.status === 'open').length;
+
+    const cards = [
+      { label: "Today's Revenue (check-ins today)", value: fmtNaira(todaysRevenue) },
+      { label: 'Occupancy Rate', value: occupancyPct + '%' },
+      { label: 'Guest Conversion Rate', value: conversionPct + '%' },
+      { label: 'Pending Requests', value: pendingCount },
+      { label: 'Total Bookings Logged', value: totalRequests },
+      { label: 'Open Complaints', value: openComplaints },
+      { label: 'Total Room Inventory', value: totalInventory },
+      { label: 'Occupied Rooms Today', value: occupiedToday }
+    ];
+
+    container.innerHTML = cards.map(c => `
+      <div class="admin-card text-center">
+        <p class="font-display text-3xl mb-1" style="color:var(--brass)">${c.value}</p>
+        <p class="text-xs uppercase tracking-wider" style="color:var(--stone)">${c.label}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderAll() {
+    renderRequests();
+    renderCalendar();
+    renderPricing();
+    renderComplaints();
+    renderContent();
+    renderAnalytics();
+  }
+
+  function escapeHtml(str) {
+    if (str === undefined || str === null) return '';
+    return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  // ---------------- event wiring (delegation, since content re-renders) ----------------
+  function wireEvents() {
+    document.getElementById('requests-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const card = btn.closest('[data-id]');
+      const booking = store.bookings.find(b => b.id === card.dataset.id);
+      if (!booking) return;
+
+      if (btn.dataset.action === 'approve') {
+        const roomNum = prompt('Assign a room number (optional):', booking.roomNumber || '');
+        if (roomNum === null) return;
+        booking.status = 'approved';
+        booking.roomNumber = roomNum.trim();
+      } else if (btn.dataset.action === 'decline') {
+        if (!confirm('Decline this booking request?')) return;
+        booking.status = 'declined';
+      } else if (btn.dataset.action === 'checkin') {
+        booking.status = 'checked-in';
+        booking.checkedInAt = new Date().toISOString();
+      } else if (btn.dataset.action === 'checkout') {
+        booking.status = 'checked-out';
+        booking.checkedOutAt = new Date().toISOString();
+      }
+      saveStore();
+      renderAll();
+    });
+
+    document.getElementById('requests-filter').addEventListener('click', (e) => {
+      const btn = e.target.closest('.req-filter-btn');
+      if (!btn) return;
+      currentReqFilter = btn.dataset.filter;
+      document.querySelectorAll('.req-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderRequests();
+    });
+
+    document.getElementById('complaints-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const card = btn.closest('[data-id]');
+      const complaint = store.complaints.find(c => c.id === card.dataset.id);
+      if (!complaint) return;
+      complaint.status = btn.dataset.action === 'resolve-complaint' ? 'resolved' : 'open';
+      saveStore();
+      renderComplaints();
+    });
+
+    document.getElementById('complaints-filter').addEventListener('click', (e) => {
+      const btn = e.target.closest('.cmp-filter-btn');
+      if (!btn) return;
+      currentCmpFilter = btn.dataset.filter;
+      document.querySelectorAll('.cmp-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderComplaints();
+    });
+
+    document.getElementById('pricing-rooms').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="save-room"]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      const price = parseInt(document.getElementById(`price-${key}`).value, 10) || 0;
+      const inventory = parseInt(document.getElementById(`inventory-${key}`).value, 10) || 0;
+      H().rooms[key].price = price;
+      H().rooms[key].inventory = inventory;
+      saveStore();
+      applyCmsToPublicSite();
+      renderAll();
+    });
+
+    document.getElementById('add-closed-date').addEventListener('click', () => {
+      const val = document.getElementById('closed-date-input').value;
+      if (!val) return;
+      if (!store.closedDates.includes(val)) store.closedDates.push(val);
+      saveStore();
+      renderPricing();
+    });
+
+    document.getElementById('closed-dates-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="remove-closed"]');
+      if (!btn) return;
+      store.closedDates = store.closedDates.filter(d => d !== btn.dataset.date);
+      saveStore();
+      renderPricing();
+    });
+
+    document.getElementById('add-discount').addEventListener('click', () => {
+      const name = document.getElementById('discount-name').value.trim();
+      const roomType = document.getElementById('discount-room').value;
+      const percent = parseInt(document.getElementById('discount-percent').value, 10);
+      const start = document.getElementById('discount-start').value;
+      const end = document.getElementById('discount-end').value;
+      if (!name || !percent || !start || !end) {
+        alert('Please fill in package name, %, start and end date.');
+        return;
+      }
+      store.discounts.push({ id: uid('DC'), name, roomType, percent, start, end });
+      saveStore();
+      document.getElementById('discount-name').value = '';
+      document.getElementById('discount-percent').value = '';
+      document.getElementById('discount-start').value = '';
+      document.getElementById('discount-end').value = '';
+      renderPricing();
+    });
+
+    document.getElementById('discounts-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="remove-discount"]');
+      if (!btn) return;
+      store.discounts = store.discounts.filter(d => d.id !== btn.dataset.id);
+      saveStore();
+      renderPricing();
+    });
+
+    document.getElementById('content-rooms').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="save-content-room"]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      H().rooms[key].description = document.getElementById(`content-desc-${key}`).value.trim();
+      H().rooms[key].image = document.getElementById(`content-img-${key}`).value.trim();
+      saveStore();
+      applyCmsToPublicSite();
+      renderContent();
+    });
+
+    document.getElementById('content-experiences').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action="save-content-exp"]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      H().experiences[key].title = document.getElementById(`content-title-${key}`).value.trim();
+      H().experiences[key].description = document.getElementById(`content-desc-${key}`).value.trim();
+      H().experiences[key].image = document.getElementById(`content-img-${key}`).value.trim();
+      saveStore();
+      applyCmsToPublicSite();
+      renderContent();
+    });
+
+    // tab switching
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+        document.querySelectorAll('.admin-tab-panel').forEach(p => {
+          p.classList.toggle('hidden', p.id !== `admin-tab-${btn.dataset.tab}`);
+        });
+      });
+    });
+
+    // login
+    document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = document.getElementById('admin-password').value;
+      if (val === ADMIN_PASSWORD) {
+        sessionStorage.setItem('dx_admin_ok', '1');
+        showDashboard();
+      } else {
+        document.getElementById('admin-login-error').classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('admin-logout').addEventListener('click', () => {
+      sessionStorage.removeItem('dx_admin_ok');
+      showLogin();
+    });
+
+    // which house the back office is managing — every tab follows it
+    document.getElementById('admin-house').addEventListener('change', (e) => {
+      store.adminHouse = e.target.value;
+      saveStore();
+      renderAll();
+    });
+  }
+
+  function showDashboard() {
+    document.getElementById('admin-login-gate').classList.add('hidden');
+    document.getElementById('admin-dashboard').classList.remove('hidden');
+    document.getElementById('admin-login-error').classList.add('hidden');
+    document.getElementById('admin-password').value = '';
+    document.querySelector('.admin-tab-btn[data-tab="requests"]').classList.add('active');
+    document.querySelector('.req-filter-btn[data-filter="all"]').classList.add('active');
+    document.querySelector('.cmp-filter-btn[data-filter="all"]').classList.add('active');
+    document.getElementById('admin-house').value = store.adminHouse;
+    renderAll();
+  }
+
+  function showLogin() {
+    document.getElementById('admin-dashboard').classList.add('hidden');
+    document.getElementById('admin-login-gate').classList.remove('hidden');
+  }
+
+  function initAdminPageIfActive() {
+    const raw = window.location.hash.replace('#', '');
+    if (raw !== ADMIN_HASH) return;
+    if (sessionStorage.getItem('dx_admin_ok') === '1') {
+      showDashboard();
+    } else {
+      showLogin();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadStore();
+    applyCmsToPublicSite();
+    wireEvents();
+    initAdminPageIfActive();
+  });
+  window.addEventListener('hashchange', initAdminPageIfActive);
+})();
+</script>
+</body>
+</html>
