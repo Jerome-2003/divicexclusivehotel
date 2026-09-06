@@ -35,6 +35,15 @@ export default function SplashPlayer({ reduced, onEnded, onReady }) {
       compositionHeight={1080}
       initialFrame={reduced ? SPLASH_DURATION_IN_FRAMES - 1 : 0}
       autoPlay={!reduced}
+      /* The composition has no audio track. Without this the browser blocks autoplay on
+         an unmuted player, opens an AudioContext it will not start, and Remotion mutes
+         the player itself and warns — three console warnings for a silent animation.
+         The Player's prop is `initiallyMuted`, not `muted`. */
+      initiallyMuted
+      /* Silences Remotion's licence notice in the console. It asserts that this use is
+         licensed; see the note in README.md — Remotion is not MIT, and a company over
+         Remotion's size threshold needs a paid licence. */
+      acknowledgeRemotionLicense
       loop={false}
       controls={false}
       clickToPlay={false}
