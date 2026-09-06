@@ -136,6 +136,22 @@ It pauses on hover and focus, and does not auto-advance under `prefers-reduced-m
 The property hero uses the same photography: the frontview opens, then one shot from each
 gallery group, so a guest choosing a house sees what that house actually has.
 
+## The splash animation, and Remotion's licence
+
+The entry animation is a Remotion composition (`src/remotion/DivicSplash.jsx`) played by
+`@remotion/player`, code-split so it never sits in the critical path.
+
+**Remotion is not MIT-licensed.** Its licence is free for individuals and for companies
+below a size threshold, and requires a paid company licence above it — see
+<https://remotion.dev/license>. `src/components/SplashPlayer.jsx` passes
+`acknowledgeRemotionLicense`, which only silences the console notice; it does not grant
+anything. Confirm Divic falls under the free terms, or buy the licence. If neither suits,
+the splash is one lazy import to remove and the rest of the site is unaffected.
+
+The player is `initiallyMuted` because the composition has no audio track. Without it the
+browser blocks autoplay on an unmuted player, opens an `AudioContext` it will not start,
+and Remotion mutes the player itself and warns.
+
 ## Known discrepancies
 
 - The Classic Room flyer reads **₦60,000**; `API.md` says **₦50,000**. The site follows
