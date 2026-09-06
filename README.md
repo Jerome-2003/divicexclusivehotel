@@ -41,8 +41,13 @@ public/images/urban/       generated web assets
 legacy/                    the previous static site, kept for reference
 ```
 
-**Routes:** `/` split chooser · `/exclusive` and `/urban` (one template, both houses) ·
-`/book` · `/booking-status` · `/contact`.
+**Routes:** `/` destination chooser · `/exclusive` and `/urban` (one template, both
+houses) · `/book` · `/booking-status` · `/contact`.
+
+The whole site sits on one near-black ground (`obsidian`), the same one the homepage and
+the swan mark use. Each house is told apart by a single accent held in CSS custom
+properties on `<html data-property>`: olive-bronze for Exclusive, Lagos clay for Urban.
+See [`DESIGN-BRIEF.md`](./DESIGN-BRIEF.md) §3 for the tokens and §14 for what changed.
 
 ## Backend integration
 
@@ -98,6 +103,9 @@ angles on the Urban bar, the indoor and outdoor bars at Exclusive — the group 
 one crossfading slideshow rather than as separate items pretending to be different rooms.
 It pauses on hover and focus, and does not auto-advance under `prefers-reduced-motion`.
 
+The property hero uses the same photography: the frontview opens, then one shot from each
+gallery group, so a guest choosing a house sees what that house actually has.
+
 ## Known discrepancies
 
 - The Classic Room flyer reads **₦60,000**; `API.md` says **₦50,000**. The site follows
@@ -108,6 +116,15 @@ It pauses on hover and focus, and does not auto-advance under `prefers-reduced-m
   Since rates are served live, whatever the PMS returns is what guests actually see.
 - The flyers carry a *Divic Exclusive Hotel* logo on Urban rooms, and quote 3rd Avenue —
   the Urban address. Cropped out, but the artwork itself may need fixing at source.
+- **Urban Classic and Urban Superior are the same photograph.** The two source flyers
+  differ only in their text and price bars; the room photograph inside them is identical,
+  so once the flyer furniture is cropped away the two files are byte-for-byte the same.
+  A guest paying ₦60,000 for a Superior currently sees the ₦50,000 Classic room. This
+  needs a real Superior photograph from the hotel — it cannot be fixed in code.
+- **Exclusive room photographs are small.** The Exclusive flyers are 1080×565, so the
+  cropped photograph is only 670×408. On the full-width room spread that is upscaled
+  roughly 1.3×, which is soft on a large screen. Original-resolution room photographs
+  would fix it.
 - Editorial copy (room descriptions, character lines, amenity notes) is written to be
   plausible and should be reviewed by the hotel. Every hard fact — rates, counts, floors,
   addresses, phones — comes from `API.md`.

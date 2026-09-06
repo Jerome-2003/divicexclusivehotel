@@ -6,31 +6,35 @@
 @tailwind utilities;
 
 /* ============================================================
-   DIVIC — LIMESTONE
-   The chassis never changes. One accent varies per property.
+   DIVIC — LIMESTONE, on the dark ground
+   One ground across the whole site. One accent varies per property.
    ============================================================ */
 @layer base {
   :root {
-    /* Divic Exclusive — deep olive-bronze. Older, quieter, residential. */
-    --accent: 91 86 56;
+    /* Divic Exclusive — olive-bronze. Older, quieter, residential.
+       Lifted from the ink-on-paper value so it reads on near-black at 5:1. */
+    --accent: 138 130 88;
+    --accent-lift: 167 157 108;
     --accent-deep: 62 58 36;
-    --accent-wash: 91 86 56;
   }
 
   :root[data-property='urban'] {
     /* Divic Urban — Lagos clay. Hotter, younger, street-facing. */
-    --accent: 180 84 58;
-    --accent-deep: 138 61 40;
-    --accent-wash: 180 84 58;
+    --accent: 201 112 78;
+    --accent-lift: 220 134 99;
+    --accent-deep: 110 56 35;
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    /* native controls — date pickers, select menus, scrollbars — follow the page */
+    color-scheme: dark;
+    background: theme('colors.obsidian');
   }
 
   body {
-    @apply bg-limestone text-ink font-sans text-body antialiased;
+    @apply bg-obsidian text-bone font-sans text-body antialiased;
     /* the accent transition is what makes a property switch read as a change of
        light rather than a page load */
     transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -38,10 +42,10 @@
 
   h1, h2, h3 { @apply font-display font-light; text-wrap: balance; }
 
-  ::selection { background: rgb(var(--accent)); color: #F7F4EF; }
+  ::selection { background: rgb(var(--accent)); color: #0B0A08; }
 
   :focus-visible {
-    outline: 2px solid rgb(var(--accent));
+    outline: 2px solid rgb(var(--accent-lift));
     outline-offset: 3px;
   }
 
@@ -65,13 +69,13 @@
      Sentence case, not the tracked-out all-caps eyebrow. */
   .eyebrow {
     @apply text-sm font-medium;
-    color: rgb(var(--accent));
+    color: rgb(var(--accent-lift));
   }
-  .lead { @apply text-lead text-slate max-w-measure; }
-  .prose-body { @apply text-body text-slate max-w-measure; }
+  .lead { @apply text-lead text-linen max-w-measure; }
+  .prose-body { @apply text-body text-linen max-w-measure; }
 
   /* --- rules --- */
-  .hair { @apply h-px w-full bg-ink/10 border-0; }
+  .hair { @apply h-px w-full bg-bone/10 border-0; }
   .rule-short { @apply h-px w-10 border-0; background: rgb(var(--accent)); }
 
   /* --- controls --- */
@@ -79,18 +83,20 @@
     @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 text-[0.9375rem]
            font-medium transition-colors duration-400 ease-quiet;
   }
+  /* On this ground the accent is the light source, so a solid button is the accent
+     carrying near-black type — the same relationship the homepage Search button has. */
   .btn-solid {
     background: rgb(var(--accent));
-    @apply text-chalk;
+    @apply text-obsidian;
   }
-  .btn-solid:hover { background: rgb(var(--accent-deep)); }
+  .btn-solid:hover { background: rgb(var(--accent-lift)); }
   .btn-outline {
-    @apply border text-ink;
-    border-color: rgb(var(--accent) / 0.45);
+    @apply border text-bone;
+    border-color: rgb(var(--accent) / 0.5);
   }
   .btn-outline:hover {
     background: rgb(var(--accent));
-    @apply text-chalk border-transparent;
+    @apply text-obsidian border-transparent;
   }
   .btn-onDark {
     @apply border border-bone/35 text-bone;
@@ -100,16 +106,16 @@
   .link-quiet {
     @apply inline-flex items-center text-[0.9375rem] font-medium pb-1
            border-b transition-colors duration-400 ease-quiet;
-    color: rgb(var(--accent));
-    border-color: rgb(var(--accent) / 0.35);
+    color: rgb(var(--accent-lift));
+    border-color: rgb(var(--accent) / 0.4);
   }
-  .link-quiet:hover { border-color: rgb(var(--accent)); }
+  .link-quiet:hover { border-color: rgb(var(--accent-lift)); }
 
   /* --- media --- */
   /* Every media well carries a designed plate underneath, so a slow or missing
      photograph never leaves a broken box in the layout. */
   .plate {
-    @apply relative overflow-hidden bg-sand isolate;
+    @apply relative overflow-hidden bg-umber isolate;
   }
   /* The plate carries the property's accent at real strength, so the two houses are
      tellable apart at thumbnail size even before any photography is in place. */
@@ -117,9 +123,9 @@
     content: '';
     @apply absolute inset-0 z-0;
     background:
-      radial-gradient(125% 95% at 72% 12%, rgb(var(--accent) / 0.42) 0%, transparent 60%),
-      radial-gradient(115% 85% at 12% 88%, rgb(var(--accent-deep) / 0.55) 0%, transparent 65%),
-      linear-gradient(160deg, #E9E2D6 0%, #C3B9A8 100%);
+      radial-gradient(125% 95% at 72% 12%, rgb(var(--accent) / 0.34) 0%, transparent 60%),
+      radial-gradient(115% 85% at 12% 88%, rgb(var(--accent-deep) / 0.85) 0%, transparent 65%),
+      linear-gradient(160deg, #2A241C 0%, #0E0C0A 100%);
     transition: background 700ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .plate > img {
@@ -127,6 +133,34 @@
     transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .plate > img.is-loaded { @apply opacity-100; }
+
+  /* A frame whose photograph drifts closer when the guest reaches for it. The scale
+     lives on the image, not the frame, so captions and dots stay put. */
+  .plate-zoom > img {
+    transition:
+      opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .group:hover .plate-zoom > img,
+  .group:focus-within .plate-zoom > img {
+    transform: scale(1.055);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .group:hover .plate-zoom > img,
+    .group:focus-within .plate-zoom > img { transform: none; }
+  }
+
+  /* The scrim that lets type sit on a photograph and stay legible whatever the
+     photograph happens to be. */
+  .scrim-b {
+    background: linear-gradient(
+      to top,
+      rgba(11, 10, 8, 0.92) 0%,
+      rgba(11, 10, 8, 0.62) 34%,
+      rgba(11, 10, 8, 0.12) 68%,
+      transparent 100%
+    );
+  }
 
   .sr-only-focusable:not(:focus) {
     @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;

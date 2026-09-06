@@ -9,15 +9,38 @@ import { useCarousel } from '../lib/useCarousel';
  * Crossfade, auto-advancing, pausing whenever someone is looking at it deliberately
  * (hover or keyboard focus) so it never moves out from under them. Under
  * `prefers-reduced-motion` it does not advance on its own at all; the dots still work.
+ *
+ * `overlay` is drawn above the photographs and below the dots, which is where a caption
+ * that sits *on* the image goes. When a caption occupies the bottom of the frame, move
+ * the dots out of its way with `dotsClassName` rather than stacking the two.
  */
-export default function Slideshow({ images, alt = '', className = '', interval = 4500 }) {
+const DOTS_DEFAULT = 'bottom-4 left-1/2 -translate-x-1/2';
+
+export default function Slideshow({
+  images,
+  alt = '',
+  className = '',
+  interval = 4500,
+  overlay = null,
+  dotsClassName = DOTS_DEFAULT,
+  zoom = false,
+  priority = false,
+}) {
   const [paused, setPaused] = useState(false);
-  const [index, setIndex] = useCarousel({ length: images.length, interval, paused });
+  const [index, setIndex] = useCarousel({ length: images?.length || 0, interval, paused });
   const go = useCallback((i) => setIndex(i), [setIndex]);
 
   if (!images?.length) return null;
+
+  const plate = `${className} ${zoom ? 'plate-zoom' : ''}`;
+
   if (images.length === 1) {
-    return <Plate src={images[0]} alt={alt} className={className} />;
+    return (
+      <div className="relative">
+        <Plate src={images[0]} alt={alt} priority={priority} className={plate} />
+        {overlay}
+      </div>
+    );
   }
 
   return (
@@ -33,13 +56,14 @@ export default function Slideshow({ images, alt = '', className = '', interval =
           key={src}
           src={src}
           alt={i === index ? alt : ''}
-          priority={i === 0}
+          priority={priority && i === 0}
           className={`absolute inset-0 transition-opacity duration-700 ease-quiet ${
-            i === index ? 'opacity-100' : 'opacity-0'
-          }`}
+            zoom ? 'plate-zoom' : ''
+          } ${i === index ? 'opacity-100' : 'opacity-0'}`}
         />
       ))}
-      <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+      {overlay}
+      <div className={`absolute z-30 flex gap-2 ${dotsClassName}`}>
         {images.map((src, i) => (
           <button
             key={src}

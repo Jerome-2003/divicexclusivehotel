@@ -1,5 +1,9 @@
 /**
- * Divic — Limestone direction.
+ * Divic — Limestone direction, dark ground.
+ *
+ * The site sits on one ground everywhere: the near-black the swan mark was drawn on.
+ * The homepage set that ground; every other page now shares it, so moving from the
+ * destination chooser into a house is a change of place, not a change of website.
  *
  * The brand chassis is fixed; only the property accent varies. Accent colours are
  * exposed as CSS custom properties (set per property on <html data-property>) so no
@@ -10,22 +14,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        // grounds
-        limestone: '#EFEBE4',
-        chalk: '#F7F4EF',
-        sand: '#E4DED3',
-        // dark grounds, used deliberately (hero, footer, the entry sequence)
+        // grounds, darkest to lightest — the page, a raised panel, an inset well
         obsidian: '#0B0A08',
-        espresso: '#191410',
-        // type
-        ink: '#16130F',
-        slate: '#6B635A',
-        mute: '#948B80',
+        espresso: '#141110',
+        umber: '#221D17',
+        // type, brightest to quietest
         bone: '#F2EDE3',
+        linen: '#B3AA9C',
+        mute: '#948B80',
         // the brand metal, from the swan mark
         champagne: '#C9A961',
         // per-property accents, resolved at runtime
         accent: 'rgb(var(--accent) / <alpha-value>)',
+        'accent-lift': 'rgb(var(--accent-lift) / <alpha-value>)',
         'accent-deep': 'rgb(var(--accent-deep) / <alpha-value>)',
       },
       fontFamily: {

@@ -55,11 +55,11 @@ export function SpecList({ items, className = '', onDark = false }) {
         <div
           key={item.label}
           className={`flex items-baseline justify-between gap-6 border-t py-3 ${
-            onDark ? 'border-bone/15' : 'border-ink/10'
+            onDark ? 'border-bone/15' : 'border-bone/10'
           }`}
         >
           <dt className={`text-sm ${onDark ? 'text-bone/55' : 'text-mute'}`}>{item.label}</dt>
-          <dd className={`text-right text-sm ${onDark ? 'text-bone' : 'text-ink'}`}>
+          <dd className={`text-right text-sm ${onDark ? 'text-bone' : 'text-bone'}`}>
             {item.value}
           </dd>
         </div>
