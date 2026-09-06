@@ -11,36 +11,38 @@ function PropertyPanel({ property, index }) {
       ? { '--accent': '180 84 58', '--accent-deep': '138 61 40' }
       : { '--accent': '91 86 56', '--accent-deep': '62 58 36' };
 
+  /* The whole panel is the target — a separate button would be a third way to make the
+     same choice. Name and one line only; the detail belongs on the property page. */
   return (
-    <article
+    <Link
+      to={`/${property.id}`}
+      onClick={() => choose(property.id)}
       style={accentVars}
-      className="group relative flex min-h-[62vh] flex-col justify-end overflow-hidden lg:min-h-0"
+      className="group relative flex min-h-[45svh] flex-col justify-end overflow-hidden
+                 focus-visible:outline focus-visible:-outline-offset-4 lg:min-h-0"
     >
       <Plate
         src={property.heroImage}
-        alt={`${property.name}, Festac`}
+        alt=""
         priority={index === 0}
         className="absolute inset-0"
         imgClassName="transition-transform duration-1100 ease-quiet group-hover:scale-[1.03]"
       />
-      {/* the lower third has to carry white type over whatever the photograph does */}
-      <div aria-hidden="true" className="absolute inset-0 z-20" style={{ background: 'linear-gradient(to bottom, rgba(11,10,8,.45) 0%, rgba(11,10,8,.14) 32%, rgba(11,10,8,.72) 70%, rgba(11,10,8,.96) 100%)' }} />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-20"
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(11,10,8,.42) 0%, rgba(11,10,8,.12) 32%, ' +
+            'rgba(11,10,8,.62) 62%, rgba(11,10,8,.88) 80%, rgba(11,10,8,.96) 100%)',
+        }}
+      />
 
-      <div className="relative z-30 flex flex-col gap-4 p-gutter pb-12">
-        <p className="text-sm" style={{ color: '#E8D9AE' }}>
-          {property.totalRooms} rooms. {property.character}.
-        </p>
-        <h2 className="max-w-[12ch] font-display text-d1 font-light text-bone">{property.name}</h2>
-        <p className="max-w-[38ch] text-bone/75">{property.tagline}</p>
-        <Link
-          to={`/${property.id}`}
-          onClick={() => choose(property.id)}
-          className="btn btn-onDark mt-2 self-start"
-        >
-          Enter this house
-        </Link>
+      <div className="relative z-30 flex flex-col gap-3 p-gutter pb-10 lg:pb-14">
+        <h2 className="font-display text-d1 font-light text-bone">{property.name}</h2>
+        <p className="max-w-[34ch] text-bone/75">{property.tagline}</p>
       </div>
-    </article>
+    </Link>
   );
 }
 
@@ -50,7 +52,7 @@ export default function Home() {
     <>
       {/* ---------- split hero: the choice comes first ---------- */}
       <section aria-label="Choose a house" className="relative">
-        <div className="grid min-h-[92svh] grid-cols-1 lg:grid-cols-2">
+        <div className="grid min-h-[100svh] grid-cols-1 lg:min-h-[92svh] lg:grid-cols-[55fr_45fr]">
           {properties.map((p, i) => (
             <PropertyPanel key={p.id} property={p} index={i} />
           ))}
