@@ -7,7 +7,6 @@ const NAV = [
   { to: '/exclusive', label: 'Exclusive' },
   { to: '/urban', label: 'Urban' },
   { to: '/contact', label: 'Contact' },
-  { to: '/book', label: 'Book' },
 ];
 
 /**
@@ -156,6 +155,20 @@ export default function Header() {
                 </div>
               </>
             )}
+
+            {/* the one action that follows the guest everywhere, chooser included */}
+            <Link
+              to="/book"
+              className={`hidden whitespace-nowrap px-5 py-2.5 text-[0.9375rem] font-medium
+                          transition-colors duration-400 ease-quiet sm:inline-flex ${
+                            onDark
+                              ? 'border border-bone/40 text-bone hover:bg-bone hover:text-obsidian'
+                              : 'text-chalk'
+                          }`}
+              style={onDark ? undefined : { background: 'rgb(var(--accent))' }}
+            >
+              Request a stay
+            </Link>
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
@@ -190,6 +203,9 @@ export default function Header() {
               {item.label}
             </NavLink>
           ))}
+          <Link to="/book" className="btn btn-solid mt-6 self-start">
+            Request a stay
+          </Link>
         </div>
       )}
     </>

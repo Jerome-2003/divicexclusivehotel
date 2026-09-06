@@ -47,7 +47,8 @@ export const PROPERTY_SEED = [
   },
 ];
 
-const img = (name) => `/images/urban/${name}.jpg`;
+const urban = (name) => `/images/urban/${name}.jpg`;
+const exclusive = (name) => `/images/exclusive/${name}.jpg`;
 
 /**
  * Editorial layer. `heroImage`, `galleryImages` and room `image` are null where no
@@ -70,38 +71,43 @@ export const CONTENT = {
     coords: '6.4654° N, 3.2836° E',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Plot+55+1st+Avenue+E+Close+Festac+Lagos',
-    // No photography supplied for this house yet.
-    heroImage: null,
-    galleryImages: [null, null, null, null],
+    heroImage: exclusive('frontview'),
+    /* Grouped: several shots of one place belong in one frame, not spread across the
+       page as though they were different rooms. */
+    gallery: [
+      { label: 'The bar', images: [exclusive('indoorbar'), exclusive('outdoorbar')] },
+      { label: 'The pool', images: [exclusive('pool')] },
+      { label: 'The rooms', images: [exclusive('bed')] },
+    ],
     rooms: {
       standard: {
         name: 'Standard Room',
-        image: null,
+        image: exclusive('standard'),
         description:
           'Ground floor, quiet side. A king bed, a proper desk, and a rain shower — the ' +
           'room most guests end up rebooking.',
       },
       deluxe: {
         name: 'Deluxe Room',
-        image: null,
+        image: exclusive('deluxe'),
         description:
           'First floor, with more floor to unpack into and a seating corner by the window.',
       },
       superior: {
         name: 'Superior Room',
-        image: null,
+        image: exclusive('superior'),
         description:
           'The largest rooms in the house, first floor, with a separate sitting area and ' +
           'a deep bath.',
       },
     },
     amenities: [
+      { label: 'Indoor bar', note: 'Open nightly' },
+      { label: 'Outdoor bar', note: 'Under the trees, from six' },
+      { label: 'Swimming pool', note: 'Open to house guests' },
       { label: 'Front desk', note: 'Attended around the clock' },
-      { label: 'Room service', note: 'Kitchen open late' },
-      { label: 'Laundry & pressing', note: 'Same day, returned before six' },
-      { label: 'Airport transfer', note: 'On request, both terminals' },
+      { label: 'Laundry and pressing', note: 'Same day, returned before six' },
       { label: 'Secure parking', note: 'Attended, on site' },
-      { label: 'Quiet hours', note: 'Observed from eleven' },
     ],
   },
 
@@ -119,33 +125,39 @@ export const CONTENT = {
     coords: '6.4671° N, 3.2894° E',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Plot+340+3rd+Avenue+A1+Close+Festac+Lagos',
-    heroImage: img('frontview'),
-    galleryImages: [img('pool'), img('bar'), img('reception'), img('restaurant-2')],
+    heroImage: urban('frontview'),
+    gallery: [
+      { label: 'The bar', images: [urban('bar'), urban('bar-1'), urban('bar-2')] },
+      { label: 'The pool', images: [urban('pool')] },
+      { label: 'The restaurant', images: [urban('restaurant-2'), urban('inside'), urban('inside-1')] },
+      { label: 'The gym', images: [urban('gym'), urban('gym-1')] },
+      { label: 'Reception', images: [urban('reception'), urban('reception-1')] },
+    ],
     rooms: {
       classic: {
         name: 'Classic Room',
-        image: img('classic'),
+        image: urban('classic'),
         description:
           'A king bed, blackout curtains, a work desk and a walk-in shower. Ground and ' +
           'first floor — the straightforward choice for a night or two.',
       },
       deluxe: {
         name: 'Deluxe Room',
-        image: img('deluxe'),
+        image: urban('deluxe'),
         description:
           'More room around the bed and a seating chair by the window. Spread across all ' +
           'three floors, so there is usually one free.',
       },
       superior: {
         name: 'Superior Room',
-        image: img('superior'),
+        image: urban('superior'),
         description:
           'A larger footprint with a proper sitting area, and the better bathrooms in the ' +
           'house.',
       },
       crown: {
         name: 'Crown Room',
-        image: img('crown'),
+        image: urban('crown'),
         description:
           'The top of the house. Upper floors only, with a lounge chair, a bench at the ' +
           'foot of the bed, and the most light of any room here.',
