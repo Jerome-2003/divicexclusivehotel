@@ -1,0 +1,142 @@
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/karla';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DIVIC — LIMESTONE
+   The chassis never changes. One accent varies per property.
+   ============================================================ */
+@layer base {
+  :root {
+    /* Divic Exclusive — deep olive-bronze. Older, quieter, residential. */
+    --accent: 91 86 56;
+    --accent-deep: 62 58 36;
+    --accent-wash: 91 86 56;
+  }
+
+  :root[data-property='urban'] {
+    /* Divic Urban — Lagos clay. Hotter, younger, street-facing. */
+    --accent: 180 84 58;
+    --accent-deep: 138 61 40;
+    --accent-wash: 180 84 58;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-limestone text-ink font-sans text-body antialiased;
+    /* the accent transition is what makes a property switch read as a change of
+       light rather than a page load */
+    transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  h1, h2, h3 { @apply font-display font-light; text-wrap: balance; }
+
+  ::selection { background: rgb(var(--accent)); color: #F7F4EF; }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 150ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* --- structure --- */
+  .shell { @apply mx-auto w-full max-w-shell px-gutter; }
+  .section { @apply py-section; }
+
+  /* --- type roles --- */
+  .eyebrow {
+    @apply text-micro uppercase font-medium;
+    color: rgb(var(--accent));
+  }
+  .lead { @apply text-lead text-slate max-w-measure; }
+  .prose-body { @apply text-body text-slate max-w-measure; }
+
+  /* --- rules --- */
+  .hair { @apply h-px w-full bg-ink/10 border-0; }
+  .rule-short { @apply h-px w-10 border-0; background: rgb(var(--accent)); }
+
+  /* --- controls --- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 text-label uppercase
+           font-medium transition-colors duration-400 ease-quiet;
+  }
+  .btn-solid {
+    background: rgb(var(--accent));
+    @apply text-chalk;
+  }
+  .btn-solid:hover { background: rgb(var(--accent-deep)); }
+  .btn-outline {
+    @apply border text-ink;
+    border-color: rgb(var(--accent) / 0.45);
+  }
+  .btn-outline:hover {
+    background: rgb(var(--accent));
+    @apply text-chalk border-transparent;
+  }
+  .btn-onDark {
+    @apply border border-bone/35 text-bone;
+  }
+  .btn-onDark:hover { @apply bg-bone text-obsidian border-bone; }
+
+  .link-quiet {
+    @apply inline-flex items-center gap-2 text-label uppercase font-medium pb-1
+           border-b transition-all duration-400 ease-quiet;
+    color: rgb(var(--accent));
+    border-color: rgb(var(--accent) / 0.35);
+  }
+  .link-quiet:hover { @apply gap-3.5; border-color: rgb(var(--accent)); }
+
+  /* --- media --- */
+  /* Every media well carries a designed plate underneath, so a slow or missing
+     photograph never leaves a broken box in the layout. */
+  .plate {
+    @apply relative overflow-hidden bg-sand isolate;
+  }
+  /* The plate carries the property's accent at real strength, so the two houses are
+     tellable apart at thumbnail size even before any photography is in place. */
+  .plate::before {
+    content: '';
+    @apply absolute inset-0 z-0;
+    background:
+      radial-gradient(125% 95% at 72% 12%, rgb(var(--accent) / 0.42) 0%, transparent 60%),
+      radial-gradient(115% 85% at 12% 88%, rgb(var(--accent-deep) / 0.55) 0%, transparent 65%),
+      linear-gradient(160deg, #E9E2D6 0%, #C3B9A8 100%);
+    transition: background 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .plate > img {
+    @apply absolute inset-0 z-10 h-full w-full object-cover opacity-0;
+    transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .plate > img.is-loaded { @apply opacity-100; }
+
+  /* --- reveal on scroll --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+
+  .sr-only-focusable:not(:focus) {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0 0 0 0);
+  }
+}

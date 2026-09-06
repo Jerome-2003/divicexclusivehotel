@@ -1,0 +1,35 @@
+import { useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { PropertyProvider } from './context/PropertyContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Property from './pages/Property';
+import Contact from './pages/Contact';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'instant' });
+  }, [pathname]);
+  return null;
+}
+
+export default function App() {
+  return (
+    <PropertyProvider>
+      <ScrollToTop />
+      <Header />
+      <main id="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/contact" element={<Contact />} />
+          {/* one template serves both houses; an unknown slug redirects home */}
+          <Route path="/:slug" element={<Property />} />
+        </Routes>
+      </main>
+      <Footer />
+    </PropertyProvider>
+  );
+}
