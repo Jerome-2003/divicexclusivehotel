@@ -74,25 +74,38 @@ Set `WEBSITE_ORIGIN` on the backend to this site's exact origin, or CORS will re
 
 ## Photography
 
-Source images live in `DIVIC URBAN/` and are never modified. Run:
+Source images live in `DIVIC URBAN/` and `divic exclusive/` and are never modified. Run:
 
 ```bash
 node scripts/prepare-images.mjs
 ```
 
-to regenerate `public/images/urban/`. The four room images arrive as 1200×628 marketing
-flyers — inset thumbnails down the left, a contact and price bar along the bottom, a logo
-watermark top right — so the script crops to the photograph alone. Prices especially must
-not be burnt into a JPEG when the PMS is the source of truth.
+to regenerate `public/images/<property>/`. The room images arrive as marketing flyers and
+the script crops each to the photograph alone — prices especially must not be burnt into a
+JPEG when the PMS is the source of truth. The two properties' flyers are laid out
+differently, so each has its own geometry in the script:
 
-**Divic Exclusive has no photography yet.** Rather than fill it with stock, its media
-wells render the designed plate. Drop Exclusive images in and point `CONTENT.exclusive`
-at them.
+| | Urban | Exclusive |
+|---|---|---|
+| Source | 1200×628 | 1080×565 |
+| Thumbnail panel | left | left |
+| Logo watermark | top right | top centre |
+| Extra inset | — | right |
+| Crop | `228,0 852×560` | `205,100 670×408` |
+
+**Galleries group related shots.** Where a place was photographed more than once — three
+angles on the Urban bar, the indoor and outdoor bars at Exclusive — the group renders as
+one crossfading slideshow rather than as separate items pretending to be different rooms.
+It pauses on hover and focus, and does not auto-advance under `prefers-reduced-motion`.
 
 ## Known discrepancies
 
 - The Classic Room flyer reads **₦60,000**; `API.md` says **₦50,000**. The site follows
   the API. Worth reconciling with whoever maintains the flyers.
+- **Urban Superior**: `API.md` says **₦60,000** and the seed follows it, but it has also
+  been quoted as ₦50,000. That would put Superior below Deluxe and level with Classic,
+  which breaks the ladder, so the contract's figure is used until the PMS says otherwise.
+  Since rates are served live, whatever the PMS returns is what guests actually see.
 - The flyers carry a *Divic Exclusive Hotel* logo on Urban rooms, and quote 3rd Avenue —
   the Urban address. Cropped out, but the artwork itself may need fixing at source.
 - Editorial copy (room descriptions, character lines, amenity notes) is written to be

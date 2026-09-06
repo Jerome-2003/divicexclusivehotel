@@ -3,6 +3,24 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { formatNGN } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
 import { Plate, SectionHead, SpecList } from '../components/primitives';
+import Slideshow from '../components/Slideshow';
+
+/* The gallery is asymmetric by position, not by accident: each slot has its own column
+   span, offset and aspect, and groups cycle through them however many there are. */
+const GALLERY_SLOTS = [
+  'md:col-span-7',
+  'md:col-span-4 md:col-start-9 md:mt-16',
+  'md:col-span-4 md:col-start-2',
+  'md:col-span-6 md:col-start-7 md:-mt-12',
+  'md:col-span-5 md:col-start-1',
+];
+const GALLERY_RATIOS = [
+  'aspect-[4/3]',
+  'aspect-[3/4]',
+  'aspect-square',
+  'aspect-[16/10]',
+  'aspect-[4/3]',
+];
 
 /* One row per room type: image and copy trade sides down the page. The image is the
    card — no borders, no shadow. */
@@ -146,23 +164,24 @@ export default function Property() {
         </div>
       </section>
 
-      {/* ---------- gallery: asymmetric, not a grid of equal tiles ---------- */}
+      {/* ---------- gallery: asymmetric, and several shots of one place share a frame ---------- */}
       <section className="section bg-chalk">
         <div className="shell">
           <SectionHead title="A look around" />
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
-            <div className="md:col-span-7">
-              <Plate src={property.galleryImages[0]} alt="" className="aspect-[4/3]" />
-            </div>
-            <div className="md:col-span-4 md:col-start-9 md:mt-16">
-              <Plate src={property.galleryImages[1]} alt="" className="aspect-[3/4]" />
-            </div>
-            <div className="md:col-span-4 md:col-start-2">
-              <Plate src={property.galleryImages[2]} alt="" className="aspect-square" />
-            </div>
-            <div className="md:col-span-6 md:col-start-7 md:-mt-12">
-              <Plate src={property.galleryImages[3]} alt="" className="aspect-[16/10]" />
-            </div>
+            {(property.gallery || []).map((group, i) => (
+              <figure key={group.label} className={GALLERY_SLOTS[i % GALLERY_SLOTS.length]}>
+                <Slideshow
+                  images={group.images}
+                  alt={`${group.label}, ${property.name}`}
+                  className={GALLERY_RATIOS[i % GALLERY_RATIOS.length]}
+                />
+                <figcaption className="mt-3 text-sm text-mute">
+                  {group.label}
+                  {group.images.length > 1 && ` — ${group.images.length} photographs`}
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
