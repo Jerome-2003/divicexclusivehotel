@@ -64,7 +64,7 @@ function HeroTour({ property }) {
 
       <div className="shell relative z-30 pb-12 pt-32">
         <p className="text-sm text-champagne">
-          {property.totalRooms} rooms. {property.character}.
+           {property.character}.
         </p>
         <h1 className="mt-4 max-w-[14ch] font-display text-d1 font-light text-bone">
           {property.name}
