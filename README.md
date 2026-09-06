@@ -16,6 +16,28 @@ npm run build
 npm run preview
 ```
 
+## Deploying
+
+`npm run build` writes everything the site needs into `dist/` — **including
+`dist/images/`, copied from `public/`. Deploy the whole `dist/` directory.** Uploading
+only `index.html` and `assets/` is what produces `404 (Not Found)` on every photograph.
+
+Where the site is served from decides how the build must be made:
+
+| Served from | Build with |
+|---|---|
+| `https://<user>.github.io/` (user site, origin root) | `npm run build` |
+| `https://<user>.github.io/<repo>/` (project site) | `VITE_BASE=/<repo>/ npm run build` |
+
+Nothing in the app hardcodes the root. Asset URLs go through `src/lib/asset.js`, which
+resolves against `import.meta.env.BASE_URL`, and the router takes the same value as its
+`basename` — so one flag moves the whole site between the two.
+
+The build also writes `dist/404.html` as a copy of `index.html`. GitHub Pages has no
+server-side rewrite, so without it a guest who opens `/urban` directly, or reloads it,
+gets Pages' own 404 instead of the site. Pages serves `404.html` for unknown paths, which
+hands the URL back to the router.
+
 ## Stack
 
 React 19 + React Router, Vite, Tailwind. Fonts (Fraunces, Karla) are self-hosted through
