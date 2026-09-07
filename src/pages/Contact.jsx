@@ -15,7 +15,7 @@ export default function Contact() {
               <br />a few minutes apart.
             </>
           }
-          lead="Each house keeps its own desk. Write to the one you want to stay at, or to us, and we will point you the right way."
+          lead="Each branch keeps its own desk. Call the one you want to stay at, or message the brand on WhatsApp, and we will point you the right way."
         />
       </section>
 
@@ -29,11 +29,11 @@ export default function Contact() {
                  in index.css. */
               const accentVars =
                 p.id === 'urban'
-                  ? { '--accent': '201 112 78', '--accent-lift': '220 134 99' }
-                  : { '--accent': '138 130 88', '--accent-lift': '167 157 108' };
+                  ? { '--accent': '143 90 40', '--accent-lift': '176 113 58' }
+                  : { '--accent': '119 100 39', '--accent-lift': '156 132 56' };
               return (
                 <div key={p.id} style={accentVars}>
-                    <p className="eyebrow">{p.name}</p>
+                    <p className="eyebrow">{p.displayName}</p>
                     <p className="mt-3 font-display text-d3">{p.character}</p>
                     <SpecList
                       className="mt-6"
@@ -49,7 +49,7 @@ export default function Contact() {
                         Directions
                       </a>
                       <a href={`tel:${p.phone}`} className="link-quiet">
-                        Call the house
+                        Call this branch
                       </a>
                     </div>
                 </div>
@@ -61,7 +61,7 @@ export default function Contact() {
 
           {/* the reservation flow lives on its own page; this points at it */}
           <div className="lg:col-span-6 lg:col-start-7">
-            <div className="border border-bone/10 bg-espresso p-8 lg:p-12">
+            <div className="border border-ink/10 bg-shell p-8 lg:p-12">
               <p className="eyebrow">Reservations</p>
               <h3 className="mt-4 font-display text-d3">Request a stay</h3>
               <p className="prose-body mt-4">
@@ -79,8 +79,19 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="mt-10 border-t border-bone/10 pt-8">
-              <p className="text-sm text-mute">Follow</p>
+            {/* WhatsApp is the brand's, not a branch's — it reaches whoever is on the
+                other end for either house. */}
+            <div className="mt-10 border-t border-ink/10 pt-8">
+              <p className="text-sm text-mute">Message us</p>
+              <a
+                href={BRAND.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block font-display text-lg hover:underline"
+              >
+                WhatsApp {BRAND.whatsapp}
+              </a>
+              <p className="mt-6 text-sm text-mute">Follow</p>
               <a
                 href={BRAND.instagram}
                 target="_blank"

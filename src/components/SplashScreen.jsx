@@ -1,133 +1,103 @@
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
-import { SPLASH_COLORS } from '../lib/swan-paths';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Logo from './Logo';
+import { BRAND } from '../data/properties';
 
 /**
- * The splash, as an actual loading screen.
+ * The entry sequence: the logo settles first, then the words come into focus under it.
  *
- * @remotion/player is a sizeable dependency for something that plays once, so it is code
- * split: this module ships only the overlay, and the player chunk is fetched just before
- * the splash runs. A returning visitor in the same session never downloads it at all.
+ * This replaced a Remotion composition. Remotion is a video toolchain — it shipped a
+ * ~93 kB gzipped player and a licence obligation to draw two elements for four seconds.
+ * Two CSS keyframes do the same job with nothing to download and nothing to license.
  *
- * The site mounts underneath rather than waiting on this, so the splash covers a page that
- * is already interactive.
- *
- * Timing is driven by the player's own `ended` event, not a wall-clock timer started at
- * mount — otherwise the chunk download eats into the five seconds and the sequence gets
- * cut off before the wordmark forms.
+ * It runs once per browser session, and never for a guest who has asked for reduced
+ * motion — they get the finished frame, held briefly, so nothing flashes past.
  */
-
-const PlayerHost = lazy(() => import('./SplashPlayer'));
-
 const SESSION_KEY = 'divic:splash-seen';
-const FADE_MS = 450;
-const SAFETY_MS = 12000; // if the player never reports back, do not trap the guest
+const RUN_MS = 2600;
+const HOLD_MS = 700;
 
-function seenThisSession() {
+function seen() {
   try {
     return sessionStorage.getItem(SESSION_KEY) === '1';
   } catch {
-    return false;
+    return false; // private browsing: show it, rather than fail
   }
 }
 
-export default function SplashScreen({ onFinish }) {
-  const reduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function remember() {
+  try {
+    sessionStorage.setItem(SESSION_KEY, '1');
+  } catch {
+    /* nothing to do — it simply shows again next time */
+  }
+}
 
-  const [show, setShow] = useState(() => !seenThisSession());
-  const [leaving, setLeaving] = useState(false);
-  const timers = useRef([]);
-  const done = useRef(false);
+export default function SplashScreen() {
+  const reduced = useRef(false);
+  const [state, setState] = useState(() => (seen() ? 'gone' : 'running'));
 
   const dismiss = useCallback(() => {
-    if (done.current) return;
-    done.current = true;
-    setLeaving(true);
-    try {
-      sessionStorage.setItem(SESSION_KEY, '1');
-    } catch {
-      /* private browsing */
-    }
-    timers.current.push(
-      setTimeout(() => {
-        setShow(false);
-        onFinish?.();
-      }, FADE_MS),
-    );
-  }, [onFinish]);
+    remember();
+    setState('leaving');
+  }, []);
 
   useEffect(() => {
-    if (!show) {
-      onFinish?.();
-      return undefined;
-    }
+    if (state === 'gone') return undefined;
+    reduced.current =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    timers.current.push(setTimeout(dismiss, SAFETY_MS));
-
-    const onKey = (e) => {
-      if (['Escape', 'Enter', ' '].includes(e.key)) dismiss();
-    };
-    window.addEventListener('keydown', onKey);
-
-    const previous = document.body.style.overflow;
+    // the page underneath is already mounted and interactive; this only covers it
     document.body.style.overflow = 'hidden';
-
+    const timer = setTimeout(dismiss, reduced.current ? HOLD_MS : RUN_MS);
     return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = previous;
-      timers.current.forEach(clearTimeout);
-      timers.current = [];
+      clearTimeout(timer);
+      document.body.style.overflow = '';
     };
-  }, [show, dismiss, onFinish]);
+  }, [state, dismiss]);
 
-  // reduced motion: hold the finished logo briefly instead of performing it
-  const handleReady = useCallback(() => {
-    if (!reduced) return;
-    timers.current.push(setTimeout(dismiss, 900));
-  }, [reduced, dismiss]);
+  useEffect(() => {
+    if (state !== 'leaving') return undefined;
+    const timer = setTimeout(() => setState('gone'), 600);
+    return () => clearTimeout(timer);
+  }, [state]);
 
-  if (!show) return null;
+  if (state === 'gone') return null;
+
+  const still = reduced.current;
 
   return (
     <div
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-alabaster
+                  transition-opacity duration-[600ms] ease-quiet ${
+                    state === 'leaving' ? 'pointer-events-none opacity-0' : 'opacity-100'
+                  }`}
       role="status"
-      aria-label="Divic Exclusive Hotel"
-      onClick={dismiss}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 300,
-        background: SPLASH_COLORS.background,
-        display: 'grid',
-        placeItems: 'center',
-        opacity: leaving ? 0 : 1,
-        transition: `opacity ${FADE_MS}ms cubic-bezier(.16,1,.3,1)`,
-        cursor: 'pointer',
-      }}
+      aria-live="polite"
+      aria-label={`${BRAND.name}, loading`}
     >
-      <Suspense fallback={null}>
-        <PlayerHost reduced={reduced} onEnded={dismiss} onReady={handleReady} />
-      </Suspense>
+      <Logo
+        variant="mark"
+        priority
+        plate
+        plateClassName={still ? '' : 'splash-mark'}
+        className="h-[clamp(6rem,18vw,8.5rem)] w-auto"
+      />
 
-      <button
-        type="button"
-        onClick={dismiss}
-        style={{
-          position: 'absolute',
-          bottom: '6vh',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'none',
-          border: 0,
-          color: 'rgba(240,240,240,.45)',
-          font: 'inherit',
-          fontSize: '0.8125rem',
-          cursor: 'pointer',
-        }}
-      >
-        Skip
-      </button>
+      <div className={`mt-7 text-center ${still ? '' : 'splash-words'}`}>
+        <p className="font-display text-[clamp(1.4rem,4.6vw,2.1rem)] font-light leading-tight text-ink">
+          Divic Exclusive Hotels
+        </p>
+        <p className="mt-2 text-sm text-mute">{BRAND.line}</p>
+      </div>
+
+      {/* One hairline that fills as the sequence runs — it says "wait", which is what a
+          loading screen is for, without a spinner borrowed from an app. */}
+      {!still && (
+        <span aria-hidden="true" className="mt-9 block h-px w-24 overflow-hidden bg-ink/10">
+          <span className="splash-rule block h-px w-full bg-accent" />
+        </span>
+      )}
     </div>
   );
 }

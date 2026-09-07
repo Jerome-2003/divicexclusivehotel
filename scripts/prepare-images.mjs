@@ -71,8 +71,13 @@ for (const job of JOBS) {
 
     const out = join(job.out, slug(file));
     await img
-      .resize({ width: 1600, withoutEnlargement: true })
-      .jpeg({ quality: 82, mozjpeg: true, progressive: true })
+      .resize({ width: 1600, withoutEnlargement: true, kernel: 'lanczos3' })
+      /* The room shots are cropped out of small flyers, so they arrive soft. A light
+         unsharp mask restores the edge the source JPEG lost, kept gentle enough not to
+         ring around high-contrast lines like door frames and skirting. Quality is up
+         from 82 because sharpening gives the encoder more detail to throw away. */
+      .sharpen({ sigma: 0.8, m1: 0.5, m2: 2 })
+      .jpeg({ quality: 90, mozjpeg: true, progressive: true, chromaSubsampling: '4:4:4' })
       .toFile(out);
 
     const meta = await sharp(out).metadata();

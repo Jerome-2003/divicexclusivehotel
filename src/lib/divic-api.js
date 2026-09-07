@@ -122,8 +122,16 @@ export function buildBookingPayload(form) {
   };
   const email = (form.guestEmail || '').trim();
   if (email) payload.guestEmail = email;
+
+  /* The ID number rides in with the notes.
+     API.md's request body has no field for it, and sending one it does not list risks a
+     400 from a strict validator — so it goes in as a labelled first line of
+     `specialRequests`, where the receptionist reading the request will see it. If a
+     `guestId` field is ever added to the PMS, move it there and delete this. */
+  const id = (form.guestId || '').trim();
   const notes = (form.specialRequests || '').trim();
-  if (notes) payload.specialRequests = notes.slice(0, 500);
+  const combined = [id && `ID: ${id}`, notes].filter(Boolean).join('\n');
+  if (combined) payload.specialRequests = combined.slice(0, 500);
   // paystackReference is only included when a deposit is taken online; the server
   // verifies it with Paystack and rejects the request if it does not check out.
   if (form.paystackReference) payload.paystackReference = form.paystackReference;

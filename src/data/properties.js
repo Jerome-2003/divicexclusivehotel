@@ -25,6 +25,7 @@ export const PROPERTY_SEED = [
     name: 'Divic Exclusive',
     address: 'Plot 55, 1st Avenue, E Close, Festac, Lagos',
     phone: '09169845311',
+    totalRooms: 15,
     currency: 'NGN',
     roomTypes: [
       { type: 'standard', rate: 40000, roomCount: 6, floors: [0] },
@@ -37,6 +38,7 @@ export const PROPERTY_SEED = [
     name: 'Divic Urban',
     address: 'Plot 340, 3rd Avenue, A1 Close, Festac, Lagos',
     phone: '09169845314',
+    totalRooms: 21,
     currency: 'NGN',
     roomTypes: [
       { type: 'classic', rate: 50000, roomCount: 5, floors: [0, 1] },
@@ -58,7 +60,11 @@ const exclusive = (name) => photo('exclusive', name);
 export const CONTENT = {
   exclusive: {
     slug: 'exclusive',
-    shortName: 'Exclusive',
+    /* The PMS calls this branch "Divic Exclusive"; the hotel's own name for it is
+       "Divic Exclusive 1 Hotel". The API name stays untouched — it is what booking
+       payloads are keyed on — and this is what guests read. */
+    displayName: 'Divic Exclusive 1 Hotel',
+    shortName: 'Exclusive 1',
     character: 'Residential, discreet, low-lit',
     tagline: 'the sense that nobody else is checking in.',
     intro:
@@ -113,6 +119,7 @@ export const CONTENT = {
 
   urban: {
     slug: 'urban',
+    displayName: 'Divic Urban',
     shortName: 'Urban',
     character: 'Open, social, daylit',
     tagline: 'the whole of Festac at the door.',
@@ -162,6 +169,21 @@ export const CONTENT = {
           'foot of the bed, and the most light of any room here.',
       },
     },
+    /* Whole-space hire, not rooms. These rates are not in the PMS, so unlike room rates
+       they are held here — see the note in README under Known discrepancies. */
+    privateBookings: [
+      { label: 'Indoor pool', rate: 200000, note: 'Exclusive use of the pool and its deck' },
+      { label: 'VIP bar', rate: 200000, note: 'The upstairs bar, closed to other guests' },
+      { label: 'Outdoor bar', rate: 100000, note: 'The terrace bar and its seating' },
+    ],
+    houseRules: [
+      { label: 'Check in', value: 'From 1pm' },
+      { label: 'Check out', value: 'By 12 noon' },
+      { label: 'Late check out', value: 'Half the room rate' },
+      { label: 'After 6pm', value: 'The full room rate is charged' },
+      { label: 'Smoking', value: 'No smoking in the rooms' },
+      { label: 'Damages', value: 'Guests are responsible for any damage' },
+    ],
     amenities: [
       { label: 'The bar', note: 'Open nightly' },
       { label: 'Swimming pool', note: 'Open to house guests' },
@@ -173,12 +195,23 @@ export const CONTENT = {
   },
 };
 
-/** Brand-level details, not property-level. */
+/**
+ * Brand-level details, not branch-level.
+ *
+ * The WhatsApp number and Instagram belong to the brand and reach both branches; each
+ * branch keeps its own landline, which comes from the PMS.
+ */
+const WHATSAPP_LOCAL = '09169845310';
+
 export const BRAND = {
-  name: 'Divic',
-  line: 'Two houses in Festac',
-  instagram: 'https://instagram.com/divicexclusivehotels',
-  instagramHandle: 'divicexclusivehotels',
+  name: 'Divic Exclusive Hotels',
+  short: 'Divic',
+  line: 'Two branches in Festac, Lagos',
+  whatsapp: WHATSAPP_LOCAL,
+  /* wa.me needs the number in international form, without the trunk zero. */
+  whatsappUrl: `https://wa.me/234${WHATSAPP_LOCAL.replace(/^0/, '')}`,
+  instagram: 'https://instagram.com/divicexclusivehotel',
+  instagramHandle: 'divicexclusivehotel',
 };
 
 /** Joins a PMS property record to its editorial content. */
@@ -189,6 +222,14 @@ export function decorate(apiProperty) {
     ...content,
     id: apiProperty.id,
     name: apiProperty.name,
+    /* What guests read. `name` stays as the PMS returned it. */
+    displayName: content.displayName || apiProperty.name,
+    /* Derived when absent rather than trusted blindly: a response without it used to
+       render "  rooms" with a hole where the number should be, in four places. The room
+       counts are the same fact, so the sum is the safe fallback. */
+    totalRooms:
+      apiProperty.totalRooms ??
+      apiProperty.roomTypes.reduce((n, rt) => n + (rt.roomCount || 0), 0),
     roomTypes: apiProperty.roomTypes.map((rt) => ({
       ...rt,
       ...(content.rooms?.[rt.type] || { name: rt.type, image: null, description: '' }),

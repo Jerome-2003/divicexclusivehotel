@@ -1,9 +1,9 @@
 /**
- * Divic — Limestone direction, dark ground.
+ * Divic Exclusive Hotels — off-white and gold.
  *
- * The site sits on one ground everywhere: the near-black the swan mark was drawn on.
- * The homepage set that ground; every other page now shares it, so moving from the
- * destination chooser into a house is a change of place, not a change of website.
+ * The ground is the off-white the logo itself sits on, and the gold is sampled from the
+ * logo's own oval (#DFC896). That gold is far too light to carry type, so it is used for
+ * fills and large marks only; a deeper gold does the reading work.
  *
  * The brand chassis is fixed; only the property accent varies. Accent colours are
  * exposed as CSS custom properties (set per property on <html data-property>) so no
@@ -14,16 +14,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        // grounds, darkest to lightest — the page, a raised panel, an inset well
-        obsidian: '#0B0A08',
-        espresso: '#141110',
-        umber: '#221D17',
-        // type, brightest to quietest
-        bone: '#F2EDE3',
-        linen: '#B3AA9C',
-        mute: '#948B80',
-        // the brand metal, from the swan mark
-        champagne: '#C9A961',
+        // grounds, lightest to deepest — the page, a raised panel, an inset well
+        alabaster: '#FAF7F1',
+        shell: '#F4EFE6',
+        sand: '#E6DCC9',
+        // type, strongest to quietest
+        ink: '#221D16',
+        slate: '#5B5348',
+        mute: '#726A5A',
+        // text over photography, where the ground is a dark scrim rather than the page
+        bone: '#FBF8F2',
+        // the brand metal: the logo's own gold, and a deeper one that can carry type
+        gold: '#DFC896',
+        'gold-deep': '#8A6B28',
         // per-property accents, resolved at runtime
         accent: 'rgb(var(--accent) / <alpha-value>)',
         'accent-lift': 'rgb(var(--accent-lift) / <alpha-value>)',
