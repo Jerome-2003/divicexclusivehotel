@@ -244,9 +244,10 @@ seconds. The dependency is gone.
   no field for it and sending an unlisted one risks a 400, so it goes in as a labelled
   first line where the receptionist will see it. Add a `guestId` field to the PMS and it
   should move there.
-- **House rules and private bookings are set on Urban only**, as supplied. They read like
-  brand-wide policy; if they apply to Exclusive 1 too, copy the two blocks across in
-  `src/data/properties.js`.
+- **House rules are brand-wide; private bookings are Urban's alone.** The rules are
+  defined once as `HOUSE_RULES` in `src/data/properties.js` and referenced by both
+  branches, so check-out time cannot change on one page and not the other. Private hire
+  of the pool and bars stays on Urban, which is where it was described.
 - **The logo artwork reads "Divic Exclusive Hotel"** while the brand is "Divic Exclusive
   Hotels". Worth correcting at source.
 - **The Exclusive photography is low-resolution at source** — some frames are 500x333.

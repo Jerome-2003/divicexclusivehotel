@@ -49,6 +49,22 @@ export const PROPERTY_SEED = [
   },
 ];
 
+/**
+ * House rules, shared by both branches.
+ *
+ * They arrived described against Divic Urban, but they are brand policy rather than one
+ * building's — so they are defined once here and referenced by each branch, and a change
+ * to check-out time cannot land on one page and not the other.
+ */
+const HOUSE_RULES = [
+  { label: 'Check in', value: 'From 1pm' },
+  { label: 'Check out', value: 'By 12 noon' },
+  { label: 'Late check out', value: 'Half the room rate' },
+  { label: 'After 6pm', value: 'The full room rate is charged' },
+  { label: 'Smoking', value: 'No smoking in the rooms' },
+  { label: 'Damages', value: 'Guests are responsible for any damage' },
+];
+
 const urban = (name) => photo('urban', name);
 const exclusive = (name) => photo('exclusive', name);
 
@@ -107,6 +123,7 @@ export const CONTENT = {
           'a deep bath.',
       },
     },
+    houseRules: HOUSE_RULES,
     amenities: [
       { label: 'Indoor bar', note: 'Open nightly' },
       { label: 'Outdoor bar', note: 'Under the trees, from six' },
@@ -176,14 +193,7 @@ export const CONTENT = {
       { label: 'VIP bar', rate: 200000, note: 'The upstairs bar, closed to other guests' },
       { label: 'Outdoor bar', rate: 100000, note: 'The terrace bar and its seating' },
     ],
-    houseRules: [
-      { label: 'Check in', value: 'From 1pm' },
-      { label: 'Check out', value: 'By 12 noon' },
-      { label: 'Late check out', value: 'Half the room rate' },
-      { label: 'After 6pm', value: 'The full room rate is charged' },
-      { label: 'Smoking', value: 'No smoking in the rooms' },
-      { label: 'Damages', value: 'Guests are responsible for any damage' },
-    ],
+    houseRules: HOUSE_RULES,
     amenities: [
       { label: 'The bar', note: 'Open nightly' },
       { label: 'Swimming pool', note: 'Open to house guests' },
