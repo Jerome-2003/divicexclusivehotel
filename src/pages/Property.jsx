@@ -19,9 +19,11 @@ function HeroTour({ property }) {
   const shots = useMemo(() => {
     const seen = new Set();
     const out = [];
+    /* Descriptors, not URLs, so dedupe on the fallback file they carry. */
     const add = (src, label) => {
-      if (src && !seen.has(src)) {
-        seen.add(src);
+      const id = src?.src;
+      if (id && !seen.has(id)) {
+        seen.add(id);
         out.push({ src, label });
       }
     };
@@ -31,7 +33,7 @@ function HeroTour({ property }) {
   }, [property]);
 
   const [paused, setPaused] = useState(false);
-  const [shot, setShot] = useCarousel({ length: shots.length, interval: 5500, paused });
+  const [shot, setShot, armed] = useCarousel({ length: shots.length, interval: 5500, paused });
   const totalFrom = Math.min(...property.roomTypes.map((r) => r.rate));
 
   return (
@@ -42,8 +44,9 @@ function HeroTour({ property }) {
     >
       {shots.map((image, i) => (
         <Plate
-          key={image.src}
-          src={image.src}
+          key={image.label}
+          src={armed.has(i) ? image.src : null}
+          sizes="100vw"
           alt={i === shot ? `${image.label}, ${property.displayName}` : ''}
           priority={i === 0}
           className={`absolute inset-0 transition-opacity duration-1100 ease-quiet ${
@@ -85,7 +88,7 @@ function HeroTour({ property }) {
               const active = i === shot;
               return (
                 <button
-                  key={image.src}
+                  key={image.label}
                   type="button"
                   onClick={() => setShot(i)}
                   aria-current={active}
@@ -183,6 +186,7 @@ function RoomSpread({ room, index }) {
       <Plate
         src={room.image}
         alt={room.name}
+        sizes="(min-width: 1024px) 62vw, 100vw"
         className={`plate-zoom aspect-[4/3] sm:aspect-[16/10] lg:col-span-8 lg:row-start-1 ${
           flipped ? 'lg:col-start-5' : 'lg:col-start-1'
         }`}
@@ -198,10 +202,7 @@ function RoomSpread({ room, index }) {
         <span aria-hidden="true" className="mt-4 block h-px w-10 bg-accent" />
         <p className="prose-body mt-5">{room.description}</p>
 
-        <p className="mt-6 text-sm text-mute">
-          {room.roomCount} {room.roomCount === 1 ? 'room' : 'rooms'} in this house
-          {floors && ` · ${floors}`}
-        </p>
+        {floors && <p className="mt-6 text-sm text-mute">{floors}</p>}
 
         <div className="mt-7 flex flex-wrap items-end justify-between gap-x-8 gap-y-5 border-t border-ink/12 pt-6">
           <span className="flex flex-col">
@@ -334,7 +335,6 @@ export default function Property() {
             <p className="prose-body">{property.stayPitch}</p>
             <SpecList
               items={[
-                { label: 'Rooms', value: String(property.totalRooms) },
                 { label: 'Address', value: property.address },
                 { label: 'Position', value: property.coords },
               ]}
@@ -404,7 +404,7 @@ export default function Property() {
         <div className="shell">
           <SectionHead
             title={`Every room at ${property.displayName}`}
-            lead={`${property.roomTypes.length} room types, ${property.totalRooms} rooms in total. Rates are nightly and ${
+            lead={`Rates are nightly and ${
               ratesAreLive ? 'come live from the hotel system' : 'are the published rates'
             } — the total for your dates is calculated when you request a stay.`}
           />

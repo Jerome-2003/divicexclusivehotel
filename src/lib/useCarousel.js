@@ -8,6 +8,12 @@ import { useEffect, useRef, useState } from 'react';
  */
 export function useCarousel({ length, interval = 5000, paused = false }) {
   const [index, setIndex] = useState(0);
+  /* Which slides may fetch their photograph. A carousel is in the viewport from the
+     start, so `loading="lazy"` does not hold any of them back — four hero shots meant
+     four full-size downloads competing with first paint. Only the first is armed
+     initially; the next is armed alongside whichever is showing, and nothing already
+     seen is ever disarmed. */
+  const [armed, setArmed] = useState(() => new Set([0]));
   const reduced = useRef(false);
 
   useEffect(() => {
@@ -24,5 +30,16 @@ export function useCarousel({ length, interval = 5000, paused = false }) {
     if (index >= length) setIndex(0);
   }, [index, length]);
 
-  return [index, setIndex];
+  useEffect(() => {
+    setArmed((prev) => {
+      const next = (index + 1) % length;
+      if (prev.has(index) && prev.has(next)) return prev;
+      const grown = new Set(prev);
+      grown.add(index);
+      grown.add(next);
+      return grown;
+    });
+  }, [index, length]);
+
+  return [index, setIndex, armed];
 }

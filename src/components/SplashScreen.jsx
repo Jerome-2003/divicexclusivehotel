@@ -9,37 +9,22 @@ import { BRAND } from '../data/properties';
  * ~93 kB gzipped player and a licence obligation to draw two elements for four seconds.
  * Two CSS keyframes do the same job with nothing to download and nothing to license.
  *
- * It runs once per browser session, and never for a guest who has asked for reduced
- * motion — they get the finished frame, held briefly, so nothing flashes past.
+ * It plays on every full page load. It used to be gated to once per browser session,
+ * which meant that after the first visit it never appeared again — including for the
+ * people who most wanted to see it. Moving between pages inside the site does not remount
+ * this, so the sequence is the entrance to the site rather than something between rooms.
+ *
+ * Anyone who has asked for reduced motion gets the finished frame, held briefly, so
+ * nothing flashes past.
  */
-const SESSION_KEY = 'divic:splash-seen';
-const RUN_MS = 2600;
+const RUN_MS = 3200;
 const HOLD_MS = 700;
-
-function seen() {
-  try {
-    return sessionStorage.getItem(SESSION_KEY) === '1';
-  } catch {
-    return false; // private browsing: show it, rather than fail
-  }
-}
-
-function remember() {
-  try {
-    sessionStorage.setItem(SESSION_KEY, '1');
-  } catch {
-    /* nothing to do — it simply shows again next time */
-  }
-}
 
 export default function SplashScreen() {
   const reduced = useRef(false);
-  const [state, setState] = useState(() => (seen() ? 'gone' : 'running'));
+  const [state, setState] = useState('running');
 
-  const dismiss = useCallback(() => {
-    remember();
-    setState('leaving');
-  }, []);
+  const dismiss = useCallback(() => setState('leaving'), []);
 
   useEffect(() => {
     if (state === 'gone') return undefined;

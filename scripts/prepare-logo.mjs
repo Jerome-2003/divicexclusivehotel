@@ -85,7 +85,9 @@ for (const [name, region] of [['logo-mark', MARK], ['logo-full', FULL]]) {
     /* A light unsharp mask recovers the edge the JPEG blurred, without the halo a
        heavier one would leave around the swan. No resize: see the note above. */
     .sharpen({ sigma: 0.7, m1: 0.4, m2: 1.6 })
-    .png({ compressionLevel: 9 })
+    /* The mark is a handful of flat colours, so a palette PNG carries it at a fraction
+       of the truecolour size — and it keeps the alpha the cutout just produced. */
+    .png({ palette: true, quality: 90, effort: 10, compressionLevel: 9 })
     .toFile(out);
   const meta = await sharp(out).metadata();
   console.log(

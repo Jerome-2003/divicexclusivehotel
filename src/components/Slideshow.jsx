@@ -16,6 +16,9 @@ import { useCarousel } from '../lib/useCarousel';
  */
 const DOTS_DEFAULT = 'bottom-4 left-1/2 -translate-x-1/2';
 
+/* An image is a descriptor now, not a URL, so React needs telling what makes it unique. */
+const keyOf = (src, i) => (typeof src === 'string' ? src : src?.src) || i;
+
 export default function Slideshow({
   images,
   alt = '',
@@ -25,9 +28,10 @@ export default function Slideshow({
   dotsClassName = DOTS_DEFAULT,
   zoom = false,
   priority = false,
+  sizes = '100vw',
 }) {
   const [paused, setPaused] = useState(false);
-  const [index, setIndex] = useCarousel({ length: images?.length || 0, interval, paused });
+  const [index, setIndex, armed] = useCarousel({ length: images?.length || 0, interval, paused });
   const go = useCallback((i) => setIndex(i), [setIndex]);
 
   if (!images?.length) return null;
@@ -37,7 +41,7 @@ export default function Slideshow({
   if (images.length === 1) {
     return (
       <div className="relative">
-        <Plate src={images[0]} alt={alt} priority={priority} className={plate} />
+        <Plate src={images[0]} alt={alt} priority={priority} sizes={sizes} className={plate} />
         {overlay}
       </div>
     );
@@ -53,8 +57,9 @@ export default function Slideshow({
     >
       {images.map((src, i) => (
         <Plate
-          key={src}
-          src={src}
+          key={keyOf(src, i)}
+          src={armed.has(i) ? src : null}
+          sizes={sizes}
           alt={i === index ? alt : ''}
           priority={priority && i === 0}
           className={`absolute inset-0 transition-opacity duration-700 ease-quiet ${
@@ -66,7 +71,7 @@ export default function Slideshow({
       <div className={`absolute z-30 flex gap-2 ${dotsClassName}`}>
         {images.map((src, i) => (
           <button
-            key={src}
+            key={keyOf(src, i)}
             type="button"
             onClick={() => go(i)}
             aria-label={`Show photograph ${i + 1} of ${images.length}`}

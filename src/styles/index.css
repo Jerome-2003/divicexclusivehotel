@@ -127,26 +127,30 @@
       linear-gradient(160deg, #F1E9DA 0%, #DDD1BB 100%);
     transition: background 700ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .plate > img {
+  /* The image may be wrapped in <picture>, so this reaches through rather than being a
+     direct-child selector. <picture> itself is display:contents, so it never becomes a
+     box between the plate and the image. */
+  .plate picture { display: contents; }
+  .plate img {
     @apply absolute inset-0 z-10 h-full w-full object-cover opacity-0;
     transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .plate > img.is-loaded { @apply opacity-100; }
+  .plate img.is-loaded { @apply opacity-100; }
 
   /* A frame whose photograph drifts closer when the guest reaches for it. The scale
      lives on the image, not the frame, so captions and dots stay put. */
-  .plate-zoom > img {
+  .plate-zoom img {
     transition:
       opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
       transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .group:hover .plate-zoom > img,
-  .group:focus-within .plate-zoom > img {
+  .group:hover .plate-zoom img,
+  .group:focus-within .plate-zoom img {
     transform: scale(1.055);
   }
   @media (prefers-reduced-motion: reduce) {
-    .group:hover .plate-zoom > img,
-    .group:focus-within .plate-zoom > img { transform: none; }
+    .group:hover .plate-zoom img,
+    .group:focus-within .plate-zoom img { transform: none; }
   }
 
   /* The scrim that lets type sit on a photograph and stay legible whatever the
@@ -166,14 +170,14 @@
      are suppressed under prefers-reduced-motion by the global rule in the base layer,
      and SplashScreen also skips straight to the finished frame there. */
   .splash-mark {
-    animation: splash-mark 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: splash-mark 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .splash-words {
-    animation: splash-words 900ms cubic-bezier(0.16, 1, 0.3, 1) 780ms both;
+    animation: splash-words 1000ms cubic-bezier(0.16, 1, 0.3, 1) 900ms both;
   }
   .splash-rule {
     transform-origin: left center;
-    animation: splash-rule 2400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: splash-rule 3000ms cubic-bezier(0.4, 0, 0.2, 1) both;
   }
 
   @keyframes splash-mark {

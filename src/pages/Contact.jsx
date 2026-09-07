@@ -40,7 +40,6 @@ export default function Contact() {
                       items={[
                         { label: 'Address', value: p.address },
                         { label: 'Telephone', value: p.phone },
-                        { label: 'Rooms', value: String(p.totalRooms) },
                         { label: 'Position', value: p.coords },
                       ]}
                     />
