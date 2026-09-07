@@ -19,7 +19,7 @@ import { join } from 'node:path';
  * The base must start and end with a slash.
  */
 const base = process.env.VITE_BASE || '/divicexclusivehotel/';
-const outDir = process.env.VITE_OUT_DIR || 'docs';
+const outDir = process.env.VITE_OUT_DIR || 'dist';
 
 /**
  * Pages has no server-side rewrite, so a guest opening /urban directly — or reloading
