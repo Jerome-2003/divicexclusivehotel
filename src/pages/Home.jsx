@@ -39,16 +39,16 @@ function DestinationCard({ property }) {
     <Link
       to={`/${property.id}`}
       onClick={() => choose(property.id)}
-      className="group flex flex-1 flex-col items-center gap-2 border bg-alabaster/95 px-7 py-6
-                 text-center backdrop-blur-sm transition-colors duration-400 ease-quiet
-                 hover:bg-alabaster sm:px-10 sm:py-8"
+      className="group flex flex-1 flex-col items-center gap-2 border bg-white/70 px-5 py-6
+                 text-center transition-colors duration-400 ease-quiet hover:bg-white
+                 sm:px-8 sm:py-8"
       style={{ borderColor: `${accent}59` }}
     >
       <PinIcon
         className="h-5 w-5 transition-transform duration-400 ease-quiet group-hover:-translate-y-0.5"
         style={{ color: accent }}
       />
-      <span className="font-display text-[clamp(1.2rem,2.4vw,1.7rem)] font-light leading-tight text-ink">
+      <span className="whitespace-nowrap font-display text-[clamp(1.05rem,2.1vw,1.45rem)] font-light leading-tight text-ink">
         {property.displayName}
       </span>
 
@@ -67,12 +67,9 @@ function DestinationCard({ property }) {
 
       <span
         aria-hidden="true"
-        className="mt-3 block h-px w-8 transition-all duration-700 ease-quiet group-hover:w-16"
+        className="mt-4 block h-px w-8 transition-all duration-700 ease-quiet group-hover:w-16"
         style={{ background: accent }}
       />
-      <span className="mt-3 text-[0.72rem] tracking-[0.2em] text-mute">
-        {property.totalRooms} ROOMS
-      </span>
     </Link>
   );
 }
@@ -80,7 +77,7 @@ function DestinationCard({ property }) {
 export default function Home() {
   const { properties } = useProperty();
   const [paused, setPaused] = useState(false);
-  const [shot, setShot] = useCarousel({ length: HERO_SHOTS.length, interval: 6000, paused });
+  const [shot, setShot, armed] = useCarousel({ length: HERO_SHOTS.length, interval: 6000, paused });
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -127,8 +124,9 @@ export default function Home() {
       >
         {HERO_SHOTS.map((image, i) => (
           <Plate
-            key={image.src}
-            src={image.src}
+            key={image.alt}
+            src={armed.has(i) ? image.src : null}
+            sizes="100vw"
             alt={i === shot ? image.alt : ''}
             priority={i === 0}
             className={`absolute inset-0 transition-opacity duration-1100 ease-quiet ${
@@ -148,7 +146,15 @@ export default function Home() {
           }}
         />
 
-        <div className="relative z-30 flex w-full max-w-4xl flex-col items-center px-gutter text-center">
+        {/* The words and the two cards sit on a frosted panel of the page's own ground,
+            so the photograph behind them can run at full strength without ever putting
+            the type at risk. */}
+        <div
+          className="relative z-30 mx-gutter flex w-full max-w-4xl flex-col items-center
+                     rounded-sm bg-alabaster/93 px-6 py-10 text-center
+                     shadow-[0_1px_44px_rgba(34,29,22,.13)] backdrop-blur-[2px]
+                     sm:px-14 sm:py-12"
+        >
           <Logo variant="mark" priority plate className="h-16 w-auto sm:h-20" />
 
           <p className="mt-6 text-[0.72rem] tracking-[0.34em] text-gold-deep">
@@ -175,7 +181,7 @@ export default function Home() {
           <div className="mt-10 flex items-center gap-3">
             {HERO_SHOTS.map((image, i) => (
               <button
-                key={image.src}
+                key={image.alt}
                 type="button"
                 onClick={() => setShot(i)}
                 aria-label={`Show background ${i + 1} of ${HERO_SHOTS.length}`}

@@ -4,18 +4,26 @@
  *   node scripts/prepare-images.mjs
  *
  * Sources of truth are `DIVIC URBAN/` and `divic exclusive/` — originals are never
- * modified. Derivatives are written to `src/assets/images/<property>/`, so re-running this
- * after replacing a source file regenerates everything.
+ * modified. Derivatives are written to `src/assets/images/<property>/`, so re-running
+ * this after replacing a source file regenerates everything.
  *
  * The room images arrive as marketing flyers: inset thumbnails on a panel, a contact and
  * price bar along the bottom, and a logo watermark. We crop to the photograph alone so no
  * text, price or logo reaches the site — prices in particular must come from the PMS, not
- * be burnt into a JPEG.
+ * be burnt into a JPEG. The two properties' flyers are laid out differently, so each has
+ * its own geometry.
  *
- * The two properties' flyers are laid out differently, so each has its own geometry.
+ * EVERY IMAGE IS EMITTED SEVERAL TIMES OVER, because one file cannot serve both a phone
+ * and a desktop without wasting one of them:
+ *
+ *   · widths 480 / 960 / 1600, so a phone downloads a phone-sized picture
+ *   · AVIF and WebP, which are a fraction of the JPEG at the same quality
+ *   · one JPEG per image as the fallback for anything that reads neither
+ *
+ * The browser picks one file per image from the `srcset` the Plate component writes.
  */
 import sharp from 'sharp';
-import { mkdirSync, readdirSync } from 'node:fs';
+import { mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const JOBS = [
@@ -36,58 +44,78 @@ const JOBS = [
        right, price bar along the bottom. top 100 clears the watermark, width 670 stops
        before the right-hand inset at x≈878, height 408 stops above the bar at y≈512. */
     flyerCrop: { left: 205, top: 100, width: 670, height: 408 },
-    flyers: new Set([
-      'standardExclusive.jpg',
-      'deluxeExclusive.jpg',
-      'superiorExclusive.jpg',
-    ]),
+    flyers: new Set(['standardExclusive.jpg', 'deluxeExclusive.jpg', 'superiorExclusive.jpg']),
     skip: new Set(),
   },
 ];
+
+const WIDTHS = [480, 960, 1600];
+/** The JPEG is only ever the fallback, so one middling width covers it. */
+const FALLBACK_WIDTH = 1200;
 
 const slug = (file) =>
   file
     .replace(/\.[^.]+$/, '')
     .replace(/(Urban|Exclusive)$/i, '')
     .replace(/([a-z])([A-Z0-9])/g, '$1-$2')
-    .toLowerCase() + '.jpg';
+    .toLowerCase();
 
-let cropped = 0;
-let total = 0;
+/* The room crops come from small flyers and arrive soft, so everything gets a light
+   unsharp mask before encoding — gentle enough not to ring around door frames. */
+const SHARPEN = { sigma: 0.8, m1: 0.5, m2: 2 };
+
+let files = 0;
+let bytes = 0;
 
 for (const job of JOBS) {
+  rmSync(job.out, { recursive: true, force: true });
   mkdirSync(job.out, { recursive: true });
-  const files = readdirSync(job.src).filter(
-    (f) => /\.(jpe?g)$/i.test(f) && !job.skip.has(f),
-  );
 
-  for (const file of files) {
-    const isFlyer = job.flyers.has(file);
-    let img = sharp(join(job.src, file));
-    if (isFlyer) {
-      img = img.extract(job.flyerCrop);
-      cropped += 1;
+  const sources = readdirSync(job.src).filter((f) => /\.(jpe?g)$/i.test(f) && !job.skip.has(f));
+
+  for (const file of sources) {
+    const name = slug(file);
+    const base = sharp(join(job.src, file));
+    const cropped = job.flyers.has(file) ? base.clone().extract(job.flyerCrop) : base.clone();
+    const meta = await cropped.metadata();
+    const native = meta.width;
+
+    /* Never upscale: a 670px flyer crop gains nothing from a 1600px file, and the
+       browser would download the bigger one for no reason. */
+    const widths = WIDTHS.filter((w) => w <= native);
+    if (widths.length === 0 || widths[widths.length - 1] < native) widths.push(native);
+
+    const written = [];
+    for (const width of widths) {
+      const resized = () =>
+        cropped.clone().resize({ width, withoutEnlargement: true, kernel: 'lanczos3' }).sharpen(SHARPEN);
+      for (const [ext, encode] of [
+        ['avif', (p) => p.avif({ quality: 55, effort: 6 })],
+        ['webp', (p) => p.webp({ quality: 76, effort: 5 })],
+      ]) {
+        const out = join(job.out, `${name}-${width}.${ext}`);
+        await encode(resized()).toFile(out);
+        written.push(out);
+      }
     }
 
-    const out = join(job.out, slug(file));
-    await img
-      .resize({ width: 1600, withoutEnlargement: true, kernel: 'lanczos3' })
-      /* The room shots are cropped out of small flyers, so they arrive soft. A light
-         unsharp mask restores the edge the source JPEG lost, kept gentle enough not to
-         ring around high-contrast lines like door frames and skirting. Quality is up
-         from 82 because sharpening gives the encoder more detail to throw away. */
-      .sharpen({ sigma: 0.8, m1: 0.5, m2: 2 })
-      .jpeg({ quality: 90, mozjpeg: true, progressive: true, chromaSubsampling: '4:4:4' })
-      .toFile(out);
+    const fallback = join(job.out, `${name}.jpg`);
+    await cropped
+      .clone()
+      .resize({ width: Math.min(FALLBACK_WIDTH, native), withoutEnlargement: true, kernel: 'lanczos3' })
+      .sharpen(SHARPEN)
+      .jpeg({ quality: 82, mozjpeg: true, progressive: true })
+      .toFile(fallback);
+    written.push(fallback);
 
-    const meta = await sharp(out).metadata();
-    total += 1;
+    const size = written.reduce((n, f) => n + statSync(f).size, 0);
+    files += written.length;
+    bytes += size;
     console.log(
-      `${job.src}/${file}`.padEnd(38) +
-        `→ ${slug(file).padEnd(18)} ${meta.width}x${meta.height}` +
-        (isFlyer ? '  (cropped out of flyer)' : ''),
+      `${name.padEnd(14)} ${String(native).padStart(4)}px source → ` +
+        `${widths.join('/')} @ avif+webp + jpg   ${(size / 1024).toFixed(0)} kB total`,
     );
   }
 }
 
-console.log(`\n${total} images written, ${cropped} cropped free of overlaid text.`);
+console.log(`\n${files} files, ${(bytes / 1048576).toFixed(2)} MB on disk (the browser downloads one per image).`);

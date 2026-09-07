@@ -154,6 +154,24 @@ differently, so each has its own geometry in the script:
 | Extra inset | — | right |
 | Crop | `228,0 852×560` | `205,100 670×408` |
 
+**Every photograph is emitted several times over.** One file cannot serve a phone and a
+desktop without wasting one of them, so `scripts/prepare-images.mjs` writes AVIF and WebP
+at 480/960/1600 (never upscaled past the source) plus one JPEG fallback. `photo()` returns
+a descriptor rather than a URL, and `Plate` turns it into a `<picture>` with `srcset` and
+a `sizes` hint, so the browser downloads one file per image at the size it needs.
+
+A carousel is in the viewport from the start, so `loading="lazy"` holds none of its slides
+back — four hero shots meant four full-size downloads competing with first paint.
+`useCarousel` now reports which slides are armed: the first, plus whichever is showing and
+the one after it. Nothing already seen is disarmed.
+
+What the homepage costs a visitor, measured in a browser against the built site:
+
+| | before | now |
+|---|---|---|
+| desktop | 942 kB | **115 kB** |
+| phone | 942 kB | **54 kB** |
+
 **Galleries group related shots.** Where a place was photographed more than once — three
 angles on the Urban bar, the indoor and outdoor bars at Exclusive — the group renders as
 one crossfading slideshow rather than as separate items pretending to be different rooms.
@@ -187,8 +205,13 @@ and the footer run larger.
 ## The entry sequence
 
 `src/components/SplashScreen.jsx`: the logo settles, then the words come into focus under
-it, with a hairline filling underneath. Two CSS keyframes, once per browser session, and
-skipped for anyone who has asked for reduced motion.
+it, with a hairline filling underneath. Two CSS keyframes.
+
+**It plays on every full page load.** It was gated to once per browser session, which
+meant that after a first visit it never appeared again — including for the people who most
+wanted to see it. Moving between pages inside the site does not remount it, so the
+sequence is the entrance to the site rather than something between rooms. Anyone who has
+asked for reduced motion gets the finished frame, held briefly.
 
 This replaced a Remotion composition. Remotion is a video toolchain — it shipped roughly
 93 kB gzipped of player, plus a licence obligation, to draw two elements for under three
@@ -229,6 +252,10 @@ seconds. The dependency is gone.
 - **The Exclusive photography is low-resolution at source** — some frames are 500x333.
   `scripts/prepare-images.mjs` sharpens and encodes at quality 90 to get the most out of
   them, but it cannot add detail. Higher-resolution originals are the real fix.
+- **Room counts are never shown to guests** — not the branch total, not how many of a type
+  exist, not how many are free on the dates asked for. The availability step says whether
+  a room can be requested, nothing more. The counts still arrive from the PMS and are
+  still used to decide what is bookable; they are simply not displayed.
 - Editorial copy (room descriptions, character lines, amenity notes) is written to be
   plausible and should be reviewed by the hotel. Every hard fact — rates, counts, floors,
   addresses, phones — comes from `API.md`.

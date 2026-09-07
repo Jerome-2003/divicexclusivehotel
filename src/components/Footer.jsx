@@ -34,7 +34,7 @@ export default function Footer() {
                 to={`/${p.id}`}
                 className="mt-4 inline-flex text-sm text-mute underline-offset-4 hover:text-ink hover:underline"
               >
-                {p.totalRooms} rooms &middot; View branch
+                View this branch
               </Link>
             </div>
           ))}

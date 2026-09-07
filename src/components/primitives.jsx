@@ -4,23 +4,47 @@ import { useState } from 'react';
  * A media well that is designed rather than empty: the plate underneath is part of the
  * composition, so a slow, blocked or missing photograph never leaves a broken box.
  */
-export function Plate({ src, alt = '', className = '', imgClassName = '', priority = false }) {
+export function Plate({
+  src,
+  alt = '',
+  className = '',
+  imgClassName = '',
+  priority = false,
+  sizes = '100vw',
+}) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+
+  /* `src` is a descriptor from src/lib/images.js — AVIF and WebP srcsets plus a JPEG
+     fallback — but a plain URL string still works, which keeps one-off images simple. */
+  const picture = typeof src === 'string' ? { src, avif: '', webp: '' } : src;
+
+  const img = picture && !failed && (
+    <img
+      src={picture.src}
+      sizes={sizes}
+      alt={alt}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : undefined}
+      decoding="async"
+      onLoad={() => setLoaded(true)}
+      onError={() => setFailed(true)}
+      className={`${imgClassName} ${loaded ? 'is-loaded' : ''}`}
+    />
+  );
+
   return (
     <figure className={`plate ${className}`}>
-      {src && !failed && (
-        <img
-          src={src}
-          alt={alt}
-          loading={priority ? 'eager' : 'lazy'}
-          fetchpriority={priority ? 'high' : undefined}
-          decoding="async"
-          onLoad={() => setLoaded(true)}
-          onError={() => setFailed(true)}
-          className={`${imgClassName} ${loaded ? 'is-loaded' : ''}`}
-        />
-      )}
+      {img &&
+        (picture.avif || picture.webp ? (
+          <picture>
+            {picture.avif && <source type="image/avif" srcSet={picture.avif} sizes={sizes} />}
+            {picture.webp && <source type="image/webp" srcSet={picture.webp} sizes={sizes} />}
+            {img}
+          </picture>
+        ) : (
+          img
+        ))}
     </figure>
   );
 }

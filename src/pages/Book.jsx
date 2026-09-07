@@ -203,7 +203,7 @@ export default function Book() {
                     <select value={form.location} onChange={set('location')} className={FIELD}>
                       {properties.map((p) => (
                         <option key={p.id} value={p.id}>
-                          {p.displayName} — {p.totalRooms} rooms
+                          {p.displayName}
                         </option>
                       ))}
                     </select>
@@ -280,11 +280,14 @@ export default function Book() {
                             {row.name}
                           </span>
                           <span className="text-sm text-mute">
+                            {/* How many rooms are free is the hotel's business, not the
+                                guest's — they only need to know whether they can ask
+                                for this one. */}
                             {row.available === null
-                              ? 'Availability confirmed by the house'
+                              ? 'Availability confirmed by the branch'
                               : soldOut
-                                ? 'None free on these dates'
-                                : `${row.available} free on these dates`}
+                                ? 'Not available on these dates'
+                                : 'Available on these dates'}
                           </span>
                         </span>
                         <span className="flex flex-col items-end gap-1">
