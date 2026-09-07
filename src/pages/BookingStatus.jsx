@@ -3,7 +3,7 @@ import { divic } from '../lib/divic-api';
 import { SectionHead } from '../components/primitives';
 
 const FIELD =
-  'w-full border-b border-bone/20 bg-transparent px-0 py-3 text-body text-bone uppercase ' +
+  'w-full border-b border-ink/20 bg-transparent px-0 py-3 text-body text-ink uppercase ' +
   'placeholder:text-mute placeholder:normal-case ' +
   'focus:border-[rgb(var(--accent))] focus:outline-none transition-colors duration-400';
 
@@ -60,13 +60,13 @@ export default function BookingStatus() {
         </form>
 
         {error && (
-          <p role="alert" className="mt-8 border-l-2 border-[#C4644A] py-2 pl-4 text-sm text-[#E4917A]">
+          <p role="alert" className="mt-8 border-l-2 border-[#B4543A] py-2 pl-4 text-sm text-[#8C3A1E]">
             {error}
           </p>
         )}
 
         {result && (
-          <div className="mt-10 border border-bone/10 bg-espresso p-8">
+          <div className="mt-10 border border-ink/10 bg-shell p-8">
             <p className="eyebrow">{result.reference || reference.toUpperCase()}</p>
             <p className="mt-4 font-display text-d3 capitalize">{result.status}</p>
             <p className="prose-body mt-3">{WORDING[result.status] || result.message || ''}</p>

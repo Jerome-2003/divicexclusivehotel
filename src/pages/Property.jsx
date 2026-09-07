@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { formatNGN } from '../data/properties';
+import { BRAND, formatNGN } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
 import { Plate, SectionHead, SpecList } from '../components/primitives';
 import Slideshow from '../components/Slideshow';
@@ -36,7 +36,7 @@ function HeroTour({ property }) {
 
   return (
     <section
-      className="relative flex min-h-[86svh] items-end overflow-hidden bg-obsidian"
+      className="relative flex min-h-[86svh] items-end overflow-hidden bg-[#1C1711]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -44,7 +44,7 @@ function HeroTour({ property }) {
         <Plate
           key={image.src}
           src={image.src}
-          alt={i === shot ? `${image.label}, ${property.name}` : ''}
+          alt={i === shot ? `${image.label}, ${property.displayName}` : ''}
           priority={i === 0}
           className={`absolute inset-0 transition-opacity duration-1100 ease-quiet ${
             i === shot ? 'opacity-100' : 'opacity-0'
@@ -57,30 +57,30 @@ function HeroTour({ property }) {
         className="absolute inset-0 z-20"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(11,10,8,.62) 0%, rgba(11,10,8,.16) 30%, ' +
-            'rgba(11,10,8,.74) 70%, rgba(11,10,8,.97) 100%)',
+            'linear-gradient(to bottom, rgba(28,23,17,.60) 0%, rgba(28,23,17,.14) 30%, ' +
+            'rgba(28,23,17,.72) 70%, rgba(28,23,17,.95) 100%)',
         }}
       />
 
       <div className="shell relative z-30 pb-12 pt-32">
-        <p className="text-sm text-champagne">
+        <p className="text-sm text-gold">
            {property.character}.
         </p>
-        <h1 className="mt-4 max-w-[14ch] font-display text-d1 font-light text-bone">
-          {property.name}
+        <h1 className="mt-4 max-w-[16ch] font-display text-d1 font-light text-bone">
+          {property.displayName}
         </h1>
         <p className="mt-5 max-w-[46ch] text-lg text-bone/75">{property.tagline}</p>
         <div className="mt-8 flex flex-wrap items-center gap-4">
-          <Link to="/book" className="btn btn-solid">
+          <Link to="/book" className="btn btn-onDark">
             Request a stay
           </Link>
-          <span className="text-sm text-bone/60">From {formatNGN(totalFrom)} per night</span>
+          <span className="text-sm text-bone/75">From {formatNGN(totalFrom)} per night</span>
         </div>
 
         {/* The tour index. It doubles as the carousel control, so the guest can go
             straight to the pool instead of waiting for it to come round. */}
         {shots.length > 1 && (
-          <div className="mt-12 flex flex-wrap gap-x-7 gap-y-4 border-t border-bone/15 pt-5">
+          <div className="mt-12 flex flex-wrap gap-x-7 gap-y-4 border-t border-bone/25 pt-5">
             {shots.map((image, i) => {
               const active = i === shot;
               return (
@@ -94,12 +94,12 @@ function HeroTour({ property }) {
                   <span
                     aria-hidden="true"
                     className={`h-px transition-all duration-700 ease-quiet ${
-                      active ? 'w-full bg-accent' : 'w-5 bg-bone/30 group-hover/tab:bg-bone/60'
+                      active ? 'w-full bg-gold' : 'w-5 bg-bone/35 group-hover/tab:bg-bone/70'
                     }`}
                   />
                   <span
                     className={`text-[0.82rem] transition-colors duration-400 ${
-                      active ? 'text-bone' : 'text-bone/50 group-hover/tab:text-bone/80'
+                      active ? 'text-bone' : 'text-bone/60 group-hover/tab:text-bone/85'
                     }`}
                   >
                     {image.label}
@@ -146,7 +146,7 @@ function GalleryFrame({ group, property, slot, lead }) {
             <figcaption className="absolute inset-x-0 bottom-0 z-20 p-6 lg:p-8">
               <span
                 aria-hidden="true"
-                className="block h-px w-8 bg-accent transition-all duration-700 ease-quiet group-hover:w-20"
+                className="block h-px w-8 bg-gold transition-all duration-700 ease-quiet group-hover:w-20"
               />
               <span
                 className={`mt-4 block font-display font-light text-bone ${
@@ -189,12 +189,12 @@ function RoomSpread({ room, index }) {
       />
 
       <div
-        className={`relative z-20 -mt-14 mx-4 border border-bone/12 bg-espresso/95 p-7 backdrop-blur-md
+        className={`relative z-20 -mt-14 mx-4 border border-ink/12 bg-alabaster/96 p-7 backdrop-blur-md
                     sm:-mt-20 sm:mx-8 lg:mx-0 lg:mt-0 lg:row-start-1 lg:col-span-5 lg:p-10 ${
                       flipped ? 'lg:col-start-1' : 'lg:col-start-8'
                     }`}
       >
-        <h3 className="font-display text-d3 text-bone">{room.name}</h3>
+        <h3 className="font-display text-d3 text-ink">{room.name}</h3>
         <span aria-hidden="true" className="mt-4 block h-px w-10 bg-accent" />
         <p className="prose-body mt-5">{room.description}</p>
 
@@ -203,11 +203,11 @@ function RoomSpread({ room, index }) {
           {floors && ` · ${floors}`}
         </p>
 
-        <div className="mt-7 flex flex-wrap items-end justify-between gap-x-8 gap-y-5 border-t border-bone/12 pt-6">
+        <div className="mt-7 flex flex-wrap items-end justify-between gap-x-8 gap-y-5 border-t border-ink/12 pt-6">
           <span className="flex flex-col">
             <span
               className="font-display text-[clamp(1.9rem,3.4vw,2.6rem)] font-light leading-none"
-              style={{ color: 'rgb(var(--accent-lift))' }}
+              style={{ color: 'rgb(var(--accent))' }}
             >
               {formatNGN(room.rate)}
             </span>
@@ -222,6 +222,86 @@ function RoomSpread({ room, index }) {
   );
 }
 
+/* ------------------------------------------------------------------ *
+ * Whole-space hire
+ *
+ * Not a room, so it does not belong in the room ladder: a guest booking the pool for an
+ * evening is doing something different from a guest booking a bed. These rates are held
+ * in the site's content rather than the PMS, which is the one place the site quotes a
+ * price the hotel system does not own — flagged in the README.
+ * ------------------------------------------------------------------ */
+function PrivateBookings({ property }) {
+  return (
+    <section className="section bg-alabaster">
+      <div className="shell">
+        <SectionHead
+          title="Private bookings"
+          lead="The pool and either bar can be taken for an evening and closed to other guests. The rate is for the space, not per head, and the branch confirms the date by telephone."
+        />
+        <div className="mt-14 grid gap-px border border-ink/12 bg-ink/12 md:grid-cols-3">
+          {property.privateBookings.map((item) => (
+            <div key={item.label} className="flex flex-col gap-4 bg-alabaster p-8 lg:p-10">
+              <h3 className="font-display text-d3 text-ink">{item.label}</h3>
+              <span aria-hidden="true" className="block h-px w-10 bg-accent" />
+              <p className="text-sm text-slate">{item.note}</p>
+              <p className="mt-auto pt-4">
+                <span
+                  className="font-display text-[clamp(1.6rem,3vw,2.1rem)] font-light leading-none"
+                  style={{ color: 'rgb(var(--accent))' }}
+                >
+                  {formatNGN(item.rate)}
+                </span>
+                <span className="mt-2 block text-sm text-mute">for the space</span>
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 flex flex-wrap gap-4">
+          <a
+            href={`tel:${(property.phone || '').replace(/\s/g, '')}`}
+            className="btn btn-solid"
+          >
+            Call {property.phone}
+          </a>
+          <a
+            href={BRAND.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline"
+          >
+            Ask on WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* House rules are the sort of thing a guest wants to find without asking, so they are
+   set plainly rather than buried in a paragraph of terms. */
+function HouseRules({ property }) {
+  return (
+    <section className="section bg-shell">
+      <div className="shell grid gap-12 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <SectionHead title="Before you arrive" />
+        </div>
+        <dl className="lg:col-span-7 lg:col-start-6">
+          {property.houseRules.map((rule) => (
+            <div
+              key={rule.label}
+              className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 border-t border-ink/12 py-5"
+            >
+              <dt className="font-display text-lg text-ink">{rule.label}</dt>
+              <dd className="text-slate">{rule.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 export default function Property() {
   const { slug } = useParams();
   const { choose, propertyId, byId, ratesAreLive } = useProperty();
@@ -233,7 +313,7 @@ export default function Property() {
   }, [property, propertyId, choose]);
 
   useEffect(() => {
-    if (property) document.title = `${property.name} — Festac, Lagos`;
+    if (property) document.title = `${property.displayName} — Festac, Lagos`;
   }, [property]);
 
   if (!property) return <Navigate to="/" replace />;
@@ -265,7 +345,7 @@ export default function Property() {
 
       {/* ---------- a look around ---------- */}
       {gallery.length > 0 && (
-        <section className="section bg-espresso">
+        <section className="section bg-shell">
           <div className="shell">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <SectionHead
@@ -296,23 +376,23 @@ export default function Property() {
       <section className="section shell">
         <SectionHead
           title="What comes with the room"
-          lead={`Everything below is on site at ${property.name} and included for house guests.`}
+          lead={`Everything below is on site at ${property.displayName} and included for house guests.`}
         />
         {/* A hairline mesh: the gaps between the tiles are the rules, so the grid
             draws its own structure and nothing needs a border of its own. */}
-        <div className="mt-14 grid gap-px border border-bone/15 bg-bone/15 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-px border border-ink/12 bg-ink/12 sm:grid-cols-2 lg:grid-cols-3">
           {property.amenities.map((a) => (
             <div
               key={a.label}
-              className="group flex flex-col gap-6 bg-obsidian p-8 transition-colors duration-400 ease-quiet hover:bg-bone/[0.035] lg:p-10"
+              className="group flex flex-col gap-6 bg-alabaster p-8 transition-colors duration-400 ease-quiet hover:bg-sand/45 lg:p-10"
             >
               <AmenityIcon
                 label={a.label}
                 className="h-10 w-10 text-accent transition-colors duration-400 group-hover:text-accent-lift"
               />
               <span className="flex flex-col">
-                <span className="font-display text-xl font-light text-bone">{a.label}</span>
-                <span className="mt-2 text-sm text-linen">{a.note}</span>
+                <span className="font-display text-xl font-light text-ink">{a.label}</span>
+                <span className="mt-2 text-sm text-slate">{a.note}</span>
               </span>
             </div>
           ))}
@@ -320,10 +400,10 @@ export default function Property() {
       </section>
 
       {/* ---------- rooms ---------- */}
-      <section className="section bg-espresso">
+      <section className="section bg-shell">
         <div className="shell">
           <SectionHead
-            title={`Every room at ${property.name}`}
+            title={`Every room at ${property.displayName}`}
             lead={`${property.roomTypes.length} room types, ${property.totalRooms} rooms in total. Rates are nightly and ${
               ratesAreLive ? 'come live from the hotel system' : 'are the published rates'
             } — the total for your dates is calculated when you request a stay.`}
@@ -336,8 +416,12 @@ export default function Property() {
         </div>
       </section>
 
+      {property.privateBookings?.length > 0 && <PrivateBookings property={property} />}
+
+      {property.houseRules?.length > 0 && <HouseRules property={property} />}
+
       {/* ---------- closing ---------- */}
-      <section className="section bg-obsidian text-bone">
+      <section className="section bg-alabaster">
         <div className="shell flex flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h2 className="max-w-[18ch] font-display text-d2 font-light">
@@ -352,9 +436,17 @@ export default function Property() {
               href={property.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-bone/60 underline-offset-4 hover:text-bone hover:underline"
+              className="text-sm text-mute underline-offset-4 hover:text-ink hover:underline"
             >
               {property.address}
+            </a>
+            <a
+              href={BRAND.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-mute underline-offset-4 hover:text-ink hover:underline"
+            >
+              Or message us on WhatsApp — {BRAND.whatsapp}
             </a>
           </div>
         </div>

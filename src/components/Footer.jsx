@@ -1,61 +1,72 @@
 import { Link } from 'react-router-dom';
 import { BRAND } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
-import SwanMark from './SwanMark';
+import Logo from './Logo';
 
 /**
- * The footer is the one place both properties always appear together — it is a
- * directory, not a feature surface, so it stays outside the property switch.
+ * The footer is the one place both branches always appear together — it is a directory,
+ * not a feature surface, so it stays outside the branch switch.
+ *
+ * The brand's WhatsApp reaches either branch; the landlines are branch-specific and come
+ * from the PMS, so each is listed against its own house.
  */
 export default function Footer() {
   const { properties } = useProperty();
   return (
-    <footer className="bg-obsidian text-bone">
+    <footer className="border-t border-ink/10 bg-shell text-ink">
       <div className="shell py-section">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <SwanMark className="h-12 w-11 text-bone" showDisc={false} />
-            <p className="mt-5 font-display text-d3">{BRAND.name}</p>
-            <p className="mt-2 text-sm text-bone/50">{BRAND.line}</p>
+            <Logo variant="full" alt={BRAND.name} plate className="h-24 w-auto" />
+            <p className="mt-5 text-sm text-mute">{BRAND.line}</p>
           </div>
 
           {properties.map((p) => (
             <div key={p.id} className="lg:col-span-3">
-              <p className="text-sm" style={{ color: '#C9A961' }}>
-                {p.name}
-              </p>
-              <p className="mt-3 text-sm text-bone/70">{p.address}</p>
-              <p className="mt-1 text-sm text-bone/70">
-                <a href={`tel:${p.phone.replace(/\s/g, '')}`} className="hover:text-bone">
+              <p className="font-display text-lg">{p.displayName}</p>
+              <p className="mt-3 text-sm text-slate">{p.address}</p>
+              <p className="mt-1 text-sm text-slate">
+                <a href={`tel:${p.phone.replace(/\s/g, '')}`} className="hover:text-ink">
                   {p.phone}
                 </a>
               </p>
               <Link
                 to={`/${p.id}`}
-                className="mt-4 inline-flex text-sm text-bone/60 underline-offset-4 hover:text-bone hover:underline"
+                className="mt-4 inline-flex text-sm text-mute underline-offset-4 hover:text-ink hover:underline"
               >
-                {p.totalRooms} rooms &middot; View house
+                {p.totalRooms} rooms &middot; View branch
               </Link>
             </div>
           ))}
 
           <div className="lg:col-span-2">
-            <p className="text-sm" style={{ color: '#C9A961' }}>
-              Elsewhere
-            </p>
-            <div className="mt-3 flex flex-col gap-2 text-sm text-bone/70">
-              <a href={BRAND.instagram} className="hover:text-bone">
-                Instagram
+            <p className="font-display text-lg">Reach us</p>
+            <div className="mt-3 flex flex-col gap-2 text-sm text-slate">
+              <a
+                href={BRAND.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-ink"
+              >
+                WhatsApp {BRAND.whatsapp}
               </a>
-              <Link to="/contact" className="hover:text-bone">
+              <a
+                href={BRAND.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-ink"
+              >
+                @{BRAND.instagramHandle}
+              </a>
+              <Link to="/contact" className="hover:text-ink">
                 Contact
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-bone/15 pt-6 text-sm text-bone/40 sm:flex-row sm:items-center sm:justify-between">
-          <span>&copy; {new Date().getFullYear()} Divic</span>
+        <div className="mt-16 flex flex-col gap-3 border-t border-ink/10 pt-6 text-sm text-mute sm:flex-row sm:items-center sm:justify-between">
+          <span>&copy; {new Date().getFullYear()} {BRAND.name}</span>
           <span>Festac, Lagos</span>
         </div>
       </div>

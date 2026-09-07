@@ -1,7 +1,15 @@
-# Divic
+# Divic Exclusive Hotels
 
-Website for **Divic Exclusive** (15 rooms) and **Divic Urban** (21 rooms), two
-separately-operated properties in Festac, Lagos, under one Divic brand.
+Website for **Divic Exclusive Hotels** and its two separately-operated branches in
+Festac, Lagos: **Divic Exclusive 1 Hotel** (15 rooms) and **Divic Urban** (21 rooms).
+
+The PMS calls the first branch `Divic Exclusive`, and that name is left alone — it is
+what booking payloads key on. `displayName` in `src/data/properties.js` is what guests
+read.
+
+**Brand contacts:** WhatsApp `09169845310` and Instagram `@divicexclusivehotel` belong to
+the brand and reach either branch. Each branch keeps its own landline, which comes from
+the PMS.
 
 Design direction, tokens and component rules: [`DESIGN-BRIEF.md`](./DESIGN-BRIEF.md).
 Backend contract: [`API.md`](./API.md).
@@ -154,21 +162,37 @@ It pauses on hover and focus, and does not auto-advance under `prefers-reduced-m
 The property hero uses the same photography: the frontview opens, then one shot from each
 gallery group, so a guest choosing a house sees what that house actually has.
 
-## The splash animation, and Remotion's licence
+## The logo
 
-The entry animation is a Remotion composition (`src/remotion/DivicSplash.jsx`) played by
-`@remotion/player`, code-split so it never sits in the critical path.
+`public/divicexlusive.jpg` is the supplied logo. `scripts/prepare-logo.mjs` cuts it into
+the two shapes the site uses and writes them to `src/assets/brand/`:
 
-**Remotion is not MIT-licensed.** Its licence is free for individuals and for companies
-below a size threshold, and requires a paid company licence above it — see
-<https://remotion.dev/license>. `src/components/SplashPlayer.jsx` passes
-`acknowledgeRemotionLicense`, which only silences the console notice; it does not grant
-anything. Confirm Divic falls under the free terms, or buy the licence. If neither suits,
-the splash is one lazy import to remove and the rest of the site is unaffected.
+| Output | What it is | Used by |
+|---|---|---|
+| `logo-mark.png` | swan and oval, 172x187 | header, homepage nav, hero, splash, favicon |
+| `logo-full.png` | mark and wordmark, 262x273 | footer |
 
-The player is `initiallyMuted` because the composition has no audio track. Without it the
-browser blocks autoplay on an unmuted player, opens an `AudioContext` it will not start,
-and Remotion mutes the player itself and warns.
+Both have the white field lifted off them by flooding inward from the border rather than
+by keying every white pixel — the swan itself is near-white, and a naive key erases it.
+
+**The logo is rendered on a white plate** (`<Logo plate />`). The swan is near-white and
+the page ground is off-white, so without one the bird all but disappears and only the gold
+oval reads. The plate is the logo's own presentation, not decoration.
+
+**Resolution is the ceiling here.** The source is 503x496 and the mark inside it is only
+about 172x187, so nothing is ever enlarged and the site is sized to suit. A higher
+resolution original — better still, the vector it was drawn from — would let the splash
+and the footer run larger.
+
+## The entry sequence
+
+`src/components/SplashScreen.jsx`: the logo settles, then the words come into focus under
+it, with a hairline filling underneath. Two CSS keyframes, once per browser session, and
+skipped for anyone who has asked for reduced motion.
+
+This replaced a Remotion composition. Remotion is a video toolchain — it shipped roughly
+93 kB gzipped of player, plus a licence obligation, to draw two elements for under three
+seconds. The dependency is gone.
 
 ## Known discrepancies
 
@@ -189,6 +213,22 @@ and Remotion mutes the player itself and warns.
   cropped photograph is only 670×408. On the full-width room spread that is upscaled
   roughly 1.3×, which is soft on a large screen. Original-resolution room photographs
   would fix it.
+- **Private booking rates are held in the site, not the PMS.** Urban's indoor pool
+  (₦200,000), VIP bar (₦200,000) and outdoor bar (₦100,000) are whole-space hire, which
+  `GET /api/public/properties` does not carry. They are the one place the site quotes a
+  price the hotel system does not own, so they must be changed here when they change.
+- **The booking form's ID number travels in `specialRequests`.** API.md's request body has
+  no field for it and sending an unlisted one risks a 400, so it goes in as a labelled
+  first line where the receptionist will see it. Add a `guestId` field to the PMS and it
+  should move there.
+- **House rules and private bookings are set on Urban only**, as supplied. They read like
+  brand-wide policy; if they apply to Exclusive 1 too, copy the two blocks across in
+  `src/data/properties.js`.
+- **The logo artwork reads "Divic Exclusive Hotel"** while the brand is "Divic Exclusive
+  Hotels". Worth correcting at source.
+- **The Exclusive photography is low-resolution at source** — some frames are 500x333.
+  `scripts/prepare-images.mjs` sharpens and encodes at quality 90 to get the most out of
+  them, but it cannot add detail. Higher-resolution originals are the real fix.
 - Editorial copy (room descriptions, character lines, amenity notes) is written to be
   plausible and should be reviewed by the hotel. Every hard fact — rates, counts, floors,
   addresses, phones — comes from `API.md`.

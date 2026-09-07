@@ -6,46 +6,45 @@
 @tailwind utilities;
 
 /* ============================================================
-   DIVIC — LIMESTONE, on the dark ground
-   One ground across the whole site. One accent varies per property.
+   DIVIC EXCLUSIVE HOTELS — off-white and gold
+   The logo sets the palette: its own off-white field, its own gold.
+   One accent varies per branch, and both stay inside the gold family.
    ============================================================ */
 @layer base {
   :root {
-    /* Divic Exclusive — olive-bronze. Older, quieter, residential.
-       Lifted from the ink-on-paper value so it reads on near-black at 5:1. */
-    --accent: 138 130 88;
-    --accent-lift: 167 157 108;
-    --accent-deep: 62 58 36;
+    /* Divic Exclusive 1 — the cooler, olive side of the gold. */
+    --accent: 119 100 39;
+    --accent-lift: 156 132 56;
+    --accent-soft: 223 200 150;
   }
 
   :root[data-property='urban'] {
-    /* Divic Urban — Lagos clay. Hotter, younger, street-facing. */
-    --accent: 201 112 78;
-    --accent-lift: 220 134 99;
-    --accent-deep: 110 56 35;
+    /* Divic Urban — the warmer, bronze side of the same family. */
+    --accent: 143 90 40;
+    --accent-lift: 176 113 58;
+    --accent-soft: 232 205 168;
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* native controls — date pickers, select menus, scrollbars — follow the page */
-    color-scheme: dark;
-    background: theme('colors.obsidian');
+    color-scheme: light;
+    background: theme('colors.alabaster');
   }
 
   body {
-    @apply bg-obsidian text-bone font-sans text-body antialiased;
-    /* the accent transition is what makes a property switch read as a change of
-       light rather than a page load */
+    @apply bg-alabaster text-ink font-sans text-body antialiased;
+    /* the accent transition is what makes a branch switch read as a change of light
+       rather than a page load */
     transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   h1, h2, h3 { @apply font-display font-light; text-wrap: balance; }
 
-  ::selection { background: rgb(var(--accent)); color: #0B0A08; }
+  ::selection { background: rgb(var(--accent-soft)); color: #221D16; }
 
   :focus-visible {
-    outline: 2px solid rgb(var(--accent-lift));
+    outline: 2px solid rgb(var(--accent));
     outline-offset: 3px;
   }
 
@@ -69,13 +68,13 @@
      Sentence case, not the tracked-out all-caps eyebrow. */
   .eyebrow {
     @apply text-sm font-medium;
-    color: rgb(var(--accent-lift));
+    color: rgb(var(--accent));
   }
-  .lead { @apply text-lead text-linen max-w-measure; }
-  .prose-body { @apply text-body text-linen max-w-measure; }
+  .lead { @apply text-lead text-slate max-w-measure; }
+  .prose-body { @apply text-body text-slate max-w-measure; }
 
   /* --- rules --- */
-  .hair { @apply h-px w-full bg-bone/10 border-0; }
+  .hair { @apply h-px w-full bg-ink/10 border-0; }
   .rule-short { @apply h-px w-10 border-0; background: rgb(var(--accent)); }
 
   /* --- controls --- */
@@ -83,49 +82,49 @@
     @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 text-[0.9375rem]
            font-medium transition-colors duration-400 ease-quiet;
   }
-  /* On this ground the accent is the light source, so a solid button is the accent
-     carrying near-black type — the same relationship the homepage Search button has. */
+  /* The accent is deep enough to carry near-white type on this ground. */
   .btn-solid {
     background: rgb(var(--accent));
-    @apply text-obsidian;
+    @apply text-alabaster;
   }
   .btn-solid:hover { background: rgb(var(--accent-lift)); }
   .btn-outline {
-    @apply border text-bone;
+    @apply border text-ink;
     border-color: rgb(var(--accent) / 0.5);
   }
   .btn-outline:hover {
     background: rgb(var(--accent));
-    @apply text-obsidian border-transparent;
+    @apply text-alabaster border-transparent;
   }
+  /* Over photography, where the ground is a scrim rather than the page. */
   .btn-onDark {
-    @apply border border-bone/35 text-bone;
+    @apply border border-bone/45 text-bone;
   }
-  .btn-onDark:hover { @apply bg-bone text-obsidian border-bone; }
+  .btn-onDark:hover { @apply bg-bone text-ink border-bone; }
 
   .link-quiet {
     @apply inline-flex items-center text-[0.9375rem] font-medium pb-1
            border-b transition-colors duration-400 ease-quiet;
-    color: rgb(var(--accent-lift));
+    color: rgb(var(--accent));
     border-color: rgb(var(--accent) / 0.4);
   }
-  .link-quiet:hover { border-color: rgb(var(--accent-lift)); }
+  .link-quiet:hover { border-color: rgb(var(--accent)); }
 
   /* --- media --- */
   /* Every media well carries a designed plate underneath, so a slow or missing
      photograph never leaves a broken box in the layout. */
   .plate {
-    @apply relative overflow-hidden bg-umber isolate;
+    @apply relative overflow-hidden bg-sand isolate;
   }
-  /* The plate carries the property's accent at real strength, so the two houses are
-     tellable apart at thumbnail size even before any photography is in place. */
+  /* The plate carries the branch's accent, so the two houses are tellable apart at
+     thumbnail size even before any photography is in place. */
   .plate::before {
     content: '';
     @apply absolute inset-0 z-0;
     background:
-      radial-gradient(125% 95% at 72% 12%, rgb(var(--accent) / 0.34) 0%, transparent 60%),
-      radial-gradient(115% 85% at 12% 88%, rgb(var(--accent-deep) / 0.85) 0%, transparent 65%),
-      linear-gradient(160deg, #2A241C 0%, #0E0C0A 100%);
+      radial-gradient(125% 95% at 72% 12%, rgb(var(--accent-soft) / 0.9) 0%, transparent 62%),
+      radial-gradient(115% 85% at 12% 88%, rgb(var(--accent) / 0.28) 0%, transparent 65%),
+      linear-gradient(160deg, #F1E9DA 0%, #DDD1BB 100%);
     transition: background 700ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .plate > img {
@@ -155,11 +154,39 @@
   .scrim-b {
     background: linear-gradient(
       to top,
-      rgba(11, 10, 8, 0.92) 0%,
-      rgba(11, 10, 8, 0.62) 34%,
-      rgba(11, 10, 8, 0.12) 68%,
+      rgba(28, 23, 17, 0.92) 0%,
+      rgba(28, 23, 17, 0.62) 34%,
+      rgba(28, 23, 17, 0.12) 68%,
       transparent 100%
     );
+  }
+
+  /* --- the entry sequence ---
+     The mark settles first; the words come into focus underneath it a beat later. Both
+     are suppressed under prefers-reduced-motion by the global rule in the base layer,
+     and SplashScreen also skips straight to the finished frame there. */
+  .splash-mark {
+    animation: splash-mark 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .splash-words {
+    animation: splash-words 900ms cubic-bezier(0.16, 1, 0.3, 1) 780ms both;
+  }
+  .splash-rule {
+    transform-origin: left center;
+    animation: splash-rule 2400ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  @keyframes splash-mark {
+    from { opacity: 0; transform: scale(0.88) translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes splash-words {
+    from { opacity: 0; filter: blur(9px); transform: translateY(8px); }
+    to   { opacity: 1; filter: blur(0);   transform: none; }
+  }
+  @keyframes splash-rule {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
   }
 
   .sr-only-focusable:not(:focus) {
