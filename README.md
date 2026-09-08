@@ -141,7 +141,9 @@ Source images live in `DIVIC URBAN/` and `divic exclusive/` and are never modifi
 node scripts/prepare-images.mjs
 ```
 
-to regenerate `src/assets/images/<property>/`. The room images arrive as marketing flyers and
+to regenerate `src/assets/images/<property>/`. **Never drop an image straight into that
+folder** — the script wipes and rebuilds it, so anything placed there is deleted on the
+next run and never gets its AVIF/WebP variants. New photography goes in the source folder. The room images arrive as marketing flyers and
 the script crops each to the photograph alone — prices especially must not be burnt into a
 JPEG when the PMS is the source of truth. The two properties' flyers are laid out
 differently, so each has its own geometry in the script:
@@ -227,11 +229,16 @@ seconds. The dependency is gone.
   Since rates are served live, whatever the PMS returns is what guests actually see.
 - The flyers carry a *Divic Exclusive Hotel* logo on Urban rooms, and quote 3rd Avenue —
   the Urban address. Cropped out, but the artwork itself may need fixing at source.
-- **Urban Classic and Urban Superior are the same photograph.** The two source flyers
-  differ only in their text and price bars; the room photograph inside them is identical,
-  so once the flyer furniture is cropped away the two files are byte-for-byte the same.
-  A guest paying ₦60,000 for a Superior currently sees the ₦50,000 Classic room. This
-  needs a real Superior photograph from the hotel — it cannot be fixed in code.
+- **Urban Superior has no photograph of its own.** `classicUrban.jpg` and
+  `superiorUrban.jpg` differ only in their text and price bars — the room photograph
+  inside them is identical, so the crops are byte-for-byte the same and the bundler emits
+  one file for both. Classic now uses `classicmainUrban.jpg`, so the two no longer show
+  the same picture on the page, but Superior is still showing what used to be the Classic
+  room. A real Superior photograph is the only fix.
+- **`urban/classic` and `urban/frontview` are no longer used by the site.**
+  `classicmain` replaced the first and `reception` replaced the second as Urban's header.
+  Both files are kept — `npm run check:images` lists them each build — in case they are
+  wanted back, for the gallery or elsewhere.
 - **Exclusive room photographs are small.** The Exclusive flyers are 1080×565, so the
   cropped photograph is only 670×408. On the full-width room spread that is upscaled
   roughly 1.3×, which is soft on a large screen. Original-resolution room photographs

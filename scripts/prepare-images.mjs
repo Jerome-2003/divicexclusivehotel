@@ -34,7 +34,13 @@ const JOBS = [
        bottom. left 228 clears the panel, width 852 stops before the watermark at x≈1085,
        height 560 stops above the bar at y≈565. */
     flyerCrop: { left: 228, top: 0, width: 852, height: 560 },
-    flyers: new Set(['classicUrban.jpg', 'crownUrban.jpg', 'deluxeUrban.jpg', 'superiorUrban.jpg']),
+    flyers: new Set([
+      'classicUrban.jpg',
+      'classicmainUrban.jpg',
+      'crownUrban.jpg',
+      'deluxeUrban.jpg',
+      'superiorUrban.jpg',
+    ]),
     skip: new Set(['diviclogo.JPG']),
   },
   {
