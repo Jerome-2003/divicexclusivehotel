@@ -148,7 +148,10 @@ export const CONTENT = {
       'the desk knows which way to send you before the traffic builds.',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Plot+340+3rd+Avenue+A1+Close+Festac+Lagos',
-    heroImage: urban('frontview'),
+    /* The lobby, not the street frontage. The hero tour opens on this and then walks the
+       gallery, and because it dedupes on the file, the Reception group's own tour slide
+       drops out rather than showing the same photograph twice. */
+    heroImage: urban('reception'),
     gallery: [
       { label: 'The bar', images: [urban('bar'), urban('bar-1'), urban('bar-2')] },
       { label: 'The pool', images: [urban('pool')] },
@@ -159,7 +162,7 @@ export const CONTENT = {
     rooms: {
       classic: {
         name: 'Classic Room',
-        image: urban('classic'),
+        image: urban('classicmain'),
         description:
           'A king bed, blackout curtains, a work desk and a walk-in shower. Ground and ' +
           'first floor — the straightforward choice for a night or two.',
