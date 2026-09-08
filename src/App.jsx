@@ -9,6 +9,8 @@ import Property from './pages/Property';
 import Contact from './pages/Contact';
 import Book from './pages/Book';
 import BookingStatus from './pages/BookingStatus';
+import Ask from './pages/Ask';
+import SiteNotices from './components/SiteNotices';
 
 /* The homepage has its own search-bar navigation (HomeNav), so the site header steps
    aside there rather than stacking two bars. Every other page keeps the site header. */
@@ -17,6 +19,9 @@ function SiteChrome({ children }) {
   return (
     <>
       {pathname !== '/' && <Header />}
+      {/* Never over the booking flow: interrupting someone mid-payment to
+          advertise at them loses the sale. */}
+      <SiteNotices suppress={pathname.startsWith('/book')} />
       {children}
     </>
   );
@@ -44,6 +49,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/book" element={<Book />} />
           <Route path="/booking-status" element={<BookingStatus />} />
+          <Route path="/ask" element={<Ask />} />
           {/* one template serves both houses; an unknown slug redirects home */}
           <Route path="/:slug" element={<Property />} />
         </Routes>

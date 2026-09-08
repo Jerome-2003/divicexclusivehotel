@@ -1,38 +1,26 @@
 {
-  "name": "divic-web",
-  "version": "0.1.0",
-  "description": "Divic — website for Divic Exclusive and Divic Urban, Festac, Lagos",
+  "name": "divic-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-images.mjs && vite build",
-    "deploy": "npm run build && gh-pages -d dist",
-    "preview": "vite preview --port 4173",
-    "check:images": "node scripts/check-images.mjs"
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "VITE_OUT_DIR=docs vite build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jerome-2003/divicexclusivehotel.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Jerome-2003/divicexclusivehotel/issues"
-  },
-  "homepage": "https://github.com/Jerome-2003/divicexclusivehotel#readme",
   "dependencies": {
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.3"
+    "@fontsource-variable/fraunces": "^5.0.0",
+    "@fontsource-variable/karla": "^5.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
-    "@fontsource-variable/fraunces": "^5.3.0",
-    "@fontsource-variable/karla": "^5.3.0",
-    "@vitejs/plugin-react": "^6.1.1",
-    "autoprefixer": "^10.5.5",
-    "gh-pages": "^6.3.0",
-    "postcss": "^8.5.28",
-    "sharp": "^0.35.4",
-    "tailwindcss": "^3.4.17",
-    "vite": "^8.2.2"
-  },
-  "private": true,
-  "type": "module"
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "vite": "^5.4.8"
+  }
 }

@@ -4,6 +4,7 @@ import { useProperty } from '../context/PropertyContext';
 import { divic, buildBookingPayload, nights as nightsBetween } from '../lib/divic-api';
 import { formatNGN } from '../data/properties';
 import { SectionHead } from '../components/primitives';
+import PayPanel from '../components/PayPanel';
 
 const FIELD =
   'w-full border-b border-ink/20 bg-transparent px-0 py-3 text-body text-ink ' +
@@ -60,6 +61,7 @@ export default function Book() {
   const [error, setError] = useState(null);
   const [availability, setAvailability] = useState(null);
   const [confirmation, setConfirmation] = useState(null);
+  const [quote, setQuote] = useState(null);
 
   /* The homepage search hands over location, dates and guests. Arriving with a complete
      set means the guest has already answered step one, so we open on the room step. */
@@ -175,6 +177,28 @@ export default function Book() {
       setBusy(false);
     }
   }
+
+  /* The fee has to be on screen before the guest reaches Paystack. A total that
+     grows at the last step reads as a trick even when it is small and disclosed,
+     and it is the most common reason a booking is abandoned. */
+  useEffect(() => {
+    if (!form.roomType || !form.checkIn || !form.checkOut || !divic.configured) {
+      setQuote(null);
+      return;
+    }
+    const ac = new AbortController();
+    divic
+      .quote({
+        location: form.location,
+        roomType: form.roomType,
+        checkIn: form.checkIn,
+        checkOut: form.checkOut,
+        signal: ac.signal,
+      })
+      .then(setQuote)
+      .catch(() => setQuote(null));   // the estimate below still stands
+    return () => ac.abort();
+  }, [form.location, form.roomType, form.checkIn, form.checkOut]);
 
   const chosenRow = rows.find((r) => r.type === form.roomType);
 
@@ -398,8 +422,14 @@ export default function Book() {
                     ))}
                   </dl>
 
+                  <PayPanel
+                    reference={confirmation.reference}
+                    quote={quote}
+                    hotelPhone={confirmation.hotelPhone}
+                  />
+
                   {confirmation.hotelPhone && (
-                    <a href={`tel:${confirmation.hotelPhone}`} className="btn btn-solid mt-8">
+                    <a href={`tel:${confirmation.hotelPhone}`} className="btn btn-outline mt-6">
                       Call {confirmation.hotelPhone}
                     </a>
                   )}
@@ -428,17 +458,31 @@ export default function Book() {
               </dl>
 
               {chosenRow && stayNights > 0 && (
-                <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-ink/15 pt-5">
-                  <span className="text-sm text-mute">Estimate</span>
-                  <span className="font-display text-2xl" style={{ color: 'rgb(var(--accent))' }}>
-                    {formatNGN(chosenRow.total || chosenRow.rate * stayNights)}
-                  </span>
+                <div className="mt-5 border-t border-ink/15 pt-5">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <span className="text-sm text-mute">Room</span>
+                    <span className="text-sm">
+                      {formatNGN(quote ? quote.roomTotal : chosenRow.total || chosenRow.rate * stayNights)}
+                    </span>
+                  </div>
+                  {quote && quote.paystackFee > 0 && (
+                    <div className="mt-3 flex items-baseline justify-between gap-4">
+                      <span className="text-sm text-mute">Card fee, if you pay online</span>
+                      <span className="text-sm">{formatNGN(quote.paystackFee)}</span>
+                    </div>
+                  )}
+                  <div className="mt-4 flex items-baseline justify-between gap-4 border-t border-ink/10 pt-4">
+                    <span className="text-sm text-mute">{quote ? 'Total by card' : 'Estimate'}</span>
+                    <span className="font-display text-2xl" style={{ color: 'rgb(var(--accent))' }}>
+                      {formatNGN(quote ? quote.totalPayable : chosenRow.total || chosenRow.rate * stayNights)}
+                    </span>
+                  </div>
                 </div>
               )}
 
               <p className="mt-6 text-sm text-slate">
-                The final price is calculated by the hotel, not in your browser. You will not
-                be charged on this site.
+                Prices come from the hotel, not from your browser. Paying at the desk by
+                cash or transfer carries no card fee.
               </p>
               {property?.phone && (
                 <p className="mt-4 text-sm text-slate">

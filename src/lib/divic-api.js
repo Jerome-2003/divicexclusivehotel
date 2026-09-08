@@ -94,6 +94,72 @@ export class DivicBooking {
     });
   }
 
+  /**
+   * What the guest will actually pay: room total, card fee and grand total, as
+   * three separate numbers.
+   *
+   * The fee is never calculated here. A price the browser works out is a price
+   * the browser can edit, and the server recomputes it at checkout regardless —
+   * so a local guess could only ever disagree with the real charge.
+   */
+  async quote({ location, roomType, checkIn, checkOut, signal } = {}) {
+    const url = new URL(this.apiUrl + '/api/public/quote');
+    url.searchParams.set('location', location || this.location);
+    url.searchParams.set('roomType', roomType);
+    url.searchParams.set('checkIn', checkIn);
+    url.searchParams.set('checkOut', checkOut);
+    return this.#json(url, { signal });
+  }
+
+  /**
+   * Starts Paystack checkout for a request that already exists.
+   *
+   * Note what is not sent: an amount. The server recomputes it from the stored
+   * request, so there is nothing here for anyone to tamper with.
+   */
+  async startPayment(reference, { signal } = {}) {
+    return this.#json(
+      this.apiUrl + '/api/public/booking-requests/' + encodeURIComponent(reference) + '/pay',
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal },
+    );
+  }
+
+  /**
+   * Where the payment stands. Called after the guest returns from Paystack —
+   * landing back on the site proves nothing about whether money moved, so the
+   * server re-verifies with Paystack before answering.
+   */
+  async paymentStatus(reference, { signal } = {}) {
+    return this.#json(
+      this.apiUrl + '/api/public/booking-requests/' + encodeURIComponent(reference) + '/payment-status',
+      { signal },
+    );
+  }
+
+  /** Promos and popups the hotel publishes from its own software. */
+  async content({ location, signal } = {}) {
+    const url = new URL(this.apiUrl + '/api/public/content');
+    if (location) url.searchParams.set('location', location);
+    return this.#json(url, { signal });
+  }
+
+  /** The curated FAQ. Answers most questions with no assistant call at all. */
+  async faq({ location, signal } = {}) {
+    const url = new URL(this.apiUrl + '/api/public/faq');
+    if (location) url.searchParams.set('location', location);
+    return this.#json(url, { signal });
+  }
+
+  /** The assistant, for questions the curated list does not cover. */
+  async askFaq({ question, location, signal } = {}) {
+    return this.#json(this.apiUrl + '/api/public/faq/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, location }),
+      signal,
+    });
+  }
+
   /** Lets a guest look up their own request by reference. */
   async checkRequest(reference, { signal } = {}) {
     return this.#json(
