@@ -22,15 +22,18 @@ import { photo } from '../lib/images';
 export const PROPERTY_SEED = [
   {
     id: 'exclusive',
-    name: 'Divic Exclusive',
+    // Mirrors the live API's display name exactly — this is the
+    // fallback, byte-for-byte, per the file's own header comment. The
+    // guest-facing name is CONTENT.exclusive.displayName below, untouched.
+    name: 'Divic 1',
     address: 'Plot 55, 1st Avenue, E Close, Festac, Lagos',
     phone: '09169845311',
     totalRooms: 15,
     currency: 'NGN',
     roomTypes: [
-      { type: 'standard', rate: 40000, roomCount: 6, floors: [0] },
-      { type: 'deluxe', rate: 45000, roomCount: 5, floors: [1] },
-      { type: 'superior', rate: 50000, roomCount: 4, floors: [1] },
+      { type: 'standard', rate: 40000, roomCount: 6, floors: [1] },
+      { type: 'deluxe', rate: 45000, roomCount: 5, floors: [2] },
+      { type: 'superior', rate: 50000, roomCount: 4, floors: [2] },
     ],
   },
   {
@@ -41,10 +44,10 @@ export const PROPERTY_SEED = [
     totalRooms: 21,
     currency: 'NGN',
     roomTypes: [
-      { type: 'classic', rate: 50000, roomCount: 5, floors: [0, 1] },
-      { type: 'deluxe', rate: 55000, roomCount: 6, floors: [0, 1, 2] },
-      { type: 'superior', rate: 60000, roomCount: 4, floors: [0, 1, 2] },
-      { type: 'crown', rate: 65000, roomCount: 6, floors: [1, 2] },
+      { type: 'classic', rate: 50000, roomCount: 5, floors: [1, 2] },
+      { type: 'deluxe', rate: 55000, roomCount: 6, floors: [1, 2, 3] },
+      { type: 'superior', rate: 60000, roomCount: 4, floors: [1, 2, 3] },
+      { type: 'crown', rate: 65000, roomCount: 6, floors: [2, 3] },
     ],
   },
 ];

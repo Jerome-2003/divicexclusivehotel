@@ -11,10 +11,10 @@ import { BRAND } from '../data/properties';
 /* Ambient establishing shots, alternating houses so the rotation itself says there are
    two of them. */
 const HERO_SHOTS = [
-  { src: photo('exclusive', 'pool'), alt: 'The pool at Divic Exclusive, after dark' },
+  { src: photo('exclusive', 'pool'), alt: 'The pool at Divic Exclusive 1, after dark' },
   { src: photo('urban', 'bar'), alt: 'The bar at Divic Urban' },
   { src: photo('urban', 'pool'), alt: 'The pool at Divic Urban' },
-  { src: photo('exclusive', 'indoorbar'), alt: 'The indoor bar at Divic Exclusive' },
+  { src: photo('exclusive', 'indoorbar'), alt: 'The indoor bar at Divic Exclusive 1' },
 ];
 
 /* The two branches, kept inside the gold family: Exclusive the cooler olive side of it,

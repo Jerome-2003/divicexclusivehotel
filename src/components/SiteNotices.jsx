@@ -93,9 +93,27 @@ export default function SiteNotices({ suppress = false }) {
   );
 }
 
+/* A YouTube/Vimeo link needs an <iframe> to embed; a direct file link plays in
+   a plain <video> tag. Detected from the URL, matching how the PMS editor
+   decides the same thing, so a promo looks the same wherever it renders. */
+function isEmbedVideo(url) {
+  return /youtube\.com|youtu\.be|vimeo\.com/i.test(url || '');
+}
+function toEmbedUrl(url) {
+  const yt = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([\w-]+)/);
+  if (yt) return 'https://www.youtube.com/embed/' + yt[1];
+  const vm = url.match(/vimeo\.com\/(\d+)/);
+  if (vm) return 'https://player.vimeo.com/video/' + vm[1];
+  return url;
+}
+
 function Popup({ item, onDismiss }) {
   const [shown, setShown] = useState(false);
   const href = safeHref(item.ctaHref);
+  // Only render a mediaUrl that actually passes the same link-safety check as
+  // any other href here — a stray javascript: or data: URL is the same
+  // problem in this attribute as it is in ctaHref.
+  const mediaUrl = item.mediaType && item.mediaType !== 'none' ? safeHref(item.mediaUrl) : null;
 
   // A short delay so it never lands before the page is usable.
   useEffect(() => {
@@ -118,8 +136,23 @@ function Popup({ item, onDismiss }) {
       onMouseDown={(e) => e.target === e.currentTarget && onDismiss()}
     >
       <div role="dialog" aria-modal="true" aria-label={item.title} className="w-full max-w-md bg-shell p-8">
-        {item.imageUrl && (
-          <img src={item.imageUrl} alt="" className="mb-6 h-40 w-full object-cover" />
+        {mediaUrl && (
+          <div className="mb-6">
+            {item.mediaType === 'image' && (
+              <img src={mediaUrl} alt={item.caption || ''} className="h-40 w-full object-cover" />
+            )}
+            {item.mediaType === 'video' && (
+              isEmbedVideo(mediaUrl)
+                ? <iframe
+                    src={toEmbedUrl(mediaUrl)}
+                    title={item.caption || item.title}
+                    allowFullScreen
+                    className="aspect-video w-full border-0"
+                  />
+                : <video src={mediaUrl} controls className="w-full" />
+            )}
+            {item.caption && <p className="mt-2 text-sm text-mute">{item.caption}</p>}
+          </div>
         )}
         <h2 className="font-display text-d3">{item.title}</h2>
         {item.body && <p className="prose-body mt-3 text-sm">{item.body}</p>}
