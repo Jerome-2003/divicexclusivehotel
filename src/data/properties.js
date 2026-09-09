@@ -80,9 +80,9 @@ export const CONTENT = {
   exclusive: {
     slug: 'exclusive',
     /* The PMS calls this branch "Divic Exclusive"; the hotel's own name for it is
-       "Divic Exclusive 1 Hotel". The API name stays untouched — it is what booking
+       "Divic Exclusive Hotel 1". The API name stays untouched — it is what booking
        payloads are keyed on — and this is what guests read. */
-    displayName: 'Divic Exclusive 1 Hotel',
+    displayName: 'DIVIC EXCLUSIVE HOTEL 1',
     shortName: 'Exclusive 1',
     character: 'Residential, discreet, low-lit',
     tagline: 'the sense that nobody else is checking in.',
@@ -139,7 +139,7 @@ export const CONTENT = {
 
   urban: {
     slug: 'urban',
-    displayName: 'Divic Urban',
+    displayName: 'DIVIC EXCLUSIVE HOTEL(URBAN)',
     shortName: 'Urban',
     character: 'Open, social, daylit',
     tagline: 'the whole of Festac at the door.',

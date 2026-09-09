@@ -1,7 +1,7 @@
 # Divic Exclusive Hotels
 
 Website for **Divic Exclusive Hotels** and its two separately-operated branches in
-Festac, Lagos: **Divic Exclusive 1 Hotel** (15 rooms) and **Divic Urban** (21 rooms).
+Festac, Lagos: **Divic Exclusive Hotel 1** (15 rooms) and **Divic Urban** (21 rooms).
 
 The PMS calls the first branch `Divic Exclusive`, and that name is left alone — it is
 what booking payloads key on. `displayName` in `src/data/properties.js` is what guests
