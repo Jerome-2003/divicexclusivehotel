@@ -12,6 +12,16 @@ const FIELD =
 
 const today = () => new Date().toISOString().slice(0, 10);
 
+/* Two branches, so "the other one" is always well defined. */
+const OTHER_BRANCH = { exclusive: 'urban', urban: 'exclusive' };
+
+/** Room types the branch can actually take on these dates. */
+const freeTypes = (availability) =>
+  (availability?.roomTypes || []).filter((r) => (r.available ?? 0) > 0).map((r) => r.type);
+
+/** null means "we could not check", which is not the same as "full". */
+const isSoldOut = (row) => row?.available === 0;
+
 /* ---------- step rail ---------- */
 function Steps({ step }) {
   const labels = ['Dates', 'Room', 'Details', 'Confirmation'];
@@ -61,6 +71,10 @@ export default function Book() {
   const [error, setError] = useState(null);
   const [availability, setAvailability] = useState(null);
   const [confirmation, setConfirmation] = useState(null);
+  /* The other branch's availability for the same dates, fetched only once something
+     here is full. `null` means we have not looked; a value means we have. */
+  const [alt, setAlt] = useState(null);
+  const [recheck, setRecheck] = useState(false);
   const [quote, setQuote] = useState(null);
 
   /* The homepage search hands over location, dates and guests. Arriving with a complete
@@ -166,6 +180,42 @@ export default function Book() {
   async function submit(e) {
     e.preventDefault();
     setError(null);
+
+    /* Check the room is still free before sending anything.
+     *
+     * The backend does NOT refuse a request for a full room type — it takes it, sets
+     * `likelyAvailable: false` and tells the guest the hotel will call with
+     * alternatives. That is a reasonable thing for a hotel to do and a poor thing for a
+     * website to do silently: the guest has just filled in a form for a room that is
+     * gone. Availability was last read on the room step, which may have been several
+     * minutes and several form fields ago, so it is read again here. */
+    if (divic.configured) {
+      setRecheck(true);
+      try {
+        const fresh = await divic.checkAvailability({
+          location: form.location,
+          checkIn: form.checkIn,
+          checkOut: form.checkOut,
+        });
+        setAvailability(fresh);
+        const row = fresh.roomTypes?.find((r) => r.type === form.roomType);
+        if (isSoldOut(row)) {
+          setRecheck(false);
+          setStep(2);   // back to the rooms, where the recommendation appears
+          setError(
+            'That room was taken while you were filling this in. Nothing has been sent — ' +
+              'here is what is still free for your dates.',
+          );
+          return;
+        }
+      } catch {
+        /* If the check itself fails, do not strand the guest on a form they have
+           filled: let the request through. The hotel confirms by telephone anyway. */
+      } finally {
+        setRecheck(false);
+      }
+    }
+
     setBusy(true);
     try {
       const result = await divic.submitRequest(buildBookingPayload(form));
@@ -201,6 +251,64 @@ export default function Book() {
   }, [form.location, form.roomType, form.checkIn, form.checkOut]);
 
   const chosenRow = rows.find((r) => r.type === form.roomType);
+  /* A recommendation only earns its place when this branch cannot help: either the room
+     the guest actually wants is gone, or the whole branch is. "Some other type is full"
+     is not a reason to send them across Festac while two rooms are free right here. */
+  const allSoldOut = rows.length > 0 && rows.every(isSoldOut);
+  const needsAlternative = allSoldOut || isSoldOut(chosenRow);
+
+  /* If anything at this branch is full for these dates, ask the other branch the same
+     question. Two branches a few minutes apart is the one advantage this hotel has over
+     a single house, and a guest should not have to discover it by going back and
+     re-searching. Only fires when there is something to recommend around. */
+  useEffect(() => {
+    const otherId = OTHER_BRANCH[form.location];
+    if (!divic.configured || !needsAlternative || !otherId || stayNights < 1) {
+      setAlt(null);
+      return undefined;
+    }
+    const ac = new AbortController();
+    divic
+      .checkAvailability({
+        location: otherId,
+        checkIn: form.checkIn,
+        checkOut: form.checkOut,
+        signal: ac.signal,
+      })
+      .then((data) => setAlt({ location: otherId, availability: data }))
+      .catch(() => setAlt(null));   // no recommendation is better than a wrong one
+    return () => ac.abort();
+  }, [needsAlternative, form.location, form.checkIn, form.checkOut, stayNights]);
+
+  /* What the other branch could offer: the same room type where it has one free,
+     otherwise whatever it does have. */
+  const recommendation = useMemo(() => {
+    if (!alt?.availability) return null;
+    const free = freeTypes(alt.availability);
+    if (free.length === 0) return null;
+    const otherProperty = byId[alt.location];
+    const nameFor = (type) =>
+      otherProperty?.roomTypes.find((rt) => rt.type === type)?.name || type;
+    const sameType = free.includes(form.roomType) ? form.roomType : null;
+    return {
+      location: alt.location,
+      branchName: otherProperty?.displayName || alt.location,
+      sameType,
+      sameTypeName: sameType ? nameFor(sameType) : null,
+      freeNames: free.map(nameFor),
+      moveTo: sameType || free[0],
+    };
+  }, [alt, byId, form.roomType]);
+
+  /* Moving branch keeps the dates and the guests, and lands on a room that is actually
+     free — the point of the recommendation is that it saves the guest the search. */
+  function moveToOtherBranch() {
+    if (!recommendation) return;
+    setError(null);
+    setAvailability(alt.availability);
+    setAlt(null);
+    setForm((f) => ({ ...f, location: recommendation.location, roomType: recommendation.moveTo }));
+  }
 
   return (
     <>
@@ -325,13 +433,34 @@ export default function Book() {
                   })}
                 </div>
 
+                {recommendation && (
+                  <div className="mt-8 border-l-2 py-4 pl-5" style={{ borderColor: 'rgb(var(--accent))' }}>
+                    <p className="font-display text-lg">
+                      {recommendation.sameTypeName
+                        ? `${recommendation.branchName} has a ${recommendation.sameTypeName} free`
+                        : `${recommendation.branchName} has rooms free`}
+                    </p>
+                    <p className="prose-body mt-2 text-sm">
+                      {recommendation.sameTypeName
+                        ? 'Same dates, same room, a few minutes away in Festac.'
+                        : `Same dates, a few minutes away in Festac — ${recommendation.freeNames.join(', ')}.`}
+                    </p>
+                    <button type="button" onClick={moveToOtherBranch} className="btn btn-solid mt-5">
+                      See {recommendation.branchName}
+                    </button>
+                  </div>
+                )}
+
                 <div className="mt-9 flex flex-wrap gap-4">
                   <button type="button" onClick={() => setStep(1)} className="btn btn-outline">
                     Back
                   </button>
                   <button
                     type="button"
-                    disabled={!form.roomType}
+                    /* A room type can arrive pre-selected from a property page link
+                       (`/book?roomType=crown`), which never consulted availability — so
+                       the sold-out state is checked here, not just on the row. */
+                    disabled={!form.roomType || isSoldOut(chosenRow)}
                     onClick={() => { setError(null); setStep(3); }}
                     className="btn btn-solid disabled:opacity-40"
                   >
@@ -358,8 +487,14 @@ export default function Book() {
                     <input type="tel" minLength={7} maxLength={20} value={form.guestPhone} onChange={set('guestPhone')} required className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-sm text-mute">Email (optional)</span>
-                    <input type="email" value={form.guestEmail} onChange={set('guestEmail')} className={FIELD} />
+                    <span className="text-sm text-mute">Email</span>
+                    <input
+                      type="email"
+                      value={form.guestEmail}
+                      onChange={set('guestEmail')}
+                      required
+                      className={FIELD}
+                    />
                   </label>
                   <label className="flex flex-col gap-1 sm:col-span-2">
                     <span className="text-sm text-mute">ID number (optional)</span>
@@ -388,8 +523,12 @@ export default function Book() {
                   <button type="button" onClick={() => setStep(2)} className="btn btn-outline">
                     Back
                   </button>
-                  <button type="submit" disabled={busy} className="btn btn-solid disabled:opacity-50">
-                    {busy ? 'Sending…' : 'Send request'}
+                  <button
+                    type="submit"
+                    disabled={busy || recheck}
+                    className="btn btn-solid disabled:opacity-50"
+                  >
+                    {recheck ? 'Checking the room…' : busy ? 'Sending…' : 'Send request'}
                   </button>
                 </div>
               </form>
