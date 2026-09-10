@@ -182,6 +182,38 @@ It pauses on hover and focus, and does not auto-advance under `prefers-reduced-m
 The property hero uses the same photography: the frontview opens, then one shot from each
 gallery group, so a guest choosing a house sees what that house actually has.
 
+## Availability, and the other branch
+
+`divic-backend` does **not** refuse a booking request for a room type that is full. It
+takes the request, sets `likelyAvailable: false` and returns a softer `message` saying the
+hotel will call with alternatives. That is reasonable for a hotel and poor for a website:
+the guest has just filled in a form for a room that is gone.
+
+So the site checks, in three places:
+
+| Where | What it does |
+|---|---|
+| The room step | A type with `available === 0` cannot be selected |
+| Continue | Disabled when the chosen type is full — a room type can arrive pre-selected from a property page link (`/book?roomType=crown`), which never consulted availability |
+| Send request | Re-reads availability for the chosen branch and dates before posting anything. Availability was last read several minutes and several form fields ago |
+
+If the re-check finds the room gone, **nothing is sent**: the guest goes back to the room
+step with an explanation and the alternatives.
+
+**The other branch.** Two houses a few minutes apart is this hotel's one advantage over a
+single building, and a guest should not have to discover it by starting the search again.
+When the branch cannot help — the room they want is gone, or the whole branch is — the
+site asks the other branch the same question and offers what it finds. `GET /availability`
+is per-location and unthrottled, so this is a second call, not a new endpoint.
+
+It is deliberately quiet: some *other* room type being full is not a reason to send anyone
+across Festac while rooms are free where they are. Moving branch keeps the dates and the
+guests, and lands on a room that is actually free.
+
+`deluxe` and `superior` exist at both branches, so those can be recommended like for like;
+`standard` is Exclusive-only and `classic`/`crown` are Urban-only, so for those the offer
+lists what the other branch does have.
+
 ## The logo
 
 `public/divicexlusive.jpg` is the supplied logo. `scripts/prepare-logo.mjs` cuts it into
