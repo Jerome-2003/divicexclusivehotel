@@ -487,8 +487,14 @@ export default function Book() {
                     <input type="tel" minLength={7} maxLength={20} value={form.guestPhone} onChange={set('guestPhone')} required className={FIELD} />
                   </label>
                   <label className="flex flex-col gap-1">
-                    <span className="text-sm text-mute">Email (optional)</span>
-                    <input type="email" value={form.guestEmail} onChange={set('guestEmail')} className={FIELD} />
+                    <span className="text-sm text-mute">Email</span>
+                    <input
+                      type="email"
+                      value={form.guestEmail}
+                      onChange={set('guestEmail')}
+                      required
+                      className={FIELD}
+                    />
                   </label>
                   <label className="flex flex-col gap-1 sm:col-span-2">
                     <span className="text-sm text-mute">ID number (optional)</span>
