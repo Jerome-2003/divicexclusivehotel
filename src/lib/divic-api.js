@@ -209,6 +209,21 @@ export const divic = new DivicBooking({
   apiUrl: import.meta.env?.VITE_DIVIC_API_URL || '',
 });
 
+/**
+ * A `mediaUrl` published from the PMS is one of two shapes: a full `https://`
+ * link someone pasted in, or a `/uploads/...` path from a file the receptionist
+ * uploaded from their device — a path on the *API's* origin, not this site's.
+ * Rendered as-is, that path resolves against whatever origin this site is
+ * deployed on instead and 404s — a broken-image icon where the promo photo
+ * should be. Only the second case needs the API origin stitched back on; a
+ * pasted https:// URL is already absolute and passes through unchanged.
+ */
+export function resolveMediaUrl(url) {
+  if (!url) return url;
+  if (/^https:\/\//i.test(url)) return url;
+  return divic.apiUrl + (url.startsWith('/') ? url : '/' + url);
+}
+
 export const nights = (checkIn, checkOut) => {
   if (!checkIn || !checkOut) return 0;
   const ms = new Date(checkOut) - new Date(checkIn);

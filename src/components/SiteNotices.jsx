@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { divic } from '../lib/divic-api';
+import { divic, resolveMediaUrl } from '../lib/divic-api';
 import { useProperty } from '../context/PropertyContext';
 
 /**
@@ -112,8 +112,14 @@ function Popup({ item, onDismiss }) {
   const href = safeHref(item.ctaHref);
   // Only render a mediaUrl that actually passes the same link-safety check as
   // any other href here — a stray javascript: or data: URL is the same
-  // problem in this attribute as it is in ctaHref.
-  const mediaUrl = item.mediaType && item.mediaType !== 'none' ? safeHref(item.mediaUrl) : null;
+  // problem in this attribute as it is in ctaHref. safeHref runs first, on the
+  // raw stored value, so the /-prefixed-or-https check is unaffected by what
+  // resolveMediaUrl does next: stitching the API's own origin onto a path
+  // that is relative to it, not to this site — otherwise the browser looks
+  // for the file on this site's own origin and never finds it.
+  const mediaUrl = item.mediaType && item.mediaType !== 'none'
+    ? resolveMediaUrl(safeHref(item.mediaUrl))
+    : null;
 
   // A short delay so it never lands before the page is usable.
   useEffect(() => {
