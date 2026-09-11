@@ -70,18 +70,6 @@ export default function Footer() {
 
         <div className="mt-16 flex flex-col gap-3 border-t border-ink/10 pt-6 text-sm text-mute sm:flex-row sm:items-center sm:justify-between">
           <span>&copy; {new Date().getFullYear()} {BRAND.name}</span>
-
-          {/* Staff entrance. Deliberately quiet and out of the guest's way — it
-              is not part of the guest experience. */}
-          {import.meta.env.VITE_PMS_URL && (
-            <a
-              href={import.meta.env.VITE_PMS_URL}
-              className="text-mute hover:text-ink"
-              rel="noreferrer"
-            >
-              Staff sign-in
-            </a>
-          )}
           <span>Festac, Lagos</span>
         </div>
       </div>

@@ -57,36 +57,53 @@ export default function SiteNotices({ suppress = false }) {
   if (suppress) return null;
 
   const live = items.filter((i) => !dismissed.includes(i.key));
-  const banners = live.filter((i) => i.type === 'banner' || i.type === 'announcement');
+  /* 'section' is one of the four types the PMS editor offers ("Section — a block of
+     content"), and its own preview renders one exactly like a banner — there is no
+     separate placement built for it anywhere, on either side. Left out here, a
+     published section is marked "Live on the site" in the PMS and never appears on it. */
+  const banners = live.filter((i) => i.type === 'banner' || i.type === 'announcement' || i.type === 'section');
   // One popup at a time, highest priority. Two at once is an ambush.
   const popup = live.find((i) => i.type === 'popup');
 
   return (
     <>
-      {banners.map((b) => {
-        const href = safeHref(b.ctaHref);
-        return (
-          <div key={b.key} className="border-b border-ink/10 bg-ink/[0.04]">
-            <div className="shell flex flex-wrap items-center gap-x-6 gap-y-2 py-3">
-              <p className="text-sm">
-                <span className="font-semibold">{b.title}</span>
-                {b.body && <span className="text-slate"> — {b.body}</span>}
-              </p>
-              {href && b.ctaLabel && (
-                <a href={href} className="link-quiet text-sm">{b.ctaLabel}</a>
-              )}
-              <button
-                type="button"
-                onClick={() => dismiss(b.key)}
-                aria-label="Dismiss this notice"
-                className="ml-auto text-sm text-mute hover:text-ink"
-              >
-                Dismiss
-              </button>
-            </div>
-          </div>
-        );
-      })}
+      {banners.length > 0 && (
+        /* Both Header and HomeNav are `position: fixed; top: 0`, so they take no space
+           in normal flow — anything that simply comes first in the DOM, as this used to,
+           renders at the very top of the document and sits exactly where the nav already
+           claims the pixels. The nav paints over it and it is 100% invisible on every
+           route at every width, which is indistinguishable from "never appeared" to
+           anyone who did not open dev tools. 85px clears the taller of the two navs
+           (measured 73–83px across breakpoints) with a small margin; the page's own
+           content keeps whatever top padding it already had, so a banner adds height
+           rather than overlapping anything. */
+        <div className="pt-[85px]">
+          {banners.map((b) => {
+            const href = safeHref(b.ctaHref);
+            return (
+              <div key={b.key} className="border-b border-ink/10 bg-ink/[0.04]">
+                <div className="shell flex flex-wrap items-center gap-x-6 gap-y-2 py-3">
+                  <p className="text-sm">
+                    <span className="font-semibold">{b.title}</span>
+                    {b.body && <span className="text-slate"> — {b.body}</span>}
+                  </p>
+                  {href && b.ctaLabel && (
+                    <a href={href} className="link-quiet text-sm">{b.ctaLabel}</a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => dismiss(b.key)}
+                    aria-label="Dismiss this notice"
+                    className="ml-auto text-sm text-mute hover:text-ink"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {popup && <Popup item={popup} onDismiss={() => dismiss(popup.key)} />}
     </>
