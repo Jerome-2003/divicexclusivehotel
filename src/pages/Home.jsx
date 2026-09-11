@@ -148,18 +148,17 @@ export default function Home() {
           }}
         />
 
-        {/* The words and the two cards sit on a solid panel of the page's own ground, so
-            the photograph behind them can run at full strength without ever putting the
-            type at risk. A translucent panel (bg-alabaster/93 with a backdrop-blur) sat
-            here before — the same combination that made the room panels on the property
-            pages hard to read against their photos, for the same reason: at anything
-            short of fully opaque, the blur lets the image through right where the text
-            sits, and how legible that reads depends entirely on what happens to be behind
-            it in the photo at that moment. Solid reads the same regardless. */}
+        {/* Translucent again, but not the same translucent: the earlier bg-alabaster/93
+            read badly against the photo not because it let the photo through, but because
+            backdrop-blur-[2px] barely blurred it — sharp detail still showed through the
+            gap. HomeNav's own "stuck" header solves the same problem at bg-alabaster/92
+            backdrop-blur-xl and reads cleanly, so the panel matches that pairing: enough
+            blur that whatever photo is behind it arrives as a soft wash, not a pattern,
+            at any opacity short of fully solid. */}
         <div
           className="relative z-30 mx-gutter flex w-full max-w-4xl flex-col items-center
-                     rounded-sm bg-alabaster px-6 py-10 text-center
-                     shadow-[0_1px_44px_rgba(34,29,22,.13)]
+                     rounded-sm bg-alabaster/90 px-6 py-10 text-center
+                     shadow-[0_1px_44px_rgba(34,29,22,.13)] backdrop-blur-xl
                      sm:px-14 sm:py-12"
         >
           <Logo variant="mark" priority plate className="h-16 w-auto sm:h-20" />
