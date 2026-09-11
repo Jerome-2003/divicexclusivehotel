@@ -67,8 +67,17 @@ const slug = (file) =>
     .toLowerCase();
 
 /* The room crops come from small flyers and arrive soft, so everything gets a light
-   unsharp mask before encoding — gentle enough not to ring around door frames. */
-const SHARPEN = { sigma: 0.8, m1: 0.5, m2: 2 };
+   unsharp mask before encoding — gentle enough not to ring around door frames.
+   The ambient shots (pool, bar, frontview...) are the ones the homepage hero and
+   the property tour stretch full-bleed to fill the screen — none of the source
+   photography clears 1200px, so on any screen wider than that the browser is
+   enlarging the file no matter what this script does. A stronger unsharp mask
+   cannot recover detail that was never captured, but it does buy back some of
+   the edge contrast that enlarging softens, and these wider shots have fewer
+   thin, straight lines (door frames, panel edges) for it to ring around than a
+   tight room crop does. */
+const SHARPEN_FLYER = { sigma: 0.8, m1: 0.5, m2: 2 };
+const SHARPEN_AMBIENT = { sigma: 1.1, m1: 0.7, m2: 2.4 };
 
 let files = 0;
 let bytes = 0;
@@ -81,8 +90,10 @@ for (const job of JOBS) {
 
   for (const file of sources) {
     const name = slug(file);
+    const isFlyer = job.flyers.has(file);
+    const sharpenSpec = isFlyer ? SHARPEN_FLYER : SHARPEN_AMBIENT;
     const base = sharp(join(job.src, file));
-    const cropped = job.flyers.has(file) ? base.clone().extract(job.flyerCrop) : base.clone();
+    const cropped = isFlyer ? base.clone().extract(job.flyerCrop) : base.clone();
     const meta = await cropped.metadata();
     const native = meta.width;
 
@@ -94,7 +105,7 @@ for (const job of JOBS) {
     const written = [];
     for (const width of widths) {
       const resized = () =>
-        cropped.clone().resize({ width, withoutEnlargement: true, kernel: 'lanczos3' }).sharpen(SHARPEN);
+        cropped.clone().resize({ width, withoutEnlargement: true, kernel: 'lanczos3' }).sharpen(sharpenSpec);
       for (const [ext, encode] of [
         ['avif', (p) => p.avif({ quality: 55, effort: 6 })],
         ['webp', (p) => p.webp({ quality: 76, effort: 5 })],
@@ -109,7 +120,7 @@ for (const job of JOBS) {
     await cropped
       .clone()
       .resize({ width: Math.min(FALLBACK_WIDTH, native), withoutEnlargement: true, kernel: 'lanczos3' })
-      .sharpen(SHARPEN)
+      .sharpen(sharpenSpec)
       .jpeg({ quality: 82, mozjpeg: true, progressive: true })
       .toFile(fallback);
     written.push(fallback);
