@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useProperty } from '../context/PropertyContext';
+import { useNavGuard } from '../context/NavGuardContext';
 import { divic, buildBookingPayload, nights as nightsBetween } from '../lib/divic-api';
 import { formatNGN } from '../data/properties';
 import { SectionHead } from '../components/primitives';
@@ -100,6 +101,16 @@ export default function Book() {
   useEffect(() => {
     document.title = 'Request a stay — Divic';
   }, []);
+
+  /* Once the guest has picked a room or started typing their details, leaving
+     costs them real work. Step 1 is just a search and step 4 is already sent,
+     so only steps 2 and 3 are worth warning about. */
+  useNavGuard(step === 2 || step === 3, {
+    title: 'Leave this booking request?',
+    body: "You haven't sent your request yet. If you leave now, the room and details you've chosen will be lost.",
+    confirmLabel: 'Leave this page',
+    cancelLabel: 'Stay and finish',
+  });
 
   /* Arriving from the homepage search with dates already chosen: skip straight to the
      room step and fetch availability, rather than showing a form that is already filled. */
