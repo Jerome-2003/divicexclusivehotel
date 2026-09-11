@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import SplashScreen from './components/SplashScreen';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { PropertyProvider } from './context/PropertyContext';
+import { NavGuardProvider } from './context/NavGuardContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -39,23 +40,25 @@ function ScrollToTop() {
 export default function App() {
   return (
     <PropertyProvider>
-      {/* covers a page that is already mounted and interactive underneath */}
-      <SplashScreen />
-      <ScrollToTop />
-      <SiteChrome>
-      <main id="main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/book" element={<Book />} />
-          <Route path="/booking-status" element={<BookingStatus />} />
-          <Route path="/ask" element={<Ask />} />
-          {/* one template serves both houses; an unknown slug redirects home */}
-          <Route path="/:slug" element={<Property />} />
-        </Routes>
-      </main>
-      </SiteChrome>
-      <Footer />
+      <NavGuardProvider>
+        {/* covers a page that is already mounted and interactive underneath */}
+        <SplashScreen />
+        <ScrollToTop />
+        <SiteChrome>
+        <main id="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/book" element={<Book />} />
+            <Route path="/booking-status" element={<BookingStatus />} />
+            <Route path="/ask" element={<Ask />} />
+            {/* one template serves both houses; an unknown slug redirects home */}
+            <Route path="/:slug" element={<Property />} />
+          </Routes>
+        </main>
+        </SiteChrome>
+        <Footer />
+      </NavGuardProvider>
     </PropertyProvider>
   );
 }
