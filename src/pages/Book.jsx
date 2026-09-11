@@ -576,6 +576,7 @@ export default function Book() {
                     reference={confirmation.reference}
                     quote={quote}
                     hotelPhone={confirmation.hotelPhone}
+                    bankTransfer={property?.bankTransfer}
                   />
 
                   {confirmation.hotelPhone && (

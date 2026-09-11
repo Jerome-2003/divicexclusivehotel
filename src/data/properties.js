@@ -135,6 +135,10 @@ export const CONTENT = {
       { label: 'Laundry and pressing', note: 'Same day, returned before six' },
       { label: 'Secure parking', note: 'Attended, on site' },
     ],
+    /* Each branch banks separately, so the account a guest transfers to depends on
+       which one they are booking — same as the phone number above. Not in the PMS,
+       so held here like privateBookings' rates; see the note in README. */
+    bankTransfer: { bank: 'Moniepoint', accountNumber: '5320744903', accountName: 'Mozo Integrated' },
   },
 
   urban: {
@@ -208,6 +212,7 @@ export const CONTENT = {
       { label: 'Security', note: 'Manned, twenty-four hours' },
       { label: 'Reception', note: 'Attended around the clock' },
     ],
+    bankTransfer: { bank: 'Moniepoint', accountNumber: '5293862563', accountName: 'Mozo Integrated Service' },
   },
 };
 
