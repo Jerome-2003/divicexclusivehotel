@@ -134,7 +134,6 @@ const GALLERY_SLOTS = [
 ];
 
 function GalleryFrame({ group, property, slot, lead }) {
-  const count = group.images.length;
   return (
     <figure className={`group relative ${slot.span}`}>
       <Slideshow
@@ -158,9 +157,6 @@ function GalleryFrame({ group, property, slot, lead }) {
               >
                 {group.label}
               </span>
-              {count > 1 && (
-                <span className="mt-1 block text-sm text-bone/55">{count} photographs</span>
-              )}
             </figcaption>
           </>
         }
@@ -193,7 +189,12 @@ function RoomSpread({ room, index }) {
       />
 
       <div
-        className={`relative z-20 -mt-14 mx-4 border border-ink/12 bg-alabaster/96 p-7 backdrop-blur-md
+        /* Solid, not translucent: this panel oversets the photograph at its left edge
+           (mx-4/mx-8 below lg), and a backdrop-blur there used to let the image show
+           through right where the text sits, exactly at that seam — legible in some
+           places and not in others depending what was behind it. A flat bg-alabaster
+           reads the same everywhere. */
+        className={`relative z-20 -mt-14 mx-4 border border-ink/12 bg-alabaster p-7
                     sm:-mt-20 sm:mx-8 lg:mx-0 lg:mt-0 lg:row-start-1 lg:col-span-5 lg:p-10 ${
                       flipped ? 'lg:col-start-1' : 'lg:col-start-8'
                     }`}

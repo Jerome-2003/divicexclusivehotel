@@ -139,10 +139,12 @@ export default function Home() {
           className="absolute inset-0 z-20"
           style={{
             /* Off-white over the photograph rather than near-black: the room stays
-               readable underneath as a pale ground, and the type on top is ink. */
+               readable underneath as a pale ground, and the type on top is ink. Light
+               enough that the photograph itself still reads — the frosted panel below
+               carries its own background and does not depend on this wash for contrast. */
             background:
-              'linear-gradient(to bottom, rgba(250,247,241,.80) 0%, rgba(250,247,241,.60) 34%, ' +
-              'rgba(250,247,241,.70) 70%, rgba(250,247,241,.90) 100%)',
+              'linear-gradient(to bottom, rgba(250,247,241,.45) 0%, rgba(250,247,241,.28) 34%, ' +
+              'rgba(250,247,241,.38) 70%, rgba(250,247,241,.55) 100%)',
           }}
         />
 

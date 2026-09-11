@@ -12,7 +12,7 @@ import { formatNGN } from '../data/properties';
  * Every figure comes from the server's quote. Nothing about the price is worked
  * out in this file.
  */
-export default function PayPanel({ reference, quote, hotelPhone, onSettled }) {
+export default function PayPanel({ reference, quote, hotelPhone, bankTransfer, onSettled }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
@@ -152,6 +152,33 @@ export default function PayPanel({ reference, quote, hotelPhone, onSettled }) {
         <button type="button" onClick={pay} disabled={busy} className="btn btn-solid mt-6 disabled:opacity-50">
           {busy ? 'Opening payment…' : `Pay ${quote ? formatNGN(quote.totalPayable) : 'now'} by card`}
         </button>
+      )}
+
+      {bankTransfer && (
+        <div className="mt-8 border-t border-ink/15 pt-6">
+          <h3 className="font-display text-d3">Or pay by bank transfer</h3>
+          <p className="prose-body mt-3 text-sm">
+            {/* The card fee above only applies when paying by card — a transfer has
+                nothing added to it. */}
+            No card fee applies to a transfer{quote ? `, so it is ${formatNGN(quote.roomTotal)} — the room total only` : ''}.
+            Put your request number, <strong className="text-ink">{reference}</strong>, in the
+            transfer narration so the house can match your payment to your request.
+          </p>
+          <dl className="mt-5 flex flex-col">
+            <div className="flex items-baseline justify-between gap-6 border-t border-ink/10 py-3">
+              <dt className="text-sm text-mute">Bank</dt>
+              <dd className="text-right text-sm">{bankTransfer.bank}</dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-6 border-t border-ink/10 py-3">
+              <dt className="text-sm text-mute">Account number</dt>
+              <dd className="text-right text-sm">{bankTransfer.accountNumber}</dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-6 border-t border-ink/10 py-3">
+              <dt className="text-sm text-mute">Account name</dt>
+              <dd className="text-right text-sm">{bankTransfer.accountName}</dd>
+            </div>
+          </dl>
+        </div>
       )}
     </div>
   );
