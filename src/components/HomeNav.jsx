@@ -85,10 +85,17 @@ export default function HomeNav({ onOpenMenu }) {
 
   return (
     <header
+      /* Before any scroll this sits directly on the hero photograph, not on the
+         frosted panel below it — the wordmark and the search field labels are
+         dark text with nothing else behind them. bg-alabaster/70 read fine over
+         the old, heavier hero wash; lightening that wash for the photo's sake
+         left this bar without enough of its own contrast. Raised close to the
+         "stuck" level so the header reads clearly the moment the page loads,
+         not only once it has something to blend into. */
       className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-400 ease-quiet ${
         stuck
           ? 'border-ink/10 bg-alabaster/92 backdrop-blur-xl'
-          : 'border-transparent bg-alabaster/70 backdrop-blur-sm'
+          : 'border-transparent bg-alabaster/88 backdrop-blur-md'
       }`}
     >
       <div className="relative mx-auto flex max-w-[1600px] flex-nowrap items-center gap-x-4 px-gutter py-3">
