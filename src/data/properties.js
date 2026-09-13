@@ -255,6 +255,10 @@ export function decorate(apiProperty) {
       ...rt,
       ...(content.rooms?.[rt.type] || { name: rt.type, image: null, description: '' }),
     })),
+    /* Offers come from the PMS and have no seed equivalent, so before the API
+       answers there are simply none — the section renders nothing rather than
+       advertising something the hotel is not actually running. */
+    discounts: apiProperty.discounts || [],
   };
 }
 

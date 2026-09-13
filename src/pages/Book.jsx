@@ -435,9 +435,22 @@ export default function Book() {
                         </span>
                         <span className="flex flex-col items-end gap-1">
                           <span className="font-display text-xl">{formatNGN(row.total || row.rate * stayNights)}</span>
-                          <span className="text-sm text-mute">
-                            {formatNGN(row.rate)} × {stayNights}
-                          </span>
+                          {/* When an offer is running, the full price stays on
+                              screen struck through. A total that is simply
+                              lower than the rate times the nights reads as an
+                              arithmetic error, not as a discount. */}
+                          {row.discountTotal > 0 ? (
+                            <span className="text-sm text-mute">
+                              <s>{formatNGN(row.fullTotal)}</s>{' '}
+                              <span style={{ color: 'rgb(var(--accent))' }}>
+                                save {formatNGN(row.discountTotal)}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-sm text-mute">
+                              {formatNGN(row.rate)} × {stayNights}
+                            </span>
+                          )}
                         </span>
                       </button>
                     );
@@ -562,6 +575,9 @@ export default function Book() {
                       ['Departure', confirmation.checkOut],
                       ['Nights', String(confirmation.nights)],
                       ['Quoted rate', formatNGN(confirmation.quotedRate)],
+                      ...(confirmation.discountTotal > 0
+                        ? [['Offer applied', '−' + formatNGN(confirmation.discountTotal)]]
+                        : []),
                       ['Quoted total', formatNGN(confirmation.quotedTotal)],
                       ['Status', confirmation.status],
                     ].map(([k, v]) => (
@@ -616,6 +632,14 @@ export default function Book() {
                       {formatNGN(quote ? quote.roomTotal : chosenRow.total || chosenRow.rate * stayNights)}
                     </span>
                   </div>
+                  {(quote?.discounts || []).map((d) => (
+                    <div key={d.name} className="mt-3 flex items-baseline justify-between gap-4">
+                      <span className="text-sm text-mute">{d.name}</span>
+                      <span className="text-sm" style={{ color: 'rgb(var(--accent))' }}>
+                        −{formatNGN(d.amount)}
+                      </span>
+                    </div>
+                  ))}
                   {quote && quote.paystackFee > 0 && (
                     <div className="mt-3 flex items-baseline justify-between gap-4">
                       <span className="text-sm text-mute">Card fee, if you pay online</span>

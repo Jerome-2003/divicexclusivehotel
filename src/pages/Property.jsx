@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { BRAND, formatNGN } from '../data/properties';
 import { useProperty } from '../context/PropertyContext';
 import { Plate, SectionHead, SpecList } from '../components/primitives';
+import Offers from '../components/Offers';
 import Slideshow from '../components/Slideshow';
 import AmenityIcon from '../components/AmenityIcon';
 import { useCarousel } from '../lib/useCarousel';
@@ -399,6 +400,11 @@ export default function Property() {
           ))}
         </div>
       </section>
+
+      {/* Offers sit above the rate card on purpose: a guest reading a price is
+          deciding, and the reason to book now has to reach them before the
+          number does, not as a footnote under it. */}
+      <Offers property={property} />
 
       {/* ---------- rooms ---------- */}
       <section className="section bg-shell">
