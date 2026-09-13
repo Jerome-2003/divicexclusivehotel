@@ -66,18 +66,20 @@ const slug = (file) =>
     .replace(/([a-z])([A-Z0-9])/g, '$1-$2')
     .toLowerCase();
 
-/* The room crops come from small flyers and arrive soft, so everything gets a light
-   unsharp mask before encoding — gentle enough not to ring around door frames.
-   The ambient shots (pool, bar, frontview...) are the ones the homepage hero and
-   the property tour stretch full-bleed to fill the screen — none of the source
-   photography clears 1200px, so on any screen wider than that the browser is
-   enlarging the file no matter what this script does. A stronger unsharp mask
-   cannot recover detail that was never captured, but it does buy back some of
-   the edge contrast that enlarging softens, and these wider shots have fewer
-   thin, straight lines (door frames, panel edges) for it to ring around than a
-   tight room crop does. */
-const SHARPEN_FLYER = { sigma: 0.8, m1: 0.5, m2: 2 };
-const SHARPEN_AMBIENT = { sigma: 1.1, m1: 0.7, m2: 2.4 };
+/* Everything gets a light unsharp mask before encoding — gentle enough not to ring
+   around door frames — and the ambient shots the homepage hero and property tour
+   stretch full-bleed get a stronger one.
+   The stronger mask is compensation for enlargement, not a preference. Most of the
+   supplied photography tops out around 1080px, so on any screen wider than that the
+   browser is enlarging the file no matter what this script does; a harder mask cannot
+   recover detail that was never captured, but it buys back some of the edge contrast
+   enlarging softens. A source that genuinely clears the widest size we emit is never
+   enlarged, so it wants the gentle mask — pushing a sharp 2560px photograph as hard as
+   a soft 1080px one only produces halos. Judged per file from what arrived, so
+   replacing a source with a better one improves the result without anybody having to
+   remember this. */
+const SHARPEN_SOFT = { sigma: 0.8, m1: 0.5, m2: 2 };
+const SHARPEN_ENLARGED = { sigma: 1.1, m1: 0.7, m2: 2.4 };
 
 let files = 0;
 let bytes = 0;
@@ -91,11 +93,15 @@ for (const job of JOBS) {
   for (const file of sources) {
     const name = slug(file);
     const isFlyer = job.flyers.has(file);
-    const sharpenSpec = isFlyer ? SHARPEN_FLYER : SHARPEN_AMBIENT;
     const base = sharp(join(job.src, file));
     const cropped = isFlyer ? base.clone().extract(job.flyerCrop) : base.clone();
     const meta = await cropped.metadata();
     const native = meta.width;
+
+    // A flyer crop is always soft and always small; anything else is judged on
+    // whether it will end up being enlarged on screen.
+    const enlarged = !isFlyer && native < WIDTHS[WIDTHS.length - 1];
+    const sharpenSpec = enlarged ? SHARPEN_ENLARGED : SHARPEN_SOFT;
 
     /* Never upscale: a 670px flyer crop gains nothing from a 1600px file, and the
        browser would download the bigger one for no reason. */
@@ -130,7 +136,8 @@ for (const job of JOBS) {
     bytes += size;
     console.log(
       `${name.padEnd(14)} ${String(native).padStart(4)}px source → ` +
-        `${widths.join('/')} @ avif+webp + jpg   ${(size / 1024).toFixed(0)} kB total`,
+        `${widths.join('/')} @ avif+webp + jpg   ${(size / 1024).toFixed(0)} kB total` +
+        `${enlarged ? '  (enlarged on wide screens)' : ''}`,
     );
   }
 }
