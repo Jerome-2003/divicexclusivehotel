@@ -155,11 +155,13 @@ export const CONTENT = {
       'the desk knows which way to send you before the traffic builds.',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Plot+340+3rd+Avenue+A1+Close+Festac+Lagos',
-    /* The lobby, not the street frontage. The hero tour opens on this and then walks the
-       gallery, and because it dedupes on the file, the Reception group's own tour slide
-       drops out rather than showing the same photograph twice. */
-    heroImage: urban('reception'),
+    /* The building itself. The hero tour opens on this and then walks the gallery, and
+       because it dedupes on the file, the house group's own tour slide drops out rather
+       than showing the same photograph twice — the reception shot keeps its place a few
+       slides in, where it reads as arriving rather than as the first thing you see. */
+    heroImage: urban('frontview'),
     gallery: [
+      { label: 'The house', images: [urban('frontview'), urban('frontview-1')] },
       { label: 'The bar', images: [urban('bar'), urban('bar-1'), urban('bar-2')] },
       { label: 'The pool', images: [urban('pool')] },
       { label: 'The restaurant', images: [urban('restaurant-2'), urban('inside'), urban('inside-1')] },
