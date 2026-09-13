@@ -210,17 +210,23 @@ export const divic = new DivicBooking({
 });
 
 /**
- * A `mediaUrl` published from the PMS is one of two shapes: a full `https://`
- * link someone pasted in, or a `/uploads/...` path from a file the receptionist
- * uploaded from their device — a path on the *API's* origin, not this site's.
- * Rendered as-is, that path resolves against whatever origin this site is
- * deployed on instead and 404s — a broken-image icon where the promo photo
- * should be. Only the second case needs the API origin stitched back on; a
- * pasted https:// URL is already absolute and passes through unchanged.
+ * A `mediaUrl` published from the PMS is a full `https://` link: either one
+ * someone pasted in, or the permanent Cloudinary link left behind when a
+ * manager uploaded a photo or video from their computer. Both are absolute and
+ * pass through unchanged.
+ *
+ * A `/uploads/...` path is the exception, and it is history rather than a
+ * shape to support. Uploads used to be written to the API server's own disk,
+ * which its hosting wipes on every deploy and idle spin-down, so those files
+ * are gone — not misaddressed, gone. Pointing at them would put a broken-image
+ * icon in the middle of a promo. Returning nothing instead lets the promo
+ * render as text alone, which is the better of the two things we can still
+ * honestly show. The PMS flags these records so a manager can re-upload.
  */
 export function resolveMediaUrl(url) {
   if (!url) return url;
   if (/^https:\/\//i.test(url)) return url;
+  if (/^\/?uploads\//i.test(url)) return null;
   return divic.apiUrl + (url.startsWith('/') ? url : '/' + url);
 }
 
