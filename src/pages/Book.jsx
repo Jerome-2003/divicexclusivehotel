@@ -77,6 +77,10 @@ export default function Book() {
   const [alt, setAlt] = useState(null);
   const [recheck, setRecheck] = useState(false);
   const [quote, setQuote] = useState(null);
+  /* Whether the hotel can take a card at all. Off until the server says
+     otherwise: a fee line and a pay button for a method that cannot complete
+     is worse than neither, because the guest only finds out at the last step. */
+  const [cardOnline, setCardOnline] = useState(false);
 
   /* The homepage search hands over location, dates and guests. Arriving with a complete
      set means the guest has already answered step one, so we open on the room step. */
@@ -97,6 +101,14 @@ export default function Book() {
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
   const property = byId[form.location];
   const stayNights = nightsBetween(form.checkIn, form.checkOut);
+
+  useEffect(() => {
+    let stale = false;
+    divic.paymentOptions()
+      .then((o) => { if (!stale) setCardOnline(Boolean(o?.online)); })
+      .catch(() => {});
+    return () => { stale = true; };
+  }, []);
 
   useEffect(() => {
     document.title = 'Request a stay — Divic';
@@ -593,6 +605,7 @@ export default function Book() {
                     quote={quote}
                     hotelPhone={confirmation.hotelPhone}
                     bankTransfer={property?.bankTransfer}
+                    cardOnline={cardOnline}
                   />
 
                   {confirmation.hotelPhone && (
@@ -640,24 +653,32 @@ export default function Book() {
                       </span>
                     </div>
                   ))}
-                  {quote && quote.paystackFee > 0 && (
+                  {quote && quote.paystackFee > 0 && cardOnline && (
                     <div className="mt-3 flex items-baseline justify-between gap-4">
                       <span className="text-sm text-mute">Card fee, if you pay online</span>
                       <span className="text-sm">{formatNGN(quote.paystackFee)}</span>
                     </div>
                   )}
                   <div className="mt-4 flex items-baseline justify-between gap-4 border-t border-ink/10 pt-4">
-                    <span className="text-sm text-mute">{quote ? 'Total by card' : 'Estimate'}</span>
+                    <span className="text-sm text-mute">
+                      {!quote ? 'Estimate' : cardOnline ? 'Total by card' : 'Total'}
+                    </span>
                     <span className="font-display text-2xl" style={{ color: 'rgb(var(--accent))' }}>
-                      {formatNGN(quote ? quote.totalPayable : chosenRow.total || chosenRow.rate * stayNights)}
+                      {formatNGN(
+                        !quote
+                          ? chosenRow.total || chosenRow.rate * stayNights
+                          : cardOnline ? quote.totalPayable : quote.roomTotal
+                      )}
                     </span>
                   </div>
                 </div>
               )}
 
               <p className="mt-6 text-sm text-slate">
-                Prices come from the hotel, not from your browser. Paying at the desk by
-                cash or transfer carries no card fee.
+                Prices come from the hotel, not from your browser.
+                {cardOnline
+                  ? ' Paying at the desk by cash or transfer carries no card fee.'
+                  : ' Payment is by transfer or at the desk.'}
               </p>
               {property?.phone && (
                 <p className="mt-4 text-sm text-slate">
