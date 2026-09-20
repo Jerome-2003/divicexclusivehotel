@@ -112,6 +112,18 @@ export class DivicBooking {
   }
 
   /**
+   * What the hotel can take money through right now.
+   *
+   * Asked of the server rather than built into this build, so the card option
+   * appears the day a live key goes on and disappears the day it comes off,
+   * with no redeploy of the site in between. Card is treated as off unless the
+   * server says otherwise — a pay button that cannot complete costs a booking.
+   */
+  async paymentOptions({ signal } = {}) {
+    return this.#json(this.apiUrl + '/api/public/payment-options', { signal });
+  }
+
+  /**
    * Starts Paystack checkout for a request that already exists.
    *
    * Note what is not sent: an amount. The server recomputes it from the stored

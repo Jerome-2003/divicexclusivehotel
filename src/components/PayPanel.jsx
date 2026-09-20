@@ -12,7 +12,7 @@ import { formatNGN } from '../data/properties';
  * Every figure comes from the server's quote. Nothing about the price is worked
  * out in this file.
  */
-export default function PayPanel({ reference, quote, hotelPhone, bankTransfer, onSettled }) {
+export default function PayPanel({ reference, quote, hotelPhone, bankTransfer, cardOnline, onSettled }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
@@ -101,13 +101,16 @@ export default function PayPanel({ reference, quote, hotelPhone, bankTransfer, o
 
   return (
     <div className="mt-8 border-t border-ink/15 pt-6">
-      <h3 className="font-display text-d3">Pay now, or pay at the house</h3>
+      <h3 className="font-display text-d3">
+        {cardOnline ? 'Pay now, or pay at the house' : 'Paying for your stay'}
+      </h3>
       <p className="prose-body mt-3 text-sm">
-        Paying now holds your room straight away. If you would rather transfer or
-        pay at the desk, leave this — the house will call you to confirm.
+        {cardOnline
+          ? 'Paying now holds your room straight away. If you would rather transfer or pay at the desk, leave this — the house will call you to confirm.'
+          : 'Your request is in. The house will call you to confirm your stay and take payment — by transfer now, or at the desk when you arrive.'}
       </p>
 
-      {quote && (
+      {quote && cardOnline && (
         <dl className="mt-6 flex flex-col">
           <div className="flex items-baseline justify-between gap-6 border-t border-ink/10 py-3">
             <dt className="text-sm text-mute">Room</dt>
@@ -138,7 +141,7 @@ export default function PayPanel({ reference, quote, hotelPhone, bankTransfer, o
         </p>
       )}
 
-      {polling ? (
+      {!cardOnline ? null : polling ? (
         <div className="mt-6">
           <p className="text-sm text-slate">
             Waiting for your payment to clear. Finish paying in the other tab and this
@@ -155,12 +158,14 @@ export default function PayPanel({ reference, quote, hotelPhone, bankTransfer, o
       )}
 
       {bankTransfer && (
-        <div className="mt-8 border-t border-ink/15 pt-6">
-          <h3 className="font-display text-d3">Or pay by bank transfer</h3>
+        <div className={cardOnline ? 'mt-8 border-t border-ink/15 pt-6' : 'mt-6'}>
+          <h3 className="font-display text-d3">
+            {cardOnline ? 'Or pay by bank transfer' : 'Pay by bank transfer'}
+          </h3>
           <p className="prose-body mt-3 text-sm">
             {/* The card fee above only applies when paying by card — a transfer has
                 nothing added to it. */}
-            No card fee applies to a transfer{quote ? `, so it is ${formatNGN(quote.roomTotal)} — the room total only` : ''}.
+            {cardOnline ? 'No card fee applies to a transfer' : 'The amount is'}{quote ? `${cardOnline ? ', so it is ' : ' '}${formatNGN(quote.roomTotal)}${cardOnline ? ' — the room total only' : ''}` : ''}.
             Put your request number, <strong className="text-ink">{reference}</strong>, in the
             transfer narration so the house can match your payment to your request.
           </p>
